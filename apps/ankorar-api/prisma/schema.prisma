@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/infra/database/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id         String    @id @unique
+  ext_id     String?   @unique
+  name       String
+  email      String    @unique
+  password   String?
+  created_at DateTime
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  sessions          Session[]
+  activation_tokens ActivationToken[]
+  organization      Organization?
+  members           Member[]
+
+  @@map("users")
+}
+
+model Session {
+  id            String    @id @unique
+  refresh_token String
+  expires_at    DateTime
+  created_at    DateTime
+  updated_at    DateTime?
+  deleted_at    DateTime?
+
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id String
+
+  @@map("sessions")
+}
+
+model ActivationToken {
+  id         String    @id @unique
+  expires_at DateTime
+  used_at    DateTime?
+  created_at DateTime
+  updated_at DateTime?
+
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id String
+
+  @@map("activation_tokens")
+}
+
+model Organization {
+  id         String    @id @unique
+  name       String
+  created_at DateTime
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  creator    User   @relation(fields: [creator_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  creator_id String @unique
+
+  members  Member[]
+  api_keys ApiKey[]
+
+  @@map("organizations")
+}
+
+model Member {
+  id         String    @id @unique
+  features   String[]
+  created_at DateTime
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  user    User         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id String
+  org     Organization @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  org_id  String
+
+  @@unique([org_id, user_id])
+  @@map("members")
+}
+
+model ApiKey {
+  id           String    @id @unique
+  features     String[]
+  env          String
+  secret       String
+  prefix       String    @unique
+  created_at   DateTime
+  last_used_at DateTime
+  revoked_at   DateTime?
+  expires_at   DateTime?
+  updated_at   DateTime?
+  deleted_at   DateTime?
+
+  organization    Organization @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  organization_id String
+
+  @@map("api_keys")
+}

@@ -1,0 +1,99 @@
+import type { MindMapNode } from "../../state/mindMap";
+import { useRef } from "react";
+import { useMindMapState } from "../../state/mindMap";
+import { useShallow } from "zustand/react/shallow";
+import { useMindMapNodeMouseHandlers } from "../../hooks/mindMap/useMindMapNodeMouseHandlers";
+import { useMindMapNode } from "../../hooks/mindMap/useMindMapNode";
+import { useMindMapNodeEditor } from "../../hooks/mindMap/useMindMapNodeEditor";
+
+type CentalNodeProps = {
+  node: MindMapNode;
+};
+
+export function CentalNode({ node }: CentalNodeProps) {
+  const { editingNodeId, selectedNodeId } = useMindMapState(
+    useShallow((state) => ({
+      selectedNodeId: state.selectedNodeId,
+      editingNodeId: state.editingNodeId,
+    })),
+  );
+
+  const textRef = useRef<HTMLSpanElement | null>(null);
+  const { node: logicalNode } = useMindMapNode({ nodeId: node.id });
+  const { onMouseDown, onDoubleClick } = useMindMapNodeMouseHandlers(node.id);
+  const editableHandlers = useMindMapNodeEditor({
+    nodeId: node.id,
+    text: node.text,
+    textRef,
+  });
+
+  return (
+    <div
+      className="group absolute"
+      data-nodex-node
+      style={{
+        transform: `translate(${node.pos.x}px, ${node.pos.y}px)`,
+        width: node.style.w + node.style.wrapperPadding * 2,
+        height: node.style.h + node.style.wrapperPadding * 2,
+      }}
+      onMouseDown={onMouseDown}
+      onDoubleClick={onDoubleClick}
+    >
+      <div
+        className="relative h-full w-full"
+        style={{ padding: node.style.wrapperPadding }}
+      >
+        <div
+          data-bold={node.style.isBold}
+          data-italic={node.style.isItalic}
+          className="flex items-center justify-center rounded-full border border-slate-300 bg-white text-slate-900 shadow-sm data-[bold=true]:font-bold data-[italic=true]:italic"
+          style={{
+            width: node.style.w,
+            height: node.style.h,
+            borderColor: node.style.color,
+            fontSize: node.style.fontSize,
+            color: node.style.textColor,
+            backgroundColor: node.style.backgroundColor,
+            textAlign: node.style.textAlign,
+            boxShadow:
+              selectedNodeId === node.id
+                ? `0 0 0 3px ${node.style.color}`
+                : undefined,
+          }}
+          onDoubleClick={onDoubleClick}
+        >
+          <span
+            ref={textRef}
+            className="whitespace-pre outline-none"
+            contentEditable={editingNodeId === node.id}
+            suppressContentEditableWarning
+            onMouseDown={(event) => {
+              if (event.detail > 1) {
+                event.preventDefault();
+              }
+            }}
+            {...editableHandlers}
+          />
+        </div>
+      </div>
+
+      <button
+        type="button"
+        data-selected={selectedNodeId === node.id}
+        data-editing={editingNodeId === node.id}
+        className="absolute data-[selected=true]:data-[editing=false]:flex hidden -right-3 top-1/2 h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white text-sm font-bold text-slate-700 shadow-sm transition"
+        style={{ borderColor: node.style.color, color: node.style.color }}
+        onMouseDown={(event) => {
+          event.stopPropagation();
+        }}
+        onClick={(event) => {
+          event.stopPropagation();
+          logicalNode?.addChild();
+        }}
+        aria-label="Adicionar node"
+      >
+        +
+      </button>
+    </div>
+  );
+}
