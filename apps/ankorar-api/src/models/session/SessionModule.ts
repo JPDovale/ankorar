@@ -23,6 +23,7 @@ interface SessionModuleProps {
       accessToken: AuthTokenResult;
       refreshToken: AuthTokenResult;
     }>;
+    logout: (props: { userId: string; refreshToken: string }) => Promise<void>;
     refresh: (props: { token: string }) => Promise<{
       session: Session;
       accessToken: AuthTokenResult;
@@ -34,6 +35,10 @@ interface SessionModuleProps {
         userId: string;
         token: string;
       }) => Promise<{ session: Session }>;
+      deleteByRefreshTokenAndUserId: (props: {
+        userId: string;
+        refreshToken: string;
+      }) => Promise<void>;
       persist: (props: { session: Session }) => Promise<{ session: Session }>;
     };
   };
@@ -103,6 +108,13 @@ export const sessionModule = SessionModule.create({
         refreshToken,
         session,
       };
+    },
+
+    async logout({ userId, refreshToken }) {
+      await this.fns.deleteByRefreshTokenAndUserId({
+        userId,
+        refreshToken,
+      });
     },
 
     async refresh({ token }) {
@@ -176,6 +188,15 @@ export const sessionModule = SessionModule.create({
         );
 
         return { session };
+      },
+
+      async deleteByRefreshTokenAndUserId({ userId, refreshToken }) {
+        await db.session.deleteMany({
+          where: {
+            user_id: userId,
+            refresh_token: refreshToken,
+          },
+        });
       },
 
       async persist({ session }) {

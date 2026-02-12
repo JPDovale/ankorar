@@ -27,6 +27,7 @@ Manter o frontend espelhado na estrutura de controllers do backend (`ankorar-api
 Backend controllers usados no frontend:
 
 - `session/login.ts` -> `POST /v1/sessions`
+- `session/logout.ts` -> `DELETE /v1/sessions`
 - `users/create.ts` -> `POST /v1/users`
 - `users/getUser.ts` -> `GET /v1/users`
 - `map/createMap.ts` -> `POST /v1/maps`
@@ -39,6 +40,7 @@ Backend controllers usados no frontend:
 Frontend requests:
 
 - `src/services/session/loginRequest.ts`
+- `src/services/session/logoutRequest.ts`
 - `src/services/users/createUserRequest.ts`
 - `src/services/users/getUserRequest.ts`
 - `src/services/maps/createMapRequest.ts`
