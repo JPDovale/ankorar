@@ -25,8 +25,6 @@ export const handleTabRootKeyBind = () => {
       removeNode(editingNodeId);
       return;
     }
-
-    return;
   }
 
   if (!currentNode) {

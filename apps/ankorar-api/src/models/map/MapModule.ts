@@ -13,6 +13,7 @@ interface MapModuleProps {
       memberId: string;
       content: JsonValue[];
     }) => Promise<{ map: Map }>;
+    delete: (props: { id: string; memberId: string }) => Promise<{ map: Map }>;
     fns: {
       findById: (props: { id: string }) => Promise<{ map: Map }>;
       findByIdAndMemberId: (props: {
@@ -64,6 +65,19 @@ export const mapModule = MapModule.create({
       if (centralNodeTitle) {
         map.title = centralNodeTitle;
       }
+
+      await this.fns.persist({ map });
+
+      return { map };
+    },
+
+    async delete({ id, memberId }) {
+      const { map } = await this.fns.findByIdAndMemberId({
+        id,
+        memberId,
+      });
+
+      map.markAsDeleted();
 
       await this.fns.persist({ map });
 

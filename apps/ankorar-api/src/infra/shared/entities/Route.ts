@@ -11,7 +11,7 @@ import { FastifyTypedInstance } from "../../http/types/fastify";
 import z from "zod";
 import { webserverModule } from "@/src/models/webserver/WebserverModule";
 
-type Method = "get" | "post" | "put" | "patch";
+type Method = "get" | "post" | "put" | "patch" | "delete";
 export type RouteBodySchema = z.ZodTypeAny;
 export type RouteResponseSchema = Partial<
   Record<number | `${number}` | "default", z.ZodTypeAny>
