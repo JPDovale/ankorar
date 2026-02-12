@@ -40,6 +40,7 @@ Backend controllers usados no frontend:
 - `organization/listOrganizationInvites.ts` -> `GET /v1/organizations/invites`
 - `organization/acceptOrganizationInvite.ts` -> `PATCH /v1/organizations/invites/:invite_id/accept`
 - `organization/rejectOrganizationInvite.ts` -> `PATCH /v1/organizations/invites/:invite_id/reject`
+- `organization/switchOrganizationContext.ts` -> `PATCH /v1/organizations/context`
 
 Frontend requests:
 
@@ -57,6 +58,7 @@ Frontend requests:
 - `src/services/organizations/listOrganizationInvitesRequest.ts`
 - `src/services/organizations/acceptOrganizationInviteRequest.ts`
 - `src/services/organizations/rejectOrganizationInviteRequest.ts`
+- `src/services/organizations/switchOrganizationContextRequest.ts`
 
 Exemplo atual de entidade:
 

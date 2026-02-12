@@ -15,6 +15,12 @@ import {
   type OrganizationPreview,
 } from "@/services/organizations/listUserOrganizationsRequest";
 import { rejectOrganizationInviteRequest } from "@/services/organizations/rejectOrganizationInviteRequest";
+import { librariesQueryKey } from "@/hooks/useLibraries";
+import { mapsQueryKey } from "@/hooks/useMaps";
+import {
+  switchOrganizationContextRequest,
+  type SwitchOrganizationContextRequestBody,
+} from "@/services/organizations/switchOrganizationContextRequest";
 
 export const organizationsQueryKey = ["organizations"] as const;
 export const organizationInvitesQueryKey = ["organization-invites"] as const;
@@ -46,6 +52,10 @@ interface CreateOrganizationInviteMutationResult {
 }
 
 interface UpdateOrganizationInviteMutationResult {
+  success: boolean;
+}
+
+interface SwitchOrganizationContextMutationResult {
   success: boolean;
 }
 
@@ -134,6 +144,30 @@ async function rejectOrganizationInviteMutationFn(
   };
 }
 
+async function switchOrganizationContextMutationFn(
+  payload: SwitchOrganizationContextRequestBody,
+): Promise<SwitchOrganizationContextMutationResult> {
+  const response = await switchOrganizationContextRequest(payload);
+
+  if (response.status !== 200) {
+    toast.error(
+      response.error?.message ??
+        "Não foi possível trocar o contexto da organização.",
+      {
+        action: response.error?.action,
+      },
+    );
+
+    return {
+      success: false,
+    };
+  }
+
+  return {
+    success: true,
+  };
+}
+
 interface UseOrganizationsParams {
   enabled?: boolean;
 }
@@ -202,6 +236,29 @@ export function useOrganizations(params: UseOrganizationsParams = {}) {
     },
   });
 
+  const switchOrganizationContextMutation = useMutation({
+    mutationFn: switchOrganizationContextMutationFn,
+    onSuccess: (result) => {
+      if (!result.success) {
+        return;
+      }
+
+      queryClient.invalidateQueries();
+      queryClient.invalidateQueries({
+        queryKey: organizationsQueryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: mapsQueryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: librariesQueryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: organizationInvitesQueryKey,
+      });
+    },
+  });
+
   const createOrganizationInvite = useCallback(
     async (
       payload: CreateOrganizationInviteRequestBody,
@@ -253,6 +310,23 @@ export function useOrganizations(params: UseOrganizationsParams = {}) {
     [rejectOrganizationInviteMutation],
   );
 
+  const switchOrganizationContext = useCallback(
+    async (
+      payload: SwitchOrganizationContextRequestBody,
+    ): Promise<SwitchOrganizationContextMutationResult> => {
+      return switchOrganizationContextMutation
+        .mutateAsync(payload)
+        .catch((error) => {
+          toast.error(extractUnexpectedErrorMessage(error));
+
+          return {
+            success: false,
+          };
+        });
+    },
+    [switchOrganizationContextMutation],
+  );
+
   return {
     organizations: organizationsQuery.data ?? [],
     organizationInvites: invitesQuery.data ?? [],
@@ -263,8 +337,10 @@ export function useOrganizations(params: UseOrganizationsParams = {}) {
     createOrganizationInvite,
     acceptOrganizationInvite,
     rejectOrganizationInvite,
+    switchOrganizationContext,
     isCreatingOrganizationInvite: createOrganizationInviteMutation.isPending,
     isAcceptingOrganizationInvite: acceptOrganizationInviteMutation.isPending,
     isRejectingOrganizationInvite: rejectOrganizationInviteMutation.isPending,
+    isSwitchingOrganizationContext: switchOrganizationContextMutation.isPending,
   };
 }

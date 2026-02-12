@@ -24,6 +24,7 @@ interface OrganizationSwitcherProps {
   organizations: OrganizationOption[];
   selectedOrgId: string;
   onSelectOrganization: (orgId: string) => void;
+  isSwitchingOrganization: boolean;
   invites: OrganizationInvitePreview[];
   isLoadingInvites: boolean;
   createInvite: (
@@ -44,6 +45,7 @@ export function OrganizationSwitcher({
   organizations,
   selectedOrgId,
   onSelectOrganization,
+  isSwitchingOrganization,
   invites,
   isLoadingInvites,
   createInvite,
@@ -150,8 +152,9 @@ export function OrganizationSwitcher({
                 key={organization.id}
                 type="button"
                 onClick={() => onSelectOrganization(organization.id)}
+                disabled={isSwitchingOrganization}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-md px-2 py-2 text-left transition-colors",
+                  "flex w-full items-center justify-between rounded-md px-2 py-2 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-60",
                   isSelected ? "bg-zinc-900 text-zinc-50" : "hover:bg-zinc-100",
                 )}
               >
@@ -181,7 +184,13 @@ export function OrganizationSwitcher({
                   </span>
                 </span>
 
-                {isSelected ? <Check className="size-4" /> : null}
+                {isSelected ? (
+                  isSwitchingOrganization ? (
+                    <LoaderCircle className="size-4 animate-spin" />
+                  ) : (
+                    <Check className="size-4" />
+                  )
+                ) : null}
               </button>
             );
           })}

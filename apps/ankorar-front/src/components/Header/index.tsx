@@ -3,7 +3,7 @@ import { useOrganizations } from "@/hooks/useOrganizations";
 import { useSideBar } from "@/hooks/useSideBar";
 import type { OrganizationOption } from "@/types/auth";
 import { PanelLeftOpen } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { OrganizationSwitcher } from "./OrganizationSwitcher";
 import { UserInfo } from "./UserInfo";
 
@@ -32,9 +32,11 @@ export function Header() {
     createOrganizationInvite,
     acceptOrganizationInvite,
     rejectOrganizationInvite,
+    switchOrganizationContext,
     isCreatingOrganizationInvite,
     isAcceptingOrganizationInvite,
     isRejectingOrganizationInvite,
+    isSwitchingOrganizationContext,
   } = useOrganizations();
   const { collapsed, toggleCollapsed } = useSideBar();
 
@@ -51,20 +53,9 @@ export function Header() {
     organizationsPreview.find((organization) => organization.is_current)?.id ??
     "";
 
-  const [selectedOrgIdState, setSelectedOrgId] = useState("");
-
   const selectedOrgId = useMemo(() => {
     if (organizations.length === 0) {
       return "";
-    }
-
-    if (
-      selectedOrgIdState &&
-      organizations.some(
-        (organization) => organization.id === selectedOrgIdState,
-      )
-    ) {
-      return selectedOrgIdState;
     }
 
     if (currentOrganizationId) {
@@ -72,7 +63,17 @@ export function Header() {
     }
 
     return organizations[0].id;
-  }, [currentOrganizationId, organizations, selectedOrgIdState]);
+  }, [currentOrganizationId, organizations]);
+
+  async function handleSelectOrganization(orgId: string) {
+    if (orgId === selectedOrgId || isSwitchingOrganizationContext) {
+      return;
+    }
+
+    await switchOrganizationContext({
+      organization_id: orgId,
+    });
+  }
 
   return (
     <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/90 backdrop-blur">
@@ -96,7 +97,8 @@ export function Header() {
             <OrganizationSwitcher
               organizations={organizations}
               selectedOrgId={selectedOrgId}
-              onSelectOrganization={setSelectedOrgId}
+              onSelectOrganization={handleSelectOrganization}
+              isSwitchingOrganization={isSwitchingOrganizationContext}
               invites={organizationInvites}
               isLoadingInvites={isLoadingOrganizationInvites}
               createInvite={createOrganizationInvite}

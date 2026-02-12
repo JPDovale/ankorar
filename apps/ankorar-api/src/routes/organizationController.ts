@@ -7,6 +7,7 @@ import { createOrganizationInviteRoute } from "../controllers/organization/creat
 import { listOrganizationInvitesRoute } from "../controllers/organization/listOrganizationInvites";
 import { acceptOrganizationInviteRoute } from "../controllers/organization/acceptOrganizationInvite";
 import { rejectOrganizationInviteRoute } from "../controllers/organization/rejectOrganizationInvite";
+import { switchOrganizationContextRoute } from "../controllers/organization/switchOrganizationContext";
 
 const organizationController = Controller.create({
   name: "Organization",
@@ -20,5 +21,6 @@ organizationController.appendRoute(createOrganizationInviteRoute);
 organizationController.appendRoute(listOrganizationInvitesRoute);
 organizationController.appendRoute(acceptOrganizationInviteRoute);
 organizationController.appendRoute(rejectOrganizationInviteRoute);
+organizationController.appendRoute(switchOrganizationContextRoute);
 
 export { organizationController };
