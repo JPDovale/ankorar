@@ -16,6 +16,7 @@ import { webserverModule } from "./models/webserver/WebserverModule";
 import { sessionController } from "./routes/sessionController";
 import { activationController } from "./routes/activationController";
 import { organizationController } from "./routes/organizationController";
+import { mapController } from "./routes/mapController";
 
 export function createServerInstance(
   opts: { log: "never" | "all" } = { log: "all" },
@@ -89,6 +90,7 @@ export function createServerInstance(
   sessionController.convertRoutes(app, opts);
   activationController.convertRoutes(app, opts);
   organizationController.convertRoutes(app, opts);
+  mapController.convertRoutes(app, opts);
 
   return {
     ...app,

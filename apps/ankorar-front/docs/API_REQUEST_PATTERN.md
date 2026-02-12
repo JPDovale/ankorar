@@ -25,23 +25,33 @@ Manter o frontend espelhado na estrutura de controllers do backend (`ankorar-api
 ## Estrutura Atual (espelhada)
 
 Backend controllers usados no frontend:
+
 - `session/login.ts` -> `POST /v1/sessions`
 - `users/create.ts` -> `POST /v1/users`
 - `users/getUser.ts` -> `GET /v1/users`
+- `map/createMap.ts` -> `POST /v1/maps`
+- `map/listMaps.ts` -> `GET /v1/maps`
 
 Frontend requests:
+
 - `src/services/session/loginRequest.ts`
 - `src/services/users/createUserRequest.ts`
 - `src/services/users/getUserRequest.ts`
+- `src/services/maps/createMapRequest.ts`
+- `src/services/maps/listMapsRequest.ts`
 
 Exemplo atual de entidade:
+
 - `src/services/users/getUserRequest.ts` exporta `User` (retorno íntegro de `/v1/users`).
 
 Service agregador:
+
 - não utilizado para auth (centralizado no hook)
 
 Hook central de query/mutation:
+
 - `src/hooks/useUser.tsx`
+- `src/hooks/useMaps.tsx`
 
 ## Como adicionar uma nova rota
 

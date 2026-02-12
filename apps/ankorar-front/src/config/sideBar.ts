@@ -9,8 +9,8 @@ export interface SideBarLink {
 
 export const sideBarLinks: SideBarLink[] = [
   {
-    label: "Home",
-    description: "Visao geral",
+    label: "Mapas",
+    description: "Tela principal",
     to: "/home",
     icon: House,
   },

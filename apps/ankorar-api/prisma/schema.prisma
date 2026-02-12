@@ -85,9 +85,24 @@ model Member {
   user_id String
   org     Organization @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   org_id  String
+  maps    Map[]
 
   @@unique([org_id, user_id])
   @@map("members")
+}
+
+model Map {
+  id         String    @id @unique
+  title      String
+  content    Json
+  created_at DateTime
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  member    Member @relation(fields: [member_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  member_id String
+
+  @@map("maps")
 }
 
 model ApiKey {
