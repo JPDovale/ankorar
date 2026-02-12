@@ -3,15 +3,13 @@ import { Entity } from "@/src/infra/shared/entities/Entity";
 import { date } from "@/src/models/date";
 
 export type JsonPrimitive = string | number | boolean | null;
-export type JsonValue =
-  | JsonPrimitive
-  | JsonValue[]
-  | { [key: string]: JsonValue };
+export type JsonObject = { [key: string]: JsonValue };
+export type JsonValue = JsonPrimitive | JsonObject | JsonValue[];
 
 interface MapProps {
   member_id: string;
   title: string;
-  content: JsonValue;
+  content: JsonValue[];
   created_at: Date;
   updated_at: Date | null;
   deleted_at: Date | null;
@@ -27,7 +25,7 @@ export class Map extends Entity<MapProps> {
     const mapProps: MapProps = {
       ...props,
       title: props.title.trim(),
-      content: props.content ?? {},
+      content: props.content ?? [],
       created_at: props.created_at ?? date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       deleted_at: props.deleted_at ?? null,
@@ -55,7 +53,7 @@ export class Map extends Entity<MapProps> {
     return this.props.content;
   }
 
-  set content(content: JsonValue) {
+  set content(content: JsonValue[]) {
     this.props.content = content;
     this.touch();
   }

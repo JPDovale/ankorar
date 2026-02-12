@@ -13,6 +13,7 @@ export type MindMapSnapshot = {
 type MindMapHistoryState = {
   past: MindMapSnapshot[];
   future: MindMapSnapshot[];
+  resetVersion: number;
   pushSnapshot: (snapshot: MindMapSnapshot) => void;
   undo: (
     current: MindMapSnapshot,
@@ -51,6 +52,7 @@ const cloneSnapshot = (snapshot: MindMapSnapshot): MindMapSnapshot =>
 export const useMindMapHistory = create<MindMapHistoryState>((set, get) => ({
   past: [],
   future: [],
+  resetVersion: 0,
   pushSnapshot: (snapshot) => {
     set((state) => ({
       past: [...state.past, snapshot].slice(-HISTORY_LIMIT),
@@ -81,5 +83,14 @@ export const useMindMapHistory = create<MindMapHistoryState>((set, get) => ({
       future: future.slice(1),
     });
   },
-  clear: () => set({ past: [], future: [] }),
+  clear: () =>
+    set((state) => ({
+      past: [],
+      future: [],
+      resetVersion: state.resetVersion + 1,
+    })),
 }));
+
+export function clearMindMapHistory() {
+  useMindMapHistory.getState().clear();
+}

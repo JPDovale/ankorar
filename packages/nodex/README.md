@@ -58,6 +58,29 @@ export function MindMapPage() {
 }
 ```
 
+## Initial State
+
+`@ankorar/nodex` now starts with an empty node list (`nodes: []`).
+
+If your app loads maps from an API, hydrate the state explicitly:
+
+```tsx
+import { useEffect } from "react";
+import { useMindMapState, type MindMapNode } from "@ankorar/nodex";
+
+export function MindMapHydrator({ nodes }: { nodes: MindMapNode[] }) {
+  useEffect(() => {
+    useMindMapState.setState({
+      nodes,
+      selectedNodeId: null,
+      editingNodeId: null,
+    });
+  }, [nodes]);
+
+  return null;
+}
+```
+
 ## Styling
 
 `@ankorar/nodex` ships its own precompiled stylesheet, so consumer apps do not need to compile Tailwind classes from this package.

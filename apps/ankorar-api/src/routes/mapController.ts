@@ -1,4 +1,5 @@
 import { createMapRoute } from "../controllers/map/createMap";
+import { getMapRoute } from "../controllers/map/getMap";
 import { listMapsRoute } from "../controllers/map/listMaps";
 import { Controller } from "../infra/shared/entities/Controller";
 import { Route } from "../infra/shared/entities/Route";
@@ -10,5 +11,6 @@ const mapController = Controller.create({
 
 mapController.appendRoute(createMapRoute);
 mapController.appendRoute(listMapsRoute);
+mapController.appendRoute(getMapRoute);
 
 export { mapController };

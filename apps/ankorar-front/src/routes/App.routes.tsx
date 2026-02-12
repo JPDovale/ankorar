@@ -1,6 +1,7 @@
 import { AuthenticatedLayout } from "@/layouts/authenticated";
 import { DefaultLayout } from "@/layouts/default";
 import { HomePage } from "@/pages/home";
+import { MapEditorPage } from "@/pages/map-editor";
 import { MindMapPage } from "@/pages/mind-map";
 import { LoginPage } from "@/pages/login";
 import { RegisterPage } from "@/pages/register";
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         Component: ProtectedRoute,
         children: [
+          {
+            path: "/maps/:map_id",
+            Component: MapEditorPage,
+          },
           {
             Component: AuthenticatedLayout,
             children: [

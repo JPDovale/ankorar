@@ -1,5 +1,9 @@
 export { useMindMapState } from "./state/mindMap";
-export { useMindMapHistory, createMindMapSnapshot } from "./state/mindMapHistory";
+export {
+  useMindMapHistory,
+  createMindMapSnapshot,
+  clearMindMapHistory,
+} from "./state/mindMapHistory";
 export { useMindMapDebounce } from "./hooks/mindMap/useMindMapDebounce";
 export { useMindMapHistoryDebounce } from "./hooks/mindMap/useMindMapHistoryDebounce";
 

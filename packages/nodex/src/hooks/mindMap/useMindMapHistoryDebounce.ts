@@ -17,8 +17,16 @@ export function useMindMapHistoryDebounce(
 ) {
   const delayMs = options.delayMs ?? 3000;
   const nodes = useMindMapState((state) => state.nodes);
+  const resetVersion = useMindMapHistory((state) => state.resetVersion);
   const lastSnapshotRef = useRef<MindMapSnapshot | null>(null);
   const pendingSnapshotRef = useRef<MindMapSnapshot | null>(null);
+  const pendingResetVersionRef = useRef(resetVersion);
+
+  useEffect(() => {
+    pendingResetVersionRef.current = resetVersion;
+    lastSnapshotRef.current = null;
+    pendingSnapshotRef.current = null;
+  }, [resetVersion]);
 
   useEffect(() => {
     const state = useMindMapState.getState();
@@ -37,15 +45,20 @@ export function useMindMapHistoryDebounce(
 
     if (!pendingSnapshotRef.current) {
       pendingSnapshotRef.current = lastSnapshotRef.current;
+      pendingResetVersionRef.current = resetVersion;
     }
 
     lastSnapshotRef.current = currentSnapshot;
-  }, [nodes]);
+  }, [nodes, resetVersion]);
 
   useMindMapDebounce(
     () => {
       const pendingSnapshot = pendingSnapshotRef.current;
       if (!pendingSnapshot) {
+        return;
+      }
+      if (pendingResetVersionRef.current !== useMindMapHistory.getState().resetVersion) {
+        pendingSnapshotRef.current = null;
         return;
       }
       useMindMapHistory.getState().pushSnapshot(pendingSnapshot);

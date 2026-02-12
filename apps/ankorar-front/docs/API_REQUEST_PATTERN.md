@@ -31,6 +31,7 @@ Backend controllers usados no frontend:
 - `users/getUser.ts` -> `GET /v1/users`
 - `map/createMap.ts` -> `POST /v1/maps`
 - `map/listMaps.ts` -> `GET /v1/maps`
+- `map/getMap.ts` -> `GET /v1/maps/:map_id`
 
 Frontend requests:
 
@@ -39,6 +40,7 @@ Frontend requests:
 - `src/services/users/getUserRequest.ts`
 - `src/services/maps/createMapRequest.ts`
 - `src/services/maps/listMapsRequest.ts`
+- `src/services/maps/getMapRequest.ts`
 
 Exemplo atual de entidade:
 

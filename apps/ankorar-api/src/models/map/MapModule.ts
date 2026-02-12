@@ -2,6 +2,7 @@ import { Prisma } from "@/src/infra/database/prisma/client";
 import { db } from "@/src/infra/database/pool";
 import { Module } from "@/src/infra/shared/entities/Module";
 import { CreateMapProps, JsonValue, Map } from "./Map";
+import { MapNotFound } from "@/src/infra/errors/MapNotFound";
 
 interface MapModuleProps {
   name: string;
@@ -9,6 +10,10 @@ interface MapModuleProps {
     create: (props: CreateMapProps) => Promise<{ map: Map }>;
     fns: {
       findById: (props: { id: string }) => Promise<{ map: Map }>;
+      findByIdAndMemberId: (props: {
+        id: string;
+        memberId: string;
+      }) => Promise<{ map: Map }>;
       findByMemberId: (props: { memberId: string }) => Promise<{ maps: Map[] }>;
       persist: (props: { map: Map }) => Promise<{ map: Map }>;
     };
@@ -25,11 +30,47 @@ class MapModule extends Module<MapModuleProps> {
   }
 }
 
+function createCentralNode(title: string): JsonValue {
+  return {
+    id: "1",
+    pos: {
+      x: 0,
+      y: 0,
+    },
+    text: title,
+    type: "central",
+    style: {
+      h: 68,
+      w: 308,
+      color: "#0f172a",
+      isBold: true,
+      padding: {
+        x: 96,
+        y: 32,
+      },
+      fontSize: 24,
+      isItalic: false,
+      textAlign: "left",
+      textColor: "#0f172a",
+      wrapperPadding: 4,
+      backgroundColor: "#ffffff",
+    },
+    sequence: 0,
+    childrens: [],
+    isVisible: true,
+    parent: null,
+  };
+}
+
 export const mapModule = MapModule.create({
   name: "map",
   Maps: {
     async create(props) {
       const map = Map.create(props);
+
+      if (!props.content || props.content.length === 0) {
+        map.content = [createCentralNode(map.title)];
+      }
 
       await this.fns.persist({ map });
 
@@ -46,14 +87,42 @@ export const mapModule = MapModule.create({
         });
 
         if (!mapOnDb) {
-          throw new Error("Map not found");
+          throw new MapNotFound();
         }
 
         const map = Map.create(
           {
             member_id: mapOnDb.member_id,
             title: mapOnDb.title,
-            content: mapOnDb.content as JsonValue,
+            content: mapOnDb.content as JsonValue[],
+            created_at: mapOnDb.created_at,
+            updated_at: mapOnDb.updated_at,
+            deleted_at: mapOnDb.deleted_at,
+          },
+          mapOnDb.id,
+        );
+
+        return { map };
+      },
+
+      async findByIdAndMemberId({ id, memberId }) {
+        const mapOnDb = await db.map.findFirst({
+          where: {
+            id,
+            member_id: memberId,
+            deleted_at: null,
+          },
+        });
+
+        if (!mapOnDb) {
+          throw new MapNotFound();
+        }
+
+        const map = Map.create(
+          {
+            member_id: mapOnDb.member_id,
+            title: mapOnDb.title,
+            content: mapOnDb.content as JsonValue[],
             created_at: mapOnDb.created_at,
             updated_at: mapOnDb.updated_at,
             deleted_at: mapOnDb.deleted_at,
@@ -80,7 +149,7 @@ export const mapModule = MapModule.create({
             {
               member_id: mapOnDb.member_id,
               title: mapOnDb.title,
-              content: mapOnDb.content as JsonValue,
+              content: mapOnDb.content as JsonValue[],
               created_at: mapOnDb.created_at,
               updated_at: mapOnDb.updated_at,
               deleted_at: mapOnDb.deleted_at,
