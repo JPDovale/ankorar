@@ -5,6 +5,7 @@ import {
   Board,
   clearMindMapHistory,
   MindMapHeader,
+  type MindMapSaveStatus,
   MineMap,
   Nodex,
   ZenCard,
@@ -13,7 +14,7 @@ import {
   useMindMapState,
 } from "@ankorar/nodex";
 import { LoaderCircle } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 
 const initialMindMapState = (() => {
@@ -40,14 +41,68 @@ function getNodesFromContent(content: unknown[]): MindMapNode[] {
 export function MapEditorPage() {
   const params = useParams<{ map_id: string }>();
   const mapId = params.map_id ?? "";
-  const { map, isLoadingMap } = useMap({ id: mapId });
-
-  useMindMapDebounce((v) => console.log(v), {
-    delayMs: 3000,
+  const { map, isLoadingMap, updateMapContent, isUpdatingMapContent } = useMap({
+    id: mapId,
   });
+  const nodes = useMindMapState((state) => state.nodes);
+  const [lastPersistedSnapshot, setLastPersistedSnapshot] = useState<{
+    mapId: string | null;
+    serializedContent: string | null;
+  }>({
+    mapId: null,
+    serializedContent: null,
+  });
+  const hydratedMapIdRef = useRef<string | null>(null);
+  const currentSerializedNodes = JSON.stringify(nodes);
+  const lastPersistedSerializedContent =
+    map && lastPersistedSnapshot.mapId === map.id
+      ? lastPersistedSnapshot.serializedContent
+      : map
+        ? JSON.stringify(map.content)
+        : null;
+  const isDirty =
+    map !== null &&
+    currentSerializedNodes !== (lastPersistedSerializedContent ?? "[]");
+  const saveStatus: MindMapSaveStatus = !map
+    ? "saved"
+    : isUpdatingMapContent
+      ? "saving"
+      : isDirty
+        ? "unsaved"
+        : "saved";
+
+  useMindMapDebounce(
+    async (nodes) => {
+      if (!mapId || !map) {
+        return;
+      }
+
+      const serializedNodes = JSON.stringify(nodes);
+
+      if (serializedNodes === lastPersistedSerializedContent) {
+        return;
+      }
+
+      const result = await updateMapContent(nodes);
+
+      if (result.success) {
+        setLastPersistedSnapshot({
+          mapId,
+          serializedContent: serializedNodes,
+        });
+      }
+    },
+    {
+      delayMs: 3000,
+    },
+  );
 
   useEffect(() => {
     if (!map) {
+      return;
+    }
+
+    if (hydratedMapIdRef.current === map.id) {
       return;
     }
 
@@ -66,6 +121,7 @@ export function MapEditorPage() {
       zenMode: false,
       helpOpen: false,
     });
+    hydratedMapIdRef.current = map.id;
   }, [map]);
 
   return (
@@ -87,7 +143,11 @@ export function MapEditorPage() {
             </section>
           ) : (
             <Nodex>
-              <MindMapHeader title={map.title} />
+              <MindMapHeader
+                title={map.title}
+                className="h-16"
+                saveStatus={saveStatus}
+              />
               <Board>
                 <Background />
                 <MineMap />

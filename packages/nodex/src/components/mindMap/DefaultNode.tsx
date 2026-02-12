@@ -5,12 +5,14 @@ import { useShallow } from "zustand/react/shallow";
 import { useMindMapNodeMouseHandlers } from "../../hooks/mindMap/useMindMapNodeMouseHandlers";
 import { useMindMapNode } from "../../hooks/mindMap/useMindMapNode";
 import { useMindMapNodeEditor } from "../../hooks/mindMap/useMindMapNodeEditor";
+import { cn } from "../../lib/utils";
 
 type DefaultNodeProps = {
   node: MindMapNode;
+  className?: string;
 };
 
-export function DefaultNode({ node }: DefaultNodeProps) {
+export function DefaultNode({ node, className }: DefaultNodeProps) {
   const { node: logicalNode } = useMindMapNode({ nodeId: node.id });
 
   if (!logicalNode) return;
@@ -39,7 +41,7 @@ export function DefaultNode({ node }: DefaultNodeProps) {
 
   return (
     <div
-      className="group absolute"
+      className={cn("group absolute", className)}
       data-nodex-node
       style={{
         transform: `translate(${node.pos.x}px, ${node.pos.y}px)`,

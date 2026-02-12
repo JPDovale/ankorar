@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { MindMapNode } from "../../state/mindMap";
 import { useMindMapState } from "../../state/mindMap";
 import { useShallow } from "zustand/react/shallow";
+import { cn } from "../../lib/utils";
 
 const MAP_WIDTH = 200;
 const MAP_HEIGHT = 120;
@@ -24,20 +25,24 @@ const collectVisibleNodes = (nodes: MindMapNode[]) => {
   return list;
 };
 
-export function MineMap() {
+interface MineMapProps {
+  className?: string;
+}
+
+export function MineMap({ className }: MineMapProps = {}) {
   const { nodes, offset, scale, zenMode } = useMindMapState(
     useShallow((state) => ({
       nodes: state.nodes,
       offset: state.offset,
       scale: state.scale,
       zenMode: state.zenMode,
-    }))
+    })),
   );
   const [rootSize, setRootSize] = useState({ w: 0, h: 0 });
 
   useEffect(() => {
     const root = document.querySelector(
-      "[data-nodex-root]"
+      "[data-nodex-root]",
     ) as HTMLElement | null;
     if (!root) {
       return;
@@ -147,7 +152,10 @@ export function MineMap() {
   return (
     <div
       data-zen={zenMode}
-      className="pointer-events-none absolute bottom-4 right-4 z-50 transition-all duration-150 rounded-xl border border-slate-200 bg-white/50 p-2 shadow-sm backdrop-blur data-[zen=true]:opacity-0 data-[zen=true]:scale-90 opacity-100 scale-100"
+      className={cn(
+        "pointer-events-none absolute bottom-4 right-4 z-50 transition-all duration-150 rounded-xl border border-slate-200 bg-white/50 p-2 shadow-sm backdrop-blur data-[zen=true]:opacity-0 data-[zen=true]:scale-90 opacity-100 scale-100",
+        className,
+      )}
     >
       <svg
         width={MAP_WIDTH}

@@ -4,12 +4,14 @@ import { useMindMapState } from "../../state/mindMap";
 import { useMindMapNodeMouseHandlers } from "../../hooks/mindMap/useMindMapNodeMouseHandlers";
 import { useMindMapNode } from "../../hooks/mindMap/useMindMapNode";
 import { useShallow } from "zustand/react/shallow";
+import { cn } from "../../lib/utils";
 
 type ImageNodeProps = {
   node: MindMapNode;
+  className?: string;
 };
 
-export function ImageNode({ node }: ImageNodeProps) {
+export function ImageNode({ node, className }: ImageNodeProps) {
   const { node: logicalNode } = useMindMapNode({ nodeId: node.id });
 
   const { selectedNodeId, editingNodeId, setEditingNode } = useMindMapState(
@@ -17,7 +19,7 @@ export function ImageNode({ node }: ImageNodeProps) {
       selectedNodeId: state.selectedNodeId,
       editingNodeId: state.editingNodeId,
       setEditingNode: state.setEditingNode,
-    }))
+    })),
   );
 
   const isLeft = logicalNode?.getSide() === "left";
@@ -149,7 +151,7 @@ export function ImageNode({ node }: ImageNodeProps) {
 
   return (
     <div
-      className="group absolute"
+      className={cn("group absolute", className)}
       data-nodex-node
       style={{
         transform: `translate(${node.pos.x}px, ${node.pos.y}px)`,

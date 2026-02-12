@@ -5,12 +5,14 @@ import { useShallow } from "zustand/react/shallow";
 import { useMindMapNodeMouseHandlers } from "../../hooks/mindMap/useMindMapNodeMouseHandlers";
 import { useMindMapNode } from "../../hooks/mindMap/useMindMapNode";
 import { useMindMapNodeEditor } from "../../hooks/mindMap/useMindMapNodeEditor";
+import { cn } from "../../lib/utils";
 
 type CentalNodeProps = {
   node: MindMapNode;
+  className?: string;
 };
 
-export function CentalNode({ node }: CentalNodeProps) {
+export function CentalNode({ node, className }: CentalNodeProps) {
   const { editingNodeId, selectedNodeId } = useMindMapState(
     useShallow((state) => ({
       selectedNodeId: state.selectedNodeId,
@@ -29,7 +31,7 @@ export function CentalNode({ node }: CentalNodeProps) {
 
   return (
     <div
-      className="group absolute"
+      className={cn("group absolute", className)}
       data-nodex-node
       style={{
         transform: `translate(${node.pos.x}px, ${node.pos.y}px)`,

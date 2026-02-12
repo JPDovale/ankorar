@@ -5,12 +5,14 @@ import { type ReactNode, useRef } from "react";
 import { Nodes } from "./Nodes";
 import { NodeStylePopover } from "./NodeStylePopover";
 import { KeyboardHelpDialog } from "./KeyboardHelpDialog";
+import { cn } from "../../lib/utils";
 
 interface BoardProps {
   children?: ReactNode;
+  className?: string;
 }
 
-export function Board({ children }: BoardProps) {
+export function Board({ children, className }: BoardProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const { ...mouseHandlers } = useRootMouseHandlers({
     rootRef,
@@ -22,7 +24,7 @@ export function Board({ children }: BoardProps) {
   return (
     <div
       data-nodex-root
-      className="relative flex-1 overflow-hidden cursor-grab"
+      className={cn("relative flex-1 overflow-hidden cursor-grab", className)}
       ref={rootRef}
       {...mouseHandlers}
     >

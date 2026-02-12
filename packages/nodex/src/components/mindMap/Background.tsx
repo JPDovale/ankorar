@@ -2,8 +2,13 @@ import type { CSSProperties } from "react";
 
 import { useMindMapState } from "../../state/mindMap";
 import { useShallow } from "zustand/react/shallow";
+import { cn } from "../../lib/utils";
 
-export function Background() {
+interface BackgroundProps {
+  className?: string;
+}
+
+export function Background({ className }: BackgroundProps = {}) {
   const { offset, scale } = useMindMapState(
     useShallow((state) => ({
       offset: state.offset,
@@ -14,7 +19,7 @@ export function Background() {
 
   return (
     <div
-      className="absolute inset-0 bg-slate-50"
+      className={cn("absolute inset-0 bg-slate-50", className)}
       style={
         {
           "--nodex-offset-x": `${offset.x}px`,

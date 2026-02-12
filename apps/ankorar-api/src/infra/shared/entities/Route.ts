@@ -83,6 +83,7 @@ interface CreateRouteProps<
   method: Method;
   summary: string;
   description: string;
+  bodyLimit?: number;
   handler: Handler<TBodySchema, TResponseSchema, TParamsSchema>;
 }
 
@@ -103,6 +104,7 @@ export class Route<
   handler: Handler<TBodySchema, TResponseSchema, TParamsSchema>;
   summary;
   description;
+  bodyLimit?;
 
   protected constructor({
     path,
@@ -115,6 +117,7 @@ export class Route<
     response,
     params,
     preHandler,
+    bodyLimit,
   }: CreateRouteProps<TBodySchema, TResponseSchema, TParamsSchema>) {
     this.path = path;
     this.tags = tags;
@@ -126,6 +129,7 @@ export class Route<
     this.params = params;
     this.preHandler = preHandler;
     this.description = description;
+    this.bodyLimit = bodyLimit;
   }
 
   static create<
@@ -148,12 +152,15 @@ export class Route<
       route.params === undefined ? {} : { params: route.params };
     const preHandler =
       route.preHandler === undefined ? {} : { preHandler: route.preHandler };
+    const bodyLimit =
+      route.bodyLimit === undefined ? {} : { bodyLimit: route.bodyLimit };
 
     app.register((app) => {
       app[route.method](
         route.path,
         {
           ...preHandler,
+          ...bodyLimit,
           schema: {
             tags: route.tags,
             summary: route.summary,

@@ -2,8 +2,15 @@ import { useCallback } from "react";
 import { useMindMapState } from "../../state/mindMap";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { type KeyBind, rootKeyBinds } from "../../config/rootKeyBinds";
+import { cn } from "../../lib/utils";
 
-export function KeyboardHelpDialog() {
+interface KeyboardHelpDialogProps {
+  className?: string;
+}
+
+export function KeyboardHelpDialog({
+  className,
+}: KeyboardHelpDialogProps = {}) {
   const helpOpen = useMindMapState((state) => state.helpOpen);
   const setHelpOpen = useMindMapState((state) => state.setHelpOpen);
 
@@ -13,17 +20,22 @@ export function KeyboardHelpDialog() {
         setHelpOpen(nextOpen);
       }
     },
-    [helpOpen, setHelpOpen]
+    [helpOpen, setHelpOpen],
   );
 
   const shortcuts = Object.entries(rootKeyBinds).reduce(
     (acc, [, value]) => [...acc, value],
-    [] as KeyBind[]
+    [] as KeyBind[],
   );
 
   return (
     <Dialog open={helpOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="h-[520px] max-w-[520px] border-slate-200 bg-white flex flex-col">
+      <DialogContent
+        className={cn(
+          "h-[520px] max-w-[520px] border-slate-200 bg-white flex flex-col",
+          className,
+        )}
+      >
         <DialogHeader className="gap-1">
           <DialogTitle className="text-lg">Atalhos de teclado</DialogTitle>
           <p className="text-sm text-slate-500">

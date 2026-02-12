@@ -8,6 +8,11 @@ interface MapModuleProps {
   name: string;
   Maps: {
     create: (props: CreateMapProps) => Promise<{ map: Map }>;
+    updateNodeContent: (props: {
+      id: string;
+      memberId: string;
+      content: JsonValue[];
+    }) => Promise<{ map: Map }>;
     fns: {
       findById: (props: { id: string }) => Promise<{ map: Map }>;
       findByIdAndMemberId: (props: {
@@ -15,6 +20,8 @@ interface MapModuleProps {
         memberId: string;
       }) => Promise<{ map: Map }>;
       findByMemberId: (props: { memberId: string }) => Promise<{ maps: Map[] }>;
+      createCentralNode: (title: string) => JsonValue;
+      extractCentralNodeTitle: (content: JsonValue[]) => string | null;
       persist: (props: { map: Map }) => Promise<{ map: Map }>;
     };
   };
@@ -30,38 +37,6 @@ class MapModule extends Module<MapModuleProps> {
   }
 }
 
-function createCentralNode(title: string): JsonValue {
-  return {
-    id: "1",
-    pos: {
-      x: 0,
-      y: 0,
-    },
-    text: title,
-    type: "central",
-    style: {
-      h: 68,
-      w: 308,
-      color: "#0f172a",
-      isBold: true,
-      padding: {
-        x: 96,
-        y: 32,
-      },
-      fontSize: 24,
-      isItalic: false,
-      textAlign: "left",
-      textColor: "#0f172a",
-      wrapperPadding: 4,
-      backgroundColor: "#ffffff",
-    },
-    sequence: 0,
-    childrens: [],
-    isVisible: true,
-    parent: null,
-  };
-}
-
 export const mapModule = MapModule.create({
   name: "map",
   Maps: {
@@ -69,7 +44,25 @@ export const mapModule = MapModule.create({
       const map = Map.create(props);
 
       if (!props.content || props.content.length === 0) {
-        map.content = [createCentralNode(map.title)];
+        map.content = [this.fns.createCentralNode(map.title)];
+      }
+
+      await this.fns.persist({ map });
+
+      return { map };
+    },
+
+    async updateNodeContent({ id, memberId, content }) {
+      const { map } = await this.fns.findByIdAndMemberId({
+        id,
+        memberId,
+      });
+
+      map.content = content;
+      const centralNodeTitle = this.fns.extractCentralNodeTitle(content);
+
+      if (centralNodeTitle) {
+        map.title = centralNodeTitle;
       }
 
       await this.fns.persist({ map });
@@ -78,6 +71,66 @@ export const mapModule = MapModule.create({
     },
 
     fns: {
+      createCentralNode(title) {
+        return {
+          id: "1",
+          pos: {
+            x: 0,
+            y: 0,
+          },
+          text: title,
+          type: "central",
+          style: {
+            h: 68,
+            w: 308,
+            color: "#0f172a",
+            isBold: true,
+            padding: {
+              x: 96,
+              y: 32,
+            },
+            fontSize: 24,
+            isItalic: false,
+            textAlign: "left",
+            textColor: "#0f172a",
+            wrapperPadding: 4,
+            backgroundColor: "#ffffff",
+          },
+          sequence: 0,
+          childrens: [],
+          isVisible: true,
+          parent: null,
+        };
+      },
+
+      extractCentralNodeTitle(content) {
+        const centralNode = content.find((node) => {
+          if (typeof node !== "object" || node === null) {
+            return false;
+          }
+
+          return (node as { type?: unknown }).type === "central";
+        });
+
+        if (!centralNode || typeof centralNode !== "object") {
+          return null;
+        }
+
+        const text = (centralNode as { text?: unknown }).text;
+
+        if (typeof text !== "string") {
+          return null;
+        }
+
+        const normalizedTitle = text.trim();
+
+        if (!normalizedTitle) {
+          return null;
+        }
+
+        return normalizedTitle;
+      },
+
       async findById({ id }) {
         const mapOnDb = await db.map.findFirst({
           where: {

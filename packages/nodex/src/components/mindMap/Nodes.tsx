@@ -5,8 +5,13 @@ import { ImageNode } from "./ImageNode";
 import { Segments } from "./Segments";
 import { useShallow } from "zustand/react/shallow";
 import { useMemo } from "react";
+import { cn } from "../../lib/utils";
 
-export function Nodes() {
+interface NodesProps {
+  className?: string;
+}
+
+export function Nodes({ className }: NodesProps = {}) {
   const { offset, scale, nodes, getFlatNodes } = useMindMapState(
     useShallow((state) => ({
       offset: state.offset,
@@ -20,7 +25,7 @@ export function Nodes() {
 
   return (
     <div
-      className="absolute left-0 top-0 h-full w-full"
+      className={cn("absolute left-0 top-0 h-full w-full", className)}
       style={{
         transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
         transformOrigin: "0 0",

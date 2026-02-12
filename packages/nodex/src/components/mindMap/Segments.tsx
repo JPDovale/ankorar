@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 import type { MindMapNode } from "../../state/mindMap";
+import { cn } from "../../lib/utils";
 
 interface SegmentsProps {
   nodes: MindMapNode[];
+  className?: string;
 }
 
-export function Segments({ nodes }: SegmentsProps) {
+export function Segments({ nodes, className }: SegmentsProps) {
   const segmentLines = useMemo(() => {
     type SegmentLine = {
       key: string;
@@ -132,7 +134,10 @@ export function Segments({ nodes }: SegmentsProps) {
 
   return (
     <svg
-      className="absolute left-0 top-0 h-full w-full pointer-events-none overflow-visible"
+      className={cn(
+        "absolute left-0 top-0 h-full w-full pointer-events-none overflow-visible",
+        className,
+      )}
       aria-hidden="true"
       style={{ overflow: "visible" }}
     >

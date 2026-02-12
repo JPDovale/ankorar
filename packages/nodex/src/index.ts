@@ -12,6 +12,10 @@ export { Board } from "./components/mindMap/Board";
 export { CentalNode } from "./components/mindMap/CentalNode";
 export { DefaultNode } from "./components/mindMap/DefaultNode";
 export { Header as MindMapHeader } from "./components/mindMap/Header";
+export {
+  SaveStatusIndicator,
+  type MindMapSaveStatus,
+} from "./components/mindMap/SaveStatusIndicator";
 export { ImageNode } from "./components/mindMap/ImageNode";
 export { KeyboardHelpDialog } from "./components/mindMap/KeyboardHelpDialog";
 export { MineMap } from "./components/mindMap/MineMap";

@@ -22,12 +22,11 @@ export function useMindMapNodeEditor({
   textRef,
 }: UseMindMapNodeEditorParams): UseMindMapNodeEditorResult {
   const { node } = useMindMapNode({ nodeId });
-  const { editingNodeId, setEditingNode, updateNode } = useMindMapState(
+  const { editingNodeId, setEditingNode } = useMindMapState(
     useShallow((state) => ({
       editingNodeId: state.editingNodeId,
       setEditingNode: state.setEditingNode,
-      updateNode: state.updateNode,
-    }))
+    })),
   );
 
   const isEditing = editingNodeId === nodeId;
@@ -76,8 +75,10 @@ export function useMindMapNodeEditor({
       }
       const element = (event.currentTarget ??
         textRef.current) as HTMLElement | null;
-      node.text = element?.textContent ?? "";
-      updateNode(node);
+      node
+        .chain()
+        .updateText(element?.textContent ?? "")
+        .commit();
     },
   };
 }

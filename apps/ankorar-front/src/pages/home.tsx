@@ -11,7 +11,13 @@ import { useMaps } from "@/hooks/useMaps";
 import { useUser } from "@/hooks/useUser";
 import { dayjs, SAO_PAULO_TIMEZONE } from "@/lib/dayjs";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight, CalendarClock, LoaderCircle, MapPlus, Shapes } from "lucide-react";
+import {
+  ArrowUpRight,
+  CalendarClock,
+  LoaderCircle,
+  MapPlus,
+  Shapes,
+} from "lucide-react";
 import { Link } from "react-router";
 import { toast } from "sonner";
 
@@ -143,62 +149,65 @@ export function HomePage() {
         </Card>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {maps.map((map) => (
-            <Card
-              key={map.id}
-              className="group relative overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              <div
-                aria-hidden
-                className={cn(
-                  "pointer-events-none absolute -right-10 -top-12 h-28 w-28 rounded-full bg-gradient-to-br blur-2xl",
-                  getThemeFromMapId(map.id).glow,
-                )}
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.92),rgba(255,255,255,0.7))]"
-              />
+          {maps.map((map) => {
+            const updateLabel = map.updated_at
+              ? `Atualizado ${formatCreatedAtLabel(map.updated_at)}`
+              : `Criado ${formatCreatedAtLabel(map.created_at)}`;
 
-              <CardHeader className="relative p-4 pb-2">
-                <div className="mb-2 flex items-center justify-between gap-2">
-                  <Badge
-                    variant="outline"
-                    className={cn(
-                      "rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em]",
-                      getThemeFromMapId(map.id).badge,
-                    )}
-                  >
-                    Mapa mental
-                  </Badge>
-                  <span className="rounded-full border border-zinc-200 bg-white/80 px-2 py-0.5 text-[10px] font-medium text-zinc-600">
-                    {formatCreatedAtLabel(map.created_at)}
+            return (
+              <Card
+                key={map.id}
+                className="group relative overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                <div
+                  aria-hidden
+                  className={cn(
+                    "pointer-events-none absolute -right-10 -top-12 h-28 w-28 rounded-full bg-gradient-to-br blur-2xl",
+                    getThemeFromMapId(map.id).glow,
+                  )}
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.92),rgba(255,255,255,0.7))]"
+                />
+
+                <CardHeader className="relative p-4 pb-2">
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em]",
+                        getThemeFromMapId(map.id).badge,
+                      )}
+                    >
+                      Mapa mental
+                    </Badge>
+                    <span className="rounded-full border border-zinc-200 bg-white/80 px-2 py-0.5 text-[10px] font-medium text-zinc-600">
+                      {formatCreatedAtLabel(map.created_at)}
+                    </span>
+                  </div>
+
+                  <CardTitle className="line-clamp-2 min-h-[2.2rem] text-base leading-snug text-zinc-900">
+                    {map.title}
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent className="relative flex items-center justify-between px-4 pb-4 pt-1">
+                  <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-500">
+                    <CalendarClock className="size-3" />
+                    {updateLabel}
                   </span>
-                </div>
-
-                <CardTitle className="line-clamp-2 min-h-[2.2rem] text-base leading-snug text-zinc-900">
-                  {map.title}
-                </CardTitle>
-              </CardHeader>
-
-              <CardContent className="relative flex items-center justify-between px-4 pb-4 pt-1">
-                <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-500">
-                  <CalendarClock className="size-3" />
-                  Atualizado{" "}
-                  {map.updated_at
-                    ? formatCreatedAtLabel(map.updated_at)
-                    : "agora"}
-                </span>
-                <Link
-                  to={`/maps/${map.id}`}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-zinc-800 transition-transform group-hover:translate-x-0.5 hover:underline"
-                >
-                  Abrir
-                  <ArrowUpRight className="size-3.5" />
-                </Link>
-              </CardContent>
-            </Card>
-          ))}
+                  <Link
+                    to={`/maps/${map.id}`}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-zinc-800 transition-transform group-hover:translate-x-0.5 hover:underline"
+                  >
+                    Abrir
+                    <ArrowUpRight className="size-3.5" />
+                  </Link>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
     </section>

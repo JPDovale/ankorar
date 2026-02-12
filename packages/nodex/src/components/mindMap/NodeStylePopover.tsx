@@ -18,15 +18,20 @@ import {
 } from "../ui/select";
 import { useShallow } from "zustand/react/shallow";
 import { useMindMapNode } from "../../hooks/mindMap/useMindMapNode";
+import { cn } from "../../lib/utils";
 
-export function NodeStylePopover() {
+interface NodeStylePopoverProps {
+  className?: string;
+}
+
+export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
   const { zenMode, scale, offset, selectedNodeId } = useMindMapState(
     useShallow((state) => ({
       zenMode: state.zenMode,
       scale: state.scale,
       offset: state.offset,
       selectedNodeId: state.selectedNodeId,
-    }))
+    })),
   );
 
   const { node: selectedNode } = useMindMapNode({ nodeId: selectedNodeId });
@@ -80,7 +85,10 @@ export function NodeStylePopover() {
         side="top"
         align="center"
         sideOffset={10}
-        className="w-auto border-slate-200 bg-white/90 p-1 shadow-sm backdrop-blur"
+        className={cn(
+          "w-auto border-slate-200 bg-white/90 p-1 shadow-sm backdrop-blur",
+          className,
+        )}
         data-nodex-ui
         onPointerDown={(event) => {
           event.stopPropagation();
