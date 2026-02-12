@@ -36,6 +36,10 @@ Backend controllers usados no frontend:
 - `library/createLibrary.ts` -> `POST /v1/libraries`
 - `library/listLibraries.ts` -> `GET /v1/libraries`
 - `library/connectMapToLibrary.ts` -> `POST /v1/libraries/:library_id/maps/:map_id/connect`
+- `organization/createOrganizationInvite.ts` -> `POST /v1/organizations/invites`
+- `organization/listOrganizationInvites.ts` -> `GET /v1/organizations/invites`
+- `organization/acceptOrganizationInvite.ts` -> `PATCH /v1/organizations/invites/:invite_id/accept`
+- `organization/rejectOrganizationInvite.ts` -> `PATCH /v1/organizations/invites/:invite_id/reject`
 
 Frontend requests:
 
@@ -49,6 +53,10 @@ Frontend requests:
 - `src/services/libraries/createLibraryRequest.ts`
 - `src/services/libraries/listLibrariesRequest.ts`
 - `src/services/libraries/connectMapToLibraryRequest.ts`
+- `src/services/organizations/createOrganizationInviteRequest.ts`
+- `src/services/organizations/listOrganizationInvitesRequest.ts`
+- `src/services/organizations/acceptOrganizationInviteRequest.ts`
+- `src/services/organizations/rejectOrganizationInviteRequest.ts`
 
 Exemplo atual de entidade:
 

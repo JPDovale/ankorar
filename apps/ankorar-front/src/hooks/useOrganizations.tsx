@@ -1,10 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { acceptOrganizationInviteRequest } from "@/services/organizations/acceptOrganizationInviteRequest";
+import {
+  createOrganizationInviteRequest,
+  type CreateOrganizationInviteRequestBody,
+} from "@/services/organizations/createOrganizationInviteRequest";
+import {
+  listOrganizationInvitesRequest,
+  type OrganizationInvitePreview,
+} from "@/services/organizations/listOrganizationInvitesRequest";
 import {
   listUserOrganizationsRequest,
   type OrganizationPreview,
 } from "@/services/organizations/listUserOrganizationsRequest";
+import { rejectOrganizationInviteRequest } from "@/services/organizations/rejectOrganizationInviteRequest";
 
 export const organizationsQueryKey = ["organizations"] as const;
+export const organizationInvitesQueryKey = ["organization-invites"] as const;
 
 async function getOrganizationsQueryFn(): Promise<OrganizationPreview[]> {
   const response = await listUserOrganizationsRequest();
@@ -16,12 +29,118 @@ async function getOrganizationsQueryFn(): Promise<OrganizationPreview[]> {
   return [];
 }
 
+async function getOrganizationInvitesQueryFn(): Promise<
+  OrganizationInvitePreview[]
+> {
+  const response = await listOrganizationInvitesRequest();
+
+  if (response.status === 200 && response.data?.invites) {
+    return response.data.invites;
+  }
+
+  return [];
+}
+
+interface CreateOrganizationInviteMutationResult {
+  success: boolean;
+}
+
+interface UpdateOrganizationInviteMutationResult {
+  success: boolean;
+}
+
+interface UpdateOrganizationInviteMutationPayload {
+  inviteId: string;
+}
+
+function extractUnexpectedErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return "Não foi possível concluir a operação.";
+}
+
+async function createOrganizationInviteMutationFn(
+  payload: CreateOrganizationInviteRequestBody,
+): Promise<CreateOrganizationInviteMutationResult> {
+  const response = await createOrganizationInviteRequest(payload);
+
+  if (response.status !== 201) {
+    toast.error(
+      response.error?.message ?? "Não foi possível enviar o convite.",
+      {
+        action: response.error?.action,
+      },
+    );
+
+    return {
+      success: false,
+    };
+  }
+
+  return {
+    success: true,
+  };
+}
+
+async function acceptOrganizationInviteMutationFn(
+  payload: UpdateOrganizationInviteMutationPayload,
+): Promise<UpdateOrganizationInviteMutationResult> {
+  const response = await acceptOrganizationInviteRequest({
+    inviteId: payload.inviteId,
+  });
+
+  if (response.status !== 200) {
+    toast.error(
+      response.error?.message ?? "Não foi possível aceitar o convite.",
+      {
+        action: response.error?.action,
+      },
+    );
+
+    return {
+      success: false,
+    };
+  }
+
+  return {
+    success: true,
+  };
+}
+
+async function rejectOrganizationInviteMutationFn(
+  payload: UpdateOrganizationInviteMutationPayload,
+): Promise<UpdateOrganizationInviteMutationResult> {
+  const response = await rejectOrganizationInviteRequest({
+    inviteId: payload.inviteId,
+  });
+
+  if (response.status !== 200) {
+    toast.error(
+      response.error?.message ?? "Não foi possível rejeitar o convite.",
+      {
+        action: response.error?.action,
+      },
+    );
+
+    return {
+      success: false,
+    };
+  }
+
+  return {
+    success: true,
+  };
+}
+
 interface UseOrganizationsParams {
   enabled?: boolean;
 }
 
 export function useOrganizations(params: UseOrganizationsParams = {}) {
   const { enabled = true } = params;
+  const queryClient = useQueryClient();
 
   const organizationsQuery = useQuery({
     queryKey: organizationsQueryKey,
@@ -32,9 +151,120 @@ export function useOrganizations(params: UseOrganizationsParams = {}) {
     refetchOnWindowFocus: false,
   });
 
+  const invitesQuery = useQuery({
+    queryKey: organizationInvitesQueryKey,
+    queryFn: getOrganizationInvitesQueryFn,
+    enabled,
+    staleTime: 2 * 60 * 1000,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  const createOrganizationInviteMutation = useMutation({
+    mutationFn: createOrganizationInviteMutationFn,
+    onSuccess: (result) => {
+      if (!result.success) {
+        return;
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: organizationInvitesQueryKey,
+      });
+    },
+  });
+
+  const acceptOrganizationInviteMutation = useMutation({
+    mutationFn: acceptOrganizationInviteMutationFn,
+    onSuccess: (result) => {
+      if (!result.success) {
+        return;
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: organizationsQueryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: organizationInvitesQueryKey,
+      });
+    },
+  });
+
+  const rejectOrganizationInviteMutation = useMutation({
+    mutationFn: rejectOrganizationInviteMutationFn,
+    onSuccess: (result) => {
+      if (!result.success) {
+        return;
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: organizationInvitesQueryKey,
+      });
+    },
+  });
+
+  const createOrganizationInvite = useCallback(
+    async (
+      payload: CreateOrganizationInviteRequestBody,
+    ): Promise<CreateOrganizationInviteMutationResult> => {
+      return createOrganizationInviteMutation
+        .mutateAsync(payload)
+        .catch((error) => {
+          toast.error(extractUnexpectedErrorMessage(error));
+
+          return {
+            success: false,
+          };
+        });
+    },
+    [createOrganizationInviteMutation],
+  );
+
+  const acceptOrganizationInvite = useCallback(
+    async (
+      payload: UpdateOrganizationInviteMutationPayload,
+    ): Promise<UpdateOrganizationInviteMutationResult> => {
+      return acceptOrganizationInviteMutation
+        .mutateAsync(payload)
+        .catch((error) => {
+          toast.error(extractUnexpectedErrorMessage(error));
+
+          return {
+            success: false,
+          };
+        });
+    },
+    [acceptOrganizationInviteMutation],
+  );
+
+  const rejectOrganizationInvite = useCallback(
+    async (
+      payload: UpdateOrganizationInviteMutationPayload,
+    ): Promise<UpdateOrganizationInviteMutationResult> => {
+      return rejectOrganizationInviteMutation
+        .mutateAsync(payload)
+        .catch((error) => {
+          toast.error(extractUnexpectedErrorMessage(error));
+
+          return {
+            success: false,
+          };
+        });
+    },
+    [rejectOrganizationInviteMutation],
+  );
+
   return {
     organizations: organizationsQuery.data ?? [],
+    organizationInvites: invitesQuery.data ?? [],
     isLoadingOrganizations: organizationsQuery.isPending,
+    isLoadingOrganizationInvites: invitesQuery.isPending,
     refetchOrganizations: organizationsQuery.refetch,
+    refetchOrganizationInvites: invitesQuery.refetch,
+    createOrganizationInvite,
+    acceptOrganizationInvite,
+    rejectOrganizationInvite,
+    isCreatingOrganizationInvite: createOrganizationInviteMutation.isPending,
+    isAcceptingOrganizationInvite: acceptOrganizationInviteMutation.isPending,
+    isRejectingOrganizationInvite: rejectOrganizationInviteMutation.isPending,
   };
 }

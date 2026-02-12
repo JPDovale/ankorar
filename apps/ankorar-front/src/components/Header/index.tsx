@@ -3,7 +3,7 @@ import { useOrganizations } from "@/hooks/useOrganizations";
 import { useSideBar } from "@/hooks/useSideBar";
 import type { OrganizationOption } from "@/types/auth";
 import { PanelLeftOpen } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { OrganizationSwitcher } from "./OrganizationSwitcher";
 import { UserInfo } from "./UserInfo";
 
@@ -24,8 +24,18 @@ function getOrganizationSlug(name: string, id: string) {
 }
 
 export function Header() {
-  const { organizations: organizationsPreview, isLoadingOrganizations } =
-    useOrganizations();
+  const {
+    organizations: organizationsPreview,
+    organizationInvites,
+    isLoadingOrganizations,
+    isLoadingOrganizationInvites,
+    createOrganizationInvite,
+    acceptOrganizationInvite,
+    rejectOrganizationInvite,
+    isCreatingOrganizationInvite,
+    isAcceptingOrganizationInvite,
+    isRejectingOrganizationInvite,
+  } = useOrganizations();
   const { collapsed, toggleCollapsed } = useSideBar();
 
   const organizations = useMemo<OrganizationOption[]>(() => {
@@ -38,33 +48,31 @@ export function Header() {
   }, [organizationsPreview]);
 
   const currentOrganizationId =
-    organizationsPreview.find((organization) => organization.is_current)?.id ?? "";
+    organizationsPreview.find((organization) => organization.is_current)?.id ??
+    "";
 
-  const [selectedOrgId, setSelectedOrgId] = useState("");
+  const [selectedOrgIdState, setSelectedOrgId] = useState("");
 
-  useEffect(() => {
+  const selectedOrgId = useMemo(() => {
     if (organizations.length === 0) {
-      if (selectedOrgId !== "") {
-        setSelectedOrgId("");
-      }
-      return;
+      return "";
     }
 
-    const selectedExists = organizations.some(
-      (organization) => organization.id === selectedOrgId,
-    );
-
-    if (selectedExists) {
-      return;
+    if (
+      selectedOrgIdState &&
+      organizations.some(
+        (organization) => organization.id === selectedOrgIdState,
+      )
+    ) {
+      return selectedOrgIdState;
     }
 
     if (currentOrganizationId) {
-      setSelectedOrgId(currentOrganizationId);
-      return;
+      return currentOrganizationId;
     }
 
-    setSelectedOrgId(organizations[0].id);
-  }, [currentOrganizationId, organizations, selectedOrgId]);
+    return organizations[0].id;
+  }, [currentOrganizationId, organizations, selectedOrgIdState]);
 
   return (
     <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/90 backdrop-blur">
@@ -89,6 +97,14 @@ export function Header() {
               organizations={organizations}
               selectedOrgId={selectedOrgId}
               onSelectOrganization={setSelectedOrgId}
+              invites={organizationInvites}
+              isLoadingInvites={isLoadingOrganizationInvites}
+              createInvite={createOrganizationInvite}
+              acceptInvite={acceptOrganizationInvite}
+              rejectInvite={rejectOrganizationInvite}
+              isCreatingInvite={isCreatingOrganizationInvite}
+              isAcceptingInvite={isAcceptingOrganizationInvite}
+              isRejectingInvite={isRejectingOrganizationInvite}
             />
           ) : (
             <Button variant="outline" className="h-10 gap-3 px-3" disabled>
