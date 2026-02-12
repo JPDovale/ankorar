@@ -93,7 +93,7 @@ export function MapEditorPage() {
       }
     },
     {
-      delayMs: 3000,
+      delayMs: 2000,
     },
   );
 
