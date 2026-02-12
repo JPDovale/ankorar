@@ -342,6 +342,7 @@ export const authModule = AuthModule.create({
 
         // ORGANIZATIONS
         "create:api_key",
+        "read:organization",
       ],
     },
   },

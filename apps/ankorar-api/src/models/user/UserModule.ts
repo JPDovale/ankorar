@@ -94,7 +94,12 @@ export const userModule = UserModule.create({
         throw new PermissionDenied();
       }
 
-      member.features = ["create:session", "read:session", "create:api_key"];
+      member.features = [
+        "create:session",
+        "read:session",
+        "create:api_key",
+        "read:organization",
+      ];
       await Members.fns.persist({ member });
 
       return { user, organization, member };

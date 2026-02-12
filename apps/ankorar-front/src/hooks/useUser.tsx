@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { organizationsQueryKey } from "@/hooks/useOrganizations";
 import { loginRequest, type LoginRequestBody } from "@/services/session/loginRequest";
 import {
   createUserRequest,
@@ -98,6 +99,9 @@ export function useUser() {
     onSuccess: (result) => {
       if (result.success && result.user) {
         queryClient.setQueryData(userQueryKey, result.user);
+        queryClient.invalidateQueries({
+          queryKey: organizationsQueryKey,
+        });
       }
     },
   });

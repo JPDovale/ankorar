@@ -4,7 +4,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import type { OrganizationOption } from "@/types/auth";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -97,13 +96,6 @@ export function OrganizationSwitcher({
             );
           })}
         </div>
-
-        <Separator className="my-2" />
-
-        <p className="px-2 pb-1 text-xs text-zinc-500">
-          Switcher pronto no frontend. A API ainda nao expoe listagem/troca de
-          organizacoes.
-        </p>
       </PopoverContent>
     </Popover>
   );

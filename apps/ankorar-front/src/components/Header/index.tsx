@@ -1,43 +1,70 @@
 import { Button } from "@/components/ui/button";
+import { useOrganizations } from "@/hooks/useOrganizations";
 import { useSideBar } from "@/hooks/useSideBar";
-import { useUser } from "@/hooks/useUser";
 import type { OrganizationOption } from "@/types/auth";
 import { PanelLeftOpen } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { OrganizationSwitcher } from "./OrganizationSwitcher";
 import { UserInfo } from "./UserInfo";
 
+function getOrganizationSlug(name: string, id: string) {
+  const letters = name
+    .trim()
+    .split(/\s+/)
+    .map((word) => word[0])
+    .join("")
+    .slice(0, 2)
+    .toLowerCase();
+
+  if (letters.length > 0) {
+    return letters;
+  }
+
+  return id.slice(0, 2).toLowerCase();
+}
+
 export function Header() {
-  const { user } = useUser();
+  const { organizations: organizationsPreview, isLoadingOrganizations } =
+    useOrganizations();
   const { collapsed, toggleCollapsed } = useSideBar();
-  const userName = user?.name || "Usuário";
 
   const organizations = useMemo<OrganizationOption[]>(() => {
-    const firstName = userName.split(" ")[0] || "Equipe";
+    return organizationsPreview.map((organization) => ({
+      id: organization.id,
+      name: organization.name,
+      role: organization.role,
+      slug: getOrganizationSlug(organization.name, organization.id),
+    }));
+  }, [organizationsPreview]);
 
-    return [
-      {
-        id: "org-main",
-        name: `${firstName} Workspace`,
-        slug: "ws",
-        role: "Owner",
-      },
-      {
-        id: "org-ops",
-        name: "Ankorar Operations",
-        slug: "ops",
-        role: "Admin",
-      },
-      {
-        id: "org-labs",
-        name: "Ankorar Labs",
-        slug: "lb",
-        role: "Member",
-      },
-    ];
-  }, [userName]);
+  const currentOrganizationId =
+    organizationsPreview.find((organization) => organization.is_current)?.id ?? "";
 
-  const [selectedOrgId, setSelectedOrgId] = useState("org-main");
+  const [selectedOrgId, setSelectedOrgId] = useState("");
+
+  useEffect(() => {
+    if (organizations.length === 0) {
+      if (selectedOrgId !== "") {
+        setSelectedOrgId("");
+      }
+      return;
+    }
+
+    const selectedExists = organizations.some(
+      (organization) => organization.id === selectedOrgId,
+    );
+
+    if (selectedExists) {
+      return;
+    }
+
+    if (currentOrganizationId) {
+      setSelectedOrgId(currentOrganizationId);
+      return;
+    }
+
+    setSelectedOrgId(organizations[0].id);
+  }, [currentOrganizationId, organizations, selectedOrgId]);
 
   return (
     <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/90 backdrop-blur">
@@ -53,11 +80,21 @@ export function Header() {
               <PanelLeftOpen className="size-4" />
             </Button>
           )}
-          <OrganizationSwitcher
-            organizations={organizations}
-            selectedOrgId={selectedOrgId}
-            onSelectOrganization={setSelectedOrgId}
-          />
+          {isLoadingOrganizations ? (
+            <Button variant="outline" className="h-10 gap-3 px-3" disabled>
+              Carregando organizacoes...
+            </Button>
+          ) : organizations.length > 0 ? (
+            <OrganizationSwitcher
+              organizations={organizations}
+              selectedOrgId={selectedOrgId}
+              onSelectOrganization={setSelectedOrgId}
+            />
+          ) : (
+            <Button variant="outline" className="h-10 gap-3 px-3" disabled>
+              Sem organizacoes
+            </Button>
+          )}
         </div>
         <UserInfo />
       </div>
