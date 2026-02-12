@@ -32,6 +32,9 @@ Backend controllers usados no frontend:
 - `map/createMap.ts` -> `POST /v1/maps`
 - `map/listMaps.ts` -> `GET /v1/maps`
 - `map/getMap.ts` -> `GET /v1/maps/:map_id`
+- `library/createLibrary.ts` -> `POST /v1/libraries`
+- `library/listLibraries.ts` -> `GET /v1/libraries`
+- `library/connectMapToLibrary.ts` -> `POST /v1/libraries/:library_id/maps/:map_id/connect`
 
 Frontend requests:
 
@@ -41,6 +44,9 @@ Frontend requests:
 - `src/services/maps/createMapRequest.ts`
 - `src/services/maps/listMapsRequest.ts`
 - `src/services/maps/getMapRequest.ts`
+- `src/services/libraries/createLibraryRequest.ts`
+- `src/services/libraries/listLibrariesRequest.ts`
+- `src/services/libraries/connectMapToLibraryRequest.ts`
 
 Exemplo atual de entidade:
 
@@ -54,6 +60,7 @@ Hook central de query/mutation:
 
 - `src/hooks/useUser.tsx`
 - `src/hooks/useMaps.tsx`
+- `src/hooks/useLibraries.tsx`
 
 ## Como adicionar uma nova rota
 

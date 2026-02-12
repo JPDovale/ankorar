@@ -1,4 +1,4 @@
-import { BrainCircuit, House, type LucideIcon } from "lucide-react";
+import { House, LibraryBig, type LucideIcon } from "lucide-react";
 
 export interface SideBarLink {
   label: string;
@@ -15,9 +15,9 @@ export const sideBarLinks: SideBarLink[] = [
     icon: House,
   },
   {
-    label: "Mind Map",
-    description: "Editor visual",
-    to: "/mind-map",
-    icon: BrainCircuit,
+    label: "Bibliotecas",
+    description: "Visualize bibliotecas",
+    to: "/libraries",
+    icon: LibraryBig,
   },
 ];

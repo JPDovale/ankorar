@@ -17,6 +17,7 @@ import { sessionController } from "./routes/sessionController";
 import { activationController } from "./routes/activationController";
 import { organizationController } from "./routes/organizationController";
 import { mapController } from "./routes/mapController";
+import { libraryController } from "./routes/libraryController";
 
 export function createServerInstance(
   opts: { log: "never" | "all" } = { log: "all" },
@@ -91,6 +92,7 @@ export function createServerInstance(
   activationController.convertRoutes(app, opts);
   organizationController.convertRoutes(app, opts);
   mapController.convertRoutes(app, opts);
+  libraryController.convertRoutes(app, opts);
 
   return {
     ...app,

@@ -20,6 +20,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useLibraries } from "@/hooks/useLibraries";
 import { useMaps } from "@/hooks/useMaps";
 import { useUser } from "@/hooks/useUser";
 import { dayjs, SAO_PAULO_TIMEZONE } from "@/lib/dayjs";
@@ -27,6 +35,8 @@ import { cn } from "@/lib/utils";
 import {
   ArrowUpRight,
   CalendarClock,
+  LibraryBig,
+  Link2,
   LoaderCircle,
   MapPlus,
   MoreVertical,
@@ -72,19 +82,28 @@ function createDateBasedMapTitle(inputDate?: string | Date) {
 
 export function HomePage() {
   const { user } = useUser();
+  const { libraries } = useLibraries();
   const {
     maps,
     isLoadingMaps,
     createMap,
     isCreatingMap,
     deleteMap,
+    connectMapToLibrary,
     isDeletingMap,
+    isConnectingMapToLibrary,
   } = useMaps();
   const [deletingMapId, setDeletingMapId] = useState<string | null>(null);
   const [mapPendingDeletion, setMapPendingDeletion] = useState<{
     id: string;
     title: string;
   } | null>(null);
+  const [mapPendingLibraryConnection, setMapPendingLibraryConnection] =
+    useState<{
+      id: string;
+      title: string;
+    } | null>(null);
+  const [selectedLibraryId, setSelectedLibraryId] = useState<string>("");
   const mapsCount = maps.length;
   const nowInSaoPaulo = dayjs().tz(SAO_PAULO_TIMEZONE);
 
@@ -137,6 +156,16 @@ export function HomePage() {
     setMapPendingDeletion(map);
   }
 
+  function handleConnectMapRequest(map: { id: string; title: string }) {
+    if (libraries.length === 0) {
+      toast.error("Crie uma biblioteca antes de vincular um mapa.");
+      return;
+    }
+
+    setSelectedLibraryId(libraries[0]?.id ?? "");
+    setMapPendingLibraryConnection(map);
+  }
+
   async function handleConfirmDeleteMap() {
     if (!mapPendingDeletion) {
       return;
@@ -156,6 +185,29 @@ export function HomePage() {
 
     toast.success(`Mapa mental "${mapPendingDeletion.title}" excluído.`);
     setMapPendingDeletion(null);
+  }
+
+  async function handleConfirmConnectMapToLibrary() {
+    if (!mapPendingLibraryConnection || !selectedLibraryId) {
+      return;
+    }
+
+    const library = libraries.find((item) => item.id === selectedLibraryId);
+
+    const { success } = await connectMapToLibrary({
+      mapId: mapPendingLibraryConnection.id,
+      libraryId: selectedLibraryId,
+    });
+
+    if (!success) {
+      return;
+    }
+
+    toast.success(
+      `Mapa mental "${mapPendingLibraryConnection.title}" vinculado à biblioteca "${library?.name ?? "selecionada"}".`,
+    );
+    setMapPendingLibraryConnection(null);
+    setSelectedLibraryId("");
   }
 
   return (
@@ -265,6 +317,19 @@ export function HomePage() {
                     </Button>
                     <Button
                       variant="ghost"
+                      className="h-8 w-full justify-start gap-2 px-2 text-xs text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+                      onClick={() =>
+                        handleConnectMapRequest({
+                          id: map.id,
+                          title: map.title,
+                        })
+                      }
+                    >
+                      <Link2 className="size-3.5 shrink-0" />
+                      Vincular biblioteca
+                    </Button>
+                    <Button
+                      variant="ghost"
                       className="h-8 w-full justify-start gap-2 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
                       onClick={() =>
                         handleDeleteMapRequest({ id: map.id, title: map.title })
@@ -354,6 +419,70 @@ export function HomePage() {
                 <Trash2 className="size-3.5 shrink-0" />
               )}
               Excluir
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={mapPendingLibraryConnection !== null}
+        onOpenChange={(isOpen) => {
+          if (!isOpen && !isConnectingMapToLibrary) {
+            setMapPendingLibraryConnection(null);
+            setSelectedLibraryId("");
+          }
+        }}
+      >
+        <DialogContent className="max-w-sm p-5">
+          <DialogHeader>
+            <DialogTitle className="text-base">Vincular biblioteca</DialogTitle>
+            <DialogDescription className="text-sm">
+              Selecione uma biblioteca para vincular este mapa mental.
+            </DialogDescription>
+          </DialogHeader>
+
+          <Select
+            value={selectedLibraryId}
+            onValueChange={setSelectedLibraryId}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Selecione uma biblioteca" />
+            </SelectTrigger>
+            <SelectContent align="start">
+              {libraries.map((library) => (
+                <SelectItem key={library.id} value={library.id}>
+                  <span className="inline-flex items-center gap-2">
+                    <LibraryBig className="size-3.5 shrink-0 text-zinc-500" />
+                    {library.name}
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <DialogFooter>
+            <Button
+              variant="secondary"
+              className="text-xs"
+              onClick={() => {
+                setMapPendingLibraryConnection(null);
+                setSelectedLibraryId("");
+              }}
+              disabled={isConnectingMapToLibrary}
+            >
+              Cancelar
+            </Button>
+            <Button
+              className="gap-2 text-xs"
+              onClick={handleConfirmConnectMapToLibrary}
+              disabled={isConnectingMapToLibrary || !selectedLibraryId}
+            >
+              {isConnectingMapToLibrary ? (
+                <LoaderCircle className="size-3.5 shrink-0 animate-spin" />
+              ) : (
+                <Link2 className="size-3.5 shrink-0" />
+              )}
+              Vincular
             </Button>
           </DialogFooter>
         </DialogContent>

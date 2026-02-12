@@ -1,5 +1,7 @@
 import { useCallback } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { librariesQueryKey } from "@/hooks/useLibraries";
+import { connectMapToLibraryRequest } from "@/services/libraries/connectMapToLibraryRequest";
 import {
   createMapRequest,
   type CreateMapRequestBody,
@@ -21,8 +23,17 @@ interface DeleteMapMutationResult {
   success: boolean;
 }
 
+interface ConnectMapToLibraryMutationResult {
+  success: boolean;
+}
+
 interface DeleteMapMutationPayload {
   id: string;
+}
+
+interface ConnectMapToLibraryMutationPayload {
+  mapId: string;
+  libraryId: string;
 }
 
 function extractUnexpectedErrorMessage(error: unknown): string {
@@ -85,6 +96,33 @@ async function deleteMapMutationFn(
   };
 }
 
+async function connectMapToLibraryMutationFn(
+  payload: ConnectMapToLibraryMutationPayload,
+): Promise<ConnectMapToLibraryMutationResult> {
+  const response = await connectMapToLibraryRequest({
+    mapId: payload.mapId,
+    libraryId: payload.libraryId,
+  });
+
+  if (response.status !== 200) {
+    toast.error(
+      response.error?.message ??
+        "Não foi possível vincular o mapa à biblioteca.",
+      {
+        action: response.error?.action,
+      },
+    );
+
+    return {
+      success: false,
+    };
+  }
+
+  return {
+    success: true,
+  };
+}
+
 export function useMaps() {
   const queryClient = useQueryClient();
 
@@ -118,6 +156,22 @@ export function useMaps() {
     },
   });
 
+  const connectMapToLibraryMutation = useMutation({
+    mutationFn: connectMapToLibraryMutationFn,
+    onSuccess: (result) => {
+      if (!result.success) {
+        return;
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: mapsQueryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: librariesQueryKey,
+      });
+    },
+  });
+
   const createMap = useCallback(
     async (payload: CreateMapRequestBody): Promise<CreateMapMutationResult> => {
       return createMapMutation.mutateAsync(payload).catch((error) => {
@@ -146,13 +200,30 @@ export function useMaps() {
     [deleteMapMutation],
   );
 
+  const connectMapToLibrary = useCallback(
+    async (
+      payload: ConnectMapToLibraryMutationPayload,
+    ): Promise<ConnectMapToLibraryMutationResult> => {
+      return connectMapToLibraryMutation.mutateAsync(payload).catch((error) => {
+        toast.error(extractUnexpectedErrorMessage(error));
+
+        return {
+          success: false,
+        };
+      });
+    },
+    [connectMapToLibraryMutation],
+  );
+
   return {
     maps: mapsQuery.data ?? [],
     isLoadingMaps: mapsQuery.isPending,
     refetchMaps: mapsQuery.refetch,
     createMap,
     deleteMap,
+    connectMapToLibrary,
     isCreatingMap: createMapMutation.isPending,
     isDeletingMap: deleteMapMutation.isPending,
+    isConnectingMapToLibrary: connectMapToLibraryMutation.isPending,
   };
 }

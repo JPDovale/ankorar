@@ -1,8 +1,8 @@
 import { AuthenticatedLayout } from "@/layouts/authenticated";
 import { DefaultLayout } from "@/layouts/default";
 import { HomePage } from "@/pages/home";
+import { LibrariesPage } from "@/pages/libraries";
 import { MapEditorPage } from "@/pages/map-editor";
-import { MindMapPage } from "@/pages/mind-map";
 import { LoginPage } from "@/pages/login";
 import { RegisterPage } from "@/pages/register";
 import { ProtectedRoute, PublicOnlyRoute } from "@/routes/guards";
@@ -41,8 +41,8 @@ const router = createBrowserRouter([
                 Component: HomePage,
               },
               {
-                path: "/mind-map",
-                Component: MindMapPage,
+                path: "/libraries",
+                Component: LibrariesPage,
               },
             ],
           },
