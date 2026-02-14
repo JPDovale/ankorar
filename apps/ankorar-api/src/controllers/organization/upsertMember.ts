@@ -5,7 +5,7 @@ import {
 } from "./upsertMember.gateway";
 import { userModule } from "@/src/models/user/UserModule";
 import { organizationModule } from "@/src/models/organization/OrganizationModule";
-import { User } from "@/src/models/user/User";
+import { User } from "@/src/models/user/Users/User";
 import { InternalServerError } from "@/src/infra/errors/InternalServerError";
 import { safeCall } from "@/src/utils/safeCall";
 import { UserNotFound } from "@/src/infra/errors/UserNotFound";

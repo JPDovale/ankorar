@@ -1,5 +1,5 @@
 import { emailModule } from "../../../email/EmailModule";
-import { User } from "../../../user/User";
+import { User } from "../../../user/Users/User";
 import { webserverModule } from "../../../webserver/WebserverModule";
 import { ActivationToken } from "../ActivationToken";
 

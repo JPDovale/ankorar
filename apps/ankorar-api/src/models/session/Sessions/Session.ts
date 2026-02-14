@@ -1,6 +1,6 @@
 import { Optional } from "@/src/infra/http/types/optional";
 import { Entity } from "@/src/infra/shared/entities/Entity";
-import { dateModule } from "../date/DateModule";
+import { dateModule } from "../../date/DateModule";
 
 interface SessionProps {
   user_id: string;

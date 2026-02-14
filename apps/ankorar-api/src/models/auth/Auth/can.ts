@@ -1,7 +1,7 @@
 import { InternalServerError } from "@/src/infra/errors/InternalServerError";
-import { Member } from "../../organization/Member";
-import { Organization } from "../../organization/Organization";
-import { User } from "../../user/User";
+import { Member } from "../../organization/Members/Member";
+import { Organization } from "../../organization/Organizations/Organization";
+import { User } from "../../user/Users/User";
 import { availableFeatures } from "./fns/availableFeatures";
 
 type CanInput = {

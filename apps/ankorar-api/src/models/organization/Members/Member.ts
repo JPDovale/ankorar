@@ -1,6 +1,6 @@
 import { Optional } from "@/src/infra/http/types/optional";
 import { Entity } from "@/src/infra/shared/entities/Entity";
-import { dateModule } from "@/src/models/date/DateModule";
+import { dateModule } from "../../date/DateModule";
 
 interface MemberProps {
   org_id: string;

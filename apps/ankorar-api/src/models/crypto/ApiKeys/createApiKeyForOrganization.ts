@@ -1,4 +1,4 @@
-import { Organization } from "../../organization/Organization";
+import { Organization } from "../../organization/Organizations/Organization";
 import { ApiKey } from "../ApiKey";
 import { createApiKey } from "./createApiKey";
 import { generateSecret } from "./fns/generateSecret";

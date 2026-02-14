@@ -1,5 +1,5 @@
 import { dateModule } from "../../date/DateModule";
-import { User } from "../../user/User";
+import { User } from "../../user/Users/User";
 import { ActivationToken } from "./ActivationToken";
 import { createActivationToken } from "./createActivationToken";
 

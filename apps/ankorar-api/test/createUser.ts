@@ -1,5 +1,5 @@
 import { Optional } from "@/src/infra/http/types/optional";
-import { CreateUserProps } from "@/src/models/user/User";
+import { CreateUserProps } from "@/src/models/user/Users/User";
 import { userModule } from "@/src/models/user/UserModule";
 import { faker } from "@faker-js/faker";
 

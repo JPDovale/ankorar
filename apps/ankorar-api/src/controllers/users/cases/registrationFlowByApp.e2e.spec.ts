@@ -1,6 +1,6 @@
 import { activationModule } from "@/src/models/activation/ActivationModule";
 import { userModule } from "@/src/models/user/UserModule";
-import { User } from "@/src/models/user/User";
+import { User } from "@/src/models/user/Users/User";
 import { orchestrator } from "@/test/orchestrator";
 import { parse } from "set-cookie-parser";
 import { webserverModule } from "@/src/models/webserver/WebserverModule";

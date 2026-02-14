@@ -3,10 +3,10 @@ import { PasswordNotDefined } from "@/src/infra/errors/PasswordNotDefined";
 import { UserNotFound } from "@/src/infra/errors/UserNotFound";
 import { safeCall } from "@/src/utils/safeCall";
 import { cryptoModule } from "../../crypto/CryptoModule";
-import { Member } from "../../organization/Member";
-import { Organization } from "../../organization/Organization";
+import { Member } from "../../organization/Members/Member";
+import { Organization } from "../../organization/Organizations/Organization";
 import { organizationModule } from "../../organization/OrganizationModule";
-import { User } from "../../user/User";
+import { User } from "../../user/Users/User";
 import { userModule } from "../../user/UserModule";
 
 type GetAuthenticatedUserInput = {
