@@ -1,182 +1,147 @@
-import {
-  backgroundNodes,
-  buildPath,
-  center,
-  type Curve,
-  nodes,
-} from "@/components/auth/authSceneData";
-import { Link2 } from "lucide-react";
-import { type ReactNode } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Link2, ShieldCheck, Sparkles, Workflow, type LucideIcon } from "lucide-react";
+import { Suspense, type ReactNode } from "react";
+
+type AuthTone = "cyan" | "violet";
+
+interface AuthHighlight {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
 
 interface AuthSceneProps {
   children: ReactNode;
   subtitle?: string;
+  tone?: AuthTone;
+  panelEyebrow?: string;
+  panelTitle?: string;
+  panelDescription?: string;
 }
+
+const highlights: AuthHighlight[] = [
+  {
+    icon: Sparkles,
+    title: "Fluxo direto",
+    description: "Entre e retome seus mapas sem etapas extras.",
+  },
+  {
+    icon: Workflow,
+    title: "Organizacao visual",
+    description: "Conecte ideias com estrutura clara e navegacao rapida.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Acesso seguro",
+    description: "Sessao protegida para manter seu conteudo consistente.",
+  },
+] as const;
 
 export function AuthScene({
   children,
   subtitle = "Sua mente organiza, ancora e aprende",
+  tone = "cyan",
+  panelEyebrow = "Acesso",
+  panelTitle = "Continue de onde parou",
+  panelDescription = "Entre para acessar seus mapas, bibliotecas e organizacoes.",
 }: AuthSceneProps) {
   return (
-    <main className="relative h-screen w-screen overflow-hidden bg-gradient-to-br from-violet-500/5 to-emerald-500/5 dark:bg-zinc-950">
-      <div aria-hidden className="absolute inset-0">
-        <svg
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          className="h-full w-full"
-        >
-          <defs>
-            <filter id="line-blur" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="0.6" />
-            </filter>
-            {nodes.map((node) => (
-              <marker
-                key={`arrowhead-${node.id}`}
-                id={`arrowhead-${node.id}`}
-                markerWidth="2.6"
-                markerHeight="2.6"
-                refX="2.1"
-                refY="1.3"
-                orient="auto"
-              >
-                <path d="M0 0 L2.6 1.3 L0 2.6 Z" fill={node.color} />
-              </marker>
-            ))}
-            {backgroundNodes.map((node) => (
-              <marker
-                key={`bg-arrow-${node.id}`}
-                id={`bg-arrow-${node.id}`}
-                markerWidth="2"
-                markerHeight="2"
-                refX="1.6"
-                refY="1"
-                orient="auto"
-              >
-                <path d="M0 0 L2 1 L0 2 Z" fill={node.color} />
-              </marker>
-            ))}
-          </defs>
-
-          {backgroundNodes.map((node) => (
-            <path
-              key={`bg-line-${node.id}`}
-              d={buildPath(
-                "c",
-                center,
-                { x: node.box.x, y: node.box.y },
-                node.curve,
-              )}
-              stroke={node.color}
-              strokeWidth="0.55"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-              opacity="0.2"
-              markerEnd={`url(#bg-arrow-${node.id})`}
-              filter="url(#line-blur)"
-            />
-          ))}
-
-          {nodes.map((node) => {
-            const nearX = node.box.x;
-            const nearY = node.box.y;
-            const outerX = node.box.x + node.outer[0];
-            const outerY = node.box.y + node.outer[1];
-            const outerCurve: Curve = [
-              node.outer[0] * 0.35 + node.curve[0] * 0.25,
-              node.outer[1] * 0.35 + node.curve[1] * 0.25,
-            ];
-
-            return (
-              <g key={node.id} opacity="0.3">
-                <path
-                  d={buildPath(
-                    node.inShape,
-                    center,
-                    { x: nearX, y: nearY },
-                    node.curve,
-                  )}
-                  stroke={node.color}
-                  strokeWidth="0.85"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  fill="none"
-                  markerEnd={`url(#arrowhead-${node.id})`}
-                  filter="url(#line-blur)"
-                />
-                <path
-                  d={buildPath(
-                    node.outShape,
-                    { x: node.box.x, y: node.box.y },
-                    { x: outerX, y: outerY },
-                    outerCurve,
-                  )}
-                  stroke={node.color}
-                  strokeWidth="0.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  fill="none"
-                  markerEnd={`url(#arrowhead-${node.id})`}
-                  filter="url(#line-blur)"
-                />
-              </g>
-            );
-          })}
-        </svg>
-
-        {backgroundNodes.map((node) => (
-          <div
-            key={`bg-node-${node.id}`}
-            className="absolute flex flex-col gap-2 rounded-md border border-white/40 bg-white/70 p-2 shadow-sm blur-[5px] dark:border-zinc-700/40 dark:bg-zinc-800/70"
-            style={{
-              left: `${node.box.x}%`,
-              top: `${node.box.y}%`,
-              width: `${node.size.w}px`,
-              height: `${node.size.h}px`,
-              transform: "translate(-50%, -50%)",
-            }}
-          >
-            <div
-              className="h-1.5 w-14 rounded-lg"
-              style={{ backgroundColor: node.color }}
-            />
-            <div className="h-1.5 w-full rounded-lg bg-zinc-200/80 dark:bg-zinc-600/80" />
-            <div className="h-1.5 w-5/6 rounded-lg bg-zinc-200/80 dark:bg-zinc-600/80" />
-          </div>
-        ))}
-
-        {nodes.map((node) => (
-          <div
-            key={`node-${node.id}`}
-            className="absolute flex w-64 flex-col gap-2 rounded-lg border border-white/80 bg-white/80 p-3 shadow-sm backdrop-blur blur-[3px] dark:border-zinc-700/40 dark:bg-zinc-800/70"
-            style={{
-              left: `${node.box.x}%`,
-              top: `${node.box.y}%`,
-              transform: "translate(-50%, -50%)",
-            }}
-          >
-            <div
-              className="h-2.5 w-16 rounded-lg"
-              style={{ backgroundColor: node.color }}
-            />
-            <div className="h-2 w-full rounded-lg bg-zinc-200 dark:bg-zinc-600/80" />
-            <div className="h-2 w-5/6 rounded-lg bg-zinc-200 dark:bg-zinc-600/80" />
-            <div className="h-2 w-7/8 rounded-lg bg-zinc-200 dark:bg-zinc-600/80" />
-          </div>
-        ))}
+    <main
+      data-tone={tone}
+      className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,#e0f2fe_0%,#f8fafc_42%,#ecfeff_100%)] data-[tone=violet]:bg-[radial-gradient(circle_at_top_left,#ede9fe_0%,#f8fafc_42%,#f5f3ff_100%)] dark:bg-zinc-950"
+    >
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div
+          data-tone={tone}
+          className="absolute -left-16 top-10 h-72 w-72 rounded-full bg-cyan-200/60 blur-3xl data-[tone=violet]:bg-violet-200/60 dark:bg-cyan-800/30 dark:data-[tone=violet]:bg-violet-800/30"
+        />
+        <div
+          data-tone={tone}
+          className="absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-emerald-200/50 blur-3xl data-[tone=violet]:bg-fuchsia-200/50 dark:bg-emerald-800/20 dark:data-[tone=violet]:bg-fuchsia-800/20"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.09)_1px,transparent_1px)] bg-[size:80px_80px]" />
       </div>
 
-      <div className="relative z-10 flex h-full w-full items-center justify-center px-6">
-        <div className="w-full max-w-lg rounded-xl border-3 border-white bg-zinc-50/30 p-6 shadow-xl shadow-black/40 backdrop-blur-xl dark:border-zinc-900 dark:bg-zinc-950/50 dark:text-white">
-          <div className="flex flex-col items-center">
-            <h1 className="flex items-center justify-center gap-1 text-4xl font-extrabold">
-              <Link2 className="h-10 w-10" />
-              ANKORAR
-            </h1>
-            <span className="text-xs font-semibold opacity-80">{subtitle}</span>
-          </div>
+      <div className="relative mx-auto flex min-h-screen w-full max-w-6xl items-center px-6 py-10 lg:px-10">
+        <div className="grid w-full items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <section className="max-w-xl space-y-8">
+            <header className="space-y-4">
+              <p className="inline-flex items-center rounded-full border border-zinc-300/70 bg-white/80 px-3 py-1 text-xs font-semibold tracking-[0.08em] text-zinc-600 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-300">
+                Plataforma de mapas mentais
+              </p>
+              <h1 className="flex items-center gap-2 text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-100 md:text-5xl">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900">
+                  <Link2 className="size-6" />
+                </span>
+                ANKORAR
+              </h1>
+              <p className="max-w-lg text-base text-zinc-700 dark:text-zinc-300">
+                {subtitle}
+              </p>
+            </header>
 
-          {children}
+            <ul className="grid gap-3">
+              {highlights.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <li
+                    key={item.title}
+                    className="flex items-start gap-3 rounded-xl border border-zinc-200/80 bg-white/70 px-4 py-3 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/60"
+                  >
+                    <span
+                      data-tone={tone}
+                      className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-100 text-cyan-700 data-[tone=violet]:bg-violet-100 data-[tone=violet]:text-violet-700 dark:bg-cyan-900/60 dark:text-cyan-200 dark:data-[tone=violet]:bg-violet-900/60 dark:data-[tone=violet]:text-violet-200"
+                    >
+                      <Icon className="size-4" />
+                    </span>
+                    <span className="space-y-0.5">
+                      <span className="block text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                        {item.title}
+                      </span>
+                      <span className="block text-sm text-zinc-600 dark:text-zinc-400">
+                        {item.description}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+
+          <section className="w-full rounded-2xl border border-zinc-200/80 bg-white/90 p-6 shadow-xl shadow-zinc-900/10 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/85 dark:text-zinc-100 sm:p-8">
+            <div className="space-y-2">
+              <p className="text-xs font-semibold tracking-[0.12em] text-zinc-500 uppercase dark:text-zinc-400">
+                {panelEyebrow}
+              </p>
+              <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                {panelTitle}
+              </h2>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                {panelDescription}
+              </p>
+            </div>
+
+            <Suspense
+              fallback={
+                <div className="mt-6 space-y-4" aria-hidden>
+                  <Skeleton className="h-4 w-4/5 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-3 w-20 rounded-full" />
+                    <Skeleton className="h-11 w-full" />
+                  </div>
+                  <div className="space-y-2">
+                    <Skeleton className="h-3 w-20 rounded-full" />
+                    <Skeleton className="h-11 w-full" />
+                  </div>
+                  <Skeleton className="h-11 w-full" />
+                  <Skeleton className="mx-auto h-4 w-2/3 rounded-full" />
+                </div>
+              }
+            >
+              {children}
+            </Suspense>
+          </section>
         </div>
       </div>
     </main>

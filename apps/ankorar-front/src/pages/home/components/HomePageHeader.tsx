@@ -3,7 +3,6 @@ import { useHomePageHeader } from "@/pages/home/hooks/useHomePageHeader";
 
 export function HomePageHeader() {
   const {
-    createdTodayText,
     handleCreateMap,
     handleCreatePopoverOpenChange,
     handleMapTitleChange,
@@ -22,11 +21,7 @@ export function HomePageHeader() {
         <p className="text-xs text-zinc-500">{mapsSummaryText}</p>
       </div>
 
-      <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end">
-        <span className="inline-flex items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600">
-          {createdTodayText}
-        </span>
-
+      <div className="flex sm:items-center sm:justify-end">
         <HomeCreateMapPopover
           isOpen={isCreatePopoverOpen}
           onOpenChange={handleCreatePopoverOpenChange}

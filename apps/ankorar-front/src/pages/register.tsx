@@ -43,6 +43,15 @@ export function RegisterPage() {
   });
 
   const isSubmitting = isSubmittingForm || isCreatingUser;
+  const nameErrorMessage = errors.name?.message;
+  const emailErrorMessage = errors.email?.message;
+  const passwordErrorMessage = errors.password?.message;
+  const confirmPasswordErrorMessage = errors.confirmPassword?.message;
+  const submitLabel = isSubmitting ? "Cadastrando..." : "Criar conta";
+  const nameFieldId = "register-name";
+  const emailFieldId = "register-email";
+  const passwordFieldId = "register-password";
+  const confirmPasswordFieldId = "register-confirm-password";
 
   async function onValidSubmit(payload: RegisterFormData) {
     const { success } = await createUser({
@@ -65,52 +74,79 @@ export function RegisterPage() {
   }
 
   return (
-    <AuthScene subtitle="Crie sua conta para começar a organizar suas ideias">
+    <AuthScene
+      tone="violet"
+      panelEyebrow="Cadastro"
+      panelTitle="Comece sua conta"
+      panelDescription="Preencha seus dados para criar acesso aos mapas e bibliotecas."
+    >
       <form
-        className="mt-6 flex flex-col gap-3"
+        className="mt-6 flex flex-col gap-4"
         onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
       >
+        <p className="text-sm text-zinc-600 dark:text-zinc-300">
+          Crie sua conta para organizar mapas, bibliotecas e conexoes em um so lugar.
+        </p>
         <InputRoot disabled={isSubmitting}>
-          <span className="text-xs">Nome</span>
+          <label
+            htmlFor={nameFieldId}
+            className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300"
+          >
+            Nome
+          </label>
           <InputBox
             data-disabled={isSubmitting}
-            data-has-error={Boolean(errors.name?.message)}
+            data-has-error={Boolean(nameErrorMessage)}
+            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-600 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
           >
             <Input
+              id={nameFieldId}
               type="text"
-              placeholder="Digite seu nome"
+              placeholder="Digite seu nome completo"
               autoComplete="name"
               {...register("name")}
               disabled={isSubmitting}
             />
           </InputBox>
-          {errors.name?.message ? <InputError>{errors.name.message}</InputError> : null}
+          {nameErrorMessage && <InputError role="alert">{nameErrorMessage}</InputError>}
         </InputRoot>
-
         <InputRoot disabled={isSubmitting}>
-          <span className="text-xs">Email</span>
+          <label
+            htmlFor={emailFieldId}
+            className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300"
+          >
+            Email
+          </label>
           <InputBox
             data-disabled={isSubmitting}
-            data-has-error={Boolean(errors.email?.message)}
+            data-has-error={Boolean(emailErrorMessage)}
+            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-600 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
           >
             <Input
+              id={emailFieldId}
               type="email"
-              placeholder="Digite seu email"
+              placeholder="voce@empresa.com"
               autoComplete="email"
               {...register("email")}
               disabled={isSubmitting}
             />
           </InputBox>
-          {errors.email?.message ? <InputError>{errors.email.message}</InputError> : null}
+          {emailErrorMessage && <InputError role="alert">{emailErrorMessage}</InputError>}
         </InputRoot>
-
         <InputRoot disabled={isSubmitting}>
-          <span className="text-xs">Senha</span>
+          <label
+            htmlFor={passwordFieldId}
+            className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300"
+          >
+            Senha
+          </label>
           <InputBox
             data-disabled={isSubmitting}
-            data-has-error={Boolean(errors.password?.message)}
+            data-has-error={Boolean(passwordErrorMessage)}
+            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-600 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
           >
             <Input
+              id={passwordFieldId}
               type="password"
               placeholder="Crie uma senha"
               autoComplete="new-password"
@@ -118,18 +154,22 @@ export function RegisterPage() {
               disabled={isSubmitting}
             />
           </InputBox>
-          {errors.password?.message ? (
-            <InputError>{errors.password.message}</InputError>
-          ) : null}
+          {passwordErrorMessage && <InputError role="alert">{passwordErrorMessage}</InputError>}
         </InputRoot>
-
         <InputRoot disabled={isSubmitting}>
-          <span className="text-xs">Confirmar senha</span>
+          <label
+            htmlFor={confirmPasswordFieldId}
+            className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300"
+          >
+            Confirmar senha
+          </label>
           <InputBox
             data-disabled={isSubmitting}
-            data-has-error={Boolean(errors.confirmPassword?.message)}
+            data-has-error={Boolean(confirmPasswordErrorMessage)}
+            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-600 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
           >
             <Input
+              id={confirmPasswordFieldId}
               type="password"
               placeholder="Repita sua senha"
               autoComplete="new-password"
@@ -137,29 +177,19 @@ export function RegisterPage() {
               disabled={isSubmitting}
             />
           </InputBox>
-          {errors.confirmPassword?.message ? (
-            <InputError>{errors.confirmPassword.message}</InputError>
-          ) : null}
+          {confirmPasswordErrorMessage && <InputError role="alert">{confirmPasswordErrorMessage}</InputError>}
         </InputRoot>
-
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="mt-2 w-full bg-violet-600 text-zinc-100 hover:bg-violet-700"
+          className="mt-2 h-11 w-full bg-violet-700 text-zinc-50 hover:bg-violet-800 dark:bg-violet-600 dark:hover:bg-violet-500"
         >
-          {isSubmitting ? (
-            <>
-              <LoaderCircle className="size-4 animate-spin" />
-              Cadastrando...
-            </>
-          ) : (
-            "Criar conta"
-          )}
+          {isSubmitting && <LoaderCircle className="size-4 animate-spin" />}
+          {submitLabel}
         </Button>
-
         <p className="text-center text-sm text-zinc-600 dark:text-zinc-300">
           Já possui conta?{" "}
-          <Link to="/" className="font-semibold text-violet-600 hover:underline">
+          <Link to="/" className="font-semibold text-violet-700 underline-offset-4 hover:underline dark:text-violet-300">
             Fazer login
           </Link>
         </p>
