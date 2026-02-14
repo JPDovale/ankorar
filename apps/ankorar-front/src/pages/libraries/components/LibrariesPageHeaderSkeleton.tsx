@@ -7,7 +7,7 @@ export function LibrariesPageHeaderSkeleton() {
         <Skeleton className="h-6 w-32" />
         <Skeleton className="h-4 w-72" />
       </div>
-      <Skeleton className="h-10 w-56 rounded-full" />
+      <Skeleton className="h-10 w-56 rounded-lg" />
     </header>
   );
 }

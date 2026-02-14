@@ -1,29 +1,35 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function HomeOrganizationLibrariesSectionSkeleton() {
   return (
-    <Card className="border-zinc-200 bg-white">
-      <CardHeader className="pb-3">
+    <section className="space-y-3">
+      <header className="space-y-1">
         <Skeleton className="h-5 w-52" />
         <Skeleton className="h-6 w-72" />
-        <Skeleton className="h-4 w-96" />
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4 lg:grid-cols-[16rem_1fr]">
-          <aside className="space-y-2 rounded-xl border border-zinc-200/80 bg-zinc-50/60 p-2">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton key={index} className="h-10 w-full rounded-lg" />
-            ))}
-          </aside>
-          <section className="space-y-2 rounded-xl border border-zinc-200/80 p-4">
-            <Skeleton className="h-5 w-48" />
-            {Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton key={index} className="h-12 w-full rounded-lg" />
-            ))}
-          </section>
-        </div>
-      </CardContent>
-    </Card>
+        <Skeleton className="h-4 w-80" />
+      </header>
+
+      <Skeleton className="h-4 w-64" />
+
+      <div className="space-y-3">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <div
+            key={index}
+            className="space-y-2 rounded-lg border border-zinc-200/80 bg-zinc-50/50 px-3.5 py-3"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-4 w-20" />
+            </div>
+
+            <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+              <Skeleton className="h-36 w-full rounded-xl border border-zinc-200/80 bg-white shadow-sm" />
+              <Skeleton className="h-36 w-full rounded-xl border border-zinc-200/80 bg-white shadow-sm" />
+              <Skeleton className="h-36 w-full rounded-xl border border-zinc-200/80 bg-white shadow-sm" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

@@ -1,13 +1,15 @@
-import { Button } from "@/components/ui/button";
+import { HomeCreateMapPopover } from "@/pages/home/components/HomeCreateMapPopover";
 import { useHomePageHeader } from "@/pages/home/hooks/useHomePageHeader";
-import { LoaderCircle, MapPlus } from "lucide-react";
 
 export function HomePageHeader() {
   const {
     createdTodayText,
-    createButtonText,
     handleCreateMap,
+    handleCreatePopoverOpenChange,
+    handleMapTitleChange,
+    isCreatePopoverOpen,
     isCreatingMap,
+    mapTitle,
     mapsSummaryText,
   } = useHomePageHeader();
 
@@ -21,22 +23,18 @@ export function HomePageHeader() {
       </div>
 
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end">
-        <span className="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600">
+        <span className="inline-flex items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-medium text-zinc-600">
           {createdTodayText}
         </span>
 
-        <Button
-          onClick={handleCreateMap}
-          disabled={isCreatingMap}
-          className="min-w-56 gap-2 rounded-full"
-        >
-          {isCreatingMap ? (
-            <LoaderCircle className="size-4 animate-spin" />
-          ) : (
-            <MapPlus className="size-4" />
-          )}
-          {createButtonText}
-        </Button>
+        <HomeCreateMapPopover
+          isOpen={isCreatePopoverOpen}
+          onOpenChange={handleCreatePopoverOpenChange}
+          mapTitle={mapTitle}
+          onMapTitleChange={handleMapTitleChange}
+          onCreateMap={handleCreateMap}
+          isCreatingMap={isCreatingMap}
+        />
       </div>
     </header>
   );

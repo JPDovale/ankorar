@@ -1,14 +1,23 @@
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { CreateLibraryPopover } from "@/pages/libraries/components/CreateLibraryPopover";
 
 interface LibrariesPageHeaderProps {
+  isCreatePopoverOpen: boolean;
+  isCreatingLibrary: boolean;
+  libraryName: string;
   librariesSummaryText: string;
   onCreateLibrary: () => void;
+  onCreatePopoverOpenChange: (isOpen: boolean) => void;
+  onLibraryNameChange: (name: string) => void;
 }
 
 export function LibrariesPageHeader({
+  isCreatePopoverOpen,
+  isCreatingLibrary,
+  libraryName,
   librariesSummaryText,
   onCreateLibrary,
+  onCreatePopoverOpenChange,
+  onLibraryNameChange,
 }: LibrariesPageHeaderProps) {
   return (
     <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -19,10 +28,14 @@ export function LibrariesPageHeader({
         <p className="text-xs text-zinc-500">{librariesSummaryText}</p>
       </div>
 
-      <Button onClick={onCreateLibrary} className="min-w-56 gap-2 rounded-full">
-        <Plus className="size-4" />
-        Criar biblioteca
-      </Button>
+      <CreateLibraryPopover
+        isOpen={isCreatePopoverOpen}
+        onOpenChange={onCreatePopoverOpenChange}
+        libraryName={libraryName}
+        onLibraryNameChange={onLibraryNameChange}
+        onCreateLibrary={onCreateLibrary}
+        isCreatingLibrary={isCreatingLibrary}
+      />
     </header>
   );
 }

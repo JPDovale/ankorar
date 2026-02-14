@@ -9,6 +9,7 @@ import { buildMapLastActivityLabel } from "@/utils/buildMapLastActivityLabel";
 import {
   ArrowUpRight,
   CalendarClock,
+  ChevronRight,
   Link2,
   LoaderCircle,
   Map,
@@ -42,7 +43,7 @@ export function HomeMapCard({
       <header className="space-y-3 p-4 pb-3">
         <div className="flex items-start justify-between gap-3">
           <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-zinc-500">
-            Mapa mental
+            {map.title}
           </p>
 
           <Popover>
@@ -50,43 +51,72 @@ export function HomeMapCard({
               <Button
                 size="icon"
                 variant="ghost"
-                className="size-7 shrink-0 rounded-md text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
+                className="size-8 shrink-0 rounded-lg border border-zinc-200 bg-white text-zinc-500 shadow-xs hover:bg-zinc-50 hover:text-zinc-800"
                 aria-label={mapActionsAriaLabel}
               >
                 <MoreVertical className="size-3.5 shrink-0" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="end" className="z-30 w-44 p-1.5">
-              <Link
-                to={`/maps/${map.id}`}
-                className="inline-flex h-8 w-full items-center justify-start gap-2 rounded-sm px-2 text-xs text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
-              >
-                <PencilLine className="size-3.5 shrink-0" />
-                Editar
-              </Link>
+            <PopoverContent
+              align="end"
+              sideOffset={10}
+              className="z-30 w-60 border-zinc-200 p-0"
+            >
+              <div className="border-b border-zinc-200 bg-zinc-50/70 px-3 py-2.5">
+                <p className="truncate text-sm font-semibold text-zinc-900">
+                  {map.title}
+                </p>
+                <p className="mt-0.5 text-[11px] text-zinc-500">
+                  Ações de edição do mapa
+                </p>
+              </div>
 
-              <Button
-                variant="ghost"
-                className="h-8 w-full justify-start gap-2 px-2 text-xs text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
-                onClick={() => onConnectMapRequest({ id: map.id, title: map.title })}
-              >
-                <Link2 className="size-3.5 shrink-0" />
-                Vincular biblioteca
-              </Button>
+              <div className="space-y-1 p-1.5">
+                <Link
+                  to={`/maps/${map.id}`}
+                  className="inline-flex h-9 w-full items-center justify-between gap-2 rounded-lg px-2.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <PencilLine className="size-3.5 shrink-0" />
+                    Editar mapa
+                  </span>
+                  <ChevronRight className="size-3.5 shrink-0 opacity-70" />
+                </Link>
 
-              <Button
-                variant="ghost"
-                className="h-8 w-full justify-start gap-2 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
-                onClick={() => onDeleteMapRequest({ id: map.id, title: map.title })}
-                disabled={isDeletingCurrentMap}
-              >
-                {isDeletingCurrentMap ? (
-                  <LoaderCircle className="size-3.5 shrink-0 animate-spin" />
-                ) : (
-                  <Trash2 className="size-3.5 shrink-0" />
-                )}
-                Excluir
-              </Button>
+                <Button
+                  variant="ghost"
+                  className="h-9 w-full justify-between gap-2 rounded-lg px-2.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+                  onClick={() =>
+                    onConnectMapRequest({ id: map.id, title: map.title })
+                  }
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <Link2 className="size-3.5 shrink-0" />
+                    Vincular biblioteca
+                  </span>
+                  <ChevronRight className="size-3.5 shrink-0 opacity-70" />
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  className="h-9 w-full justify-between gap-2 rounded-lg px-2.5 text-xs font-medium text-red-600 hover:bg-red-50 hover:text-red-700"
+                  onClick={() =>
+                    onDeleteMapRequest({ id: map.id, title: map.title })
+                  }
+                  disabled={isDeletingCurrentMap}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    {isDeletingCurrentMap && (
+                      <LoaderCircle className="size-3.5 shrink-0 animate-spin" />
+                    )}
+                    {!isDeletingCurrentMap && (
+                      <Trash2 className="size-3.5 shrink-0" />
+                    )}
+                    Excluir mapa
+                  </span>
+                  <ChevronRight className="size-3.5 shrink-0 opacity-70" />
+                </Button>
+              </div>
             </PopoverContent>
           </Popover>
         </div>
@@ -106,7 +136,7 @@ export function HomeMapCard({
           </span>
           <Link
             to={`/maps/${map.id}`}
-            className="inline-flex items-center gap-1 rounded-md border border-zinc-200 px-2 py-1 text-[11px] font-medium text-zinc-700 transition-colors hover:border-zinc-300 hover:text-zinc-900"
+            className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 px-2 py-1 text-[11px] font-medium text-zinc-700 transition-colors hover:border-zinc-300 hover:text-zinc-900"
           >
             Abrir
             <ArrowUpRight className="size-3.5" />

@@ -1,40 +1,34 @@
-import { CreateLibraryDialog } from "@/pages/libraries/components/CreateLibraryDialog";
 import { LibrariesListSection } from "@/pages/libraries/components/LibrariesListSection";
 import { LibrariesPageHeader } from "@/pages/libraries/components/LibrariesPageHeader";
 import { useLibrariesPage } from "@/pages/libraries/hooks/useLibrariesPage";
 
 export function LibrariesPageContent() {
   const {
-    handleCreateDialogOpenChange,
     handleCreateLibrary,
-    handleOpenCreateDialog,
-    isCreateDialogOpen,
+    handleCreatePopoverOpenChange,
+    handleLibraryNameChange,
+    isCreatePopoverOpen,
     isCreatingLibrary,
     libraries,
     librariesSummaryText,
     libraryName,
-    setLibraryName,
   } = useLibrariesPage();
 
   return (
     <section className="space-y-6">
       <LibrariesPageHeader
+        isCreatePopoverOpen={isCreatePopoverOpen}
+        onCreatePopoverOpenChange={handleCreatePopoverOpenChange}
+        libraryName={libraryName}
+        onLibraryNameChange={handleLibraryNameChange}
+        isCreatingLibrary={isCreatingLibrary}
         librariesSummaryText={librariesSummaryText}
-        onCreateLibrary={handleOpenCreateDialog}
+        onCreateLibrary={handleCreateLibrary}
       />
 
       <LibrariesListSection
         libraries={libraries}
-        onCreateLibrary={handleOpenCreateDialog}
-      />
-
-      <CreateLibraryDialog
-        isOpen={isCreateDialogOpen}
-        onOpenChange={handleCreateDialogOpenChange}
-        libraryName={libraryName}
-        onLibraryNameChange={setLibraryName}
-        onCreateLibrary={handleCreateLibrary}
-        isCreatingLibrary={isCreatingLibrary}
+        onCreateLibrary={() => handleCreatePopoverOpenChange(true)}
       />
     </section>
   );

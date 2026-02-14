@@ -338,9 +338,9 @@ export function AuthScene({
               transform: "translate(-50%, -50%)",
             }}
           >
-            <div className="h-1.5 w-14 rounded-full" style={{ backgroundColor: node.color }} />
-            <div className="h-1.5 w-full rounded-full bg-zinc-200/80 dark:bg-zinc-600/80" />
-            <div className="h-1.5 w-5/6 rounded-full bg-zinc-200/80 dark:bg-zinc-600/80" />
+            <div className="h-1.5 w-14 rounded-lg" style={{ backgroundColor: node.color }} />
+            <div className="h-1.5 w-full rounded-lg bg-zinc-200/80 dark:bg-zinc-600/80" />
+            <div className="h-1.5 w-5/6 rounded-lg bg-zinc-200/80 dark:bg-zinc-600/80" />
           </div>
         ))}
 
@@ -354,10 +354,10 @@ export function AuthScene({
               transform: "translate(-50%, -50%)",
             }}
           >
-            <div className="h-2.5 w-16 rounded-full" style={{ backgroundColor: node.color }} />
-            <div className="h-2 w-full rounded-full bg-zinc-200 dark:bg-zinc-600/80" />
-            <div className="h-2 w-5/6 rounded-full bg-zinc-200 dark:bg-zinc-600/80" />
-            <div className="h-2 w-7/8 rounded-full bg-zinc-200 dark:bg-zinc-600/80" />
+            <div className="h-2.5 w-16 rounded-lg" style={{ backgroundColor: node.color }} />
+            <div className="h-2 w-full rounded-lg bg-zinc-200 dark:bg-zinc-600/80" />
+            <div className="h-2 w-5/6 rounded-lg bg-zinc-200 dark:bg-zinc-600/80" />
+            <div className="h-2 w-7/8 rounded-lg bg-zinc-200 dark:bg-zinc-600/80" />
           </div>
         ))}
       </div>

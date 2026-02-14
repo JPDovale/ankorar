@@ -1,11 +1,14 @@
 import { useMaps, useSuspenseMaps } from "@/hooks/useMaps";
 import { dayjs, SAO_PAULO_TIMEZONE } from "@/lib/dayjs";
 import { createDateBasedMapTitle } from "@/utils/createDateBasedMapTitle";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export function useHomePageHeader() {
   const { data: maps } = useSuspenseMaps();
   const { createMap, isCreatingMap } = useMaps();
+  const [isCreatePopoverOpen, setIsCreatePopoverOpen] = useState(false);
+  const [mapTitle, setMapTitle] = useState(() => createDateBasedMapTitle());
 
   const mapsCount = maps.length;
   const nowInSaoPaulo = dayjs().tz(SAO_PAULO_TIMEZONE);
@@ -14,10 +17,22 @@ export function useHomePageHeader() {
   ).length;
   const mapsSummaryText = `Você tem ${mapsCount} mapa${mapsCount === 1 ? "" : "s"} mental${mapsCount === 1 ? "" : "is"} na organização atual.`;
   const createdTodayText = `${createdTodayCount} criado${createdTodayCount === 1 ? "" : "s"} hoje`;
-  const createButtonText = isCreatingMap ? "Criando mapa mental..." : "Criar mapa mental";
+
+  function handleCreatePopoverOpenChange(isOpen: boolean) {
+    if (isCreatingMap) {
+      return;
+    }
+
+    setIsCreatePopoverOpen(isOpen);
+  }
+
+  function handleMapTitleChange(nextTitle: string) {
+    setMapTitle(nextTitle);
+  }
 
   async function handleCreateMap() {
-    const title = createDateBasedMapTitle();
+    const normalizedTitle = mapTitle.trim();
+    const title = normalizedTitle || createDateBasedMapTitle();
     const { success } = await createMap({
       title,
     });
@@ -27,13 +42,18 @@ export function useHomePageHeader() {
     }
 
     toast.success(`Mapa mental "${title}" criado com sucesso.`);
+    setIsCreatePopoverOpen(false);
+    setMapTitle(createDateBasedMapTitle());
   }
 
   return {
     createdTodayText,
-    createButtonText,
     handleCreateMap,
+    handleCreatePopoverOpenChange,
+    handleMapTitleChange,
+    isCreatePopoverOpen,
     isCreatingMap,
+    mapTitle,
     mapsSummaryText,
   };
 }

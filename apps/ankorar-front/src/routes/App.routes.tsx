@@ -1,6 +1,6 @@
 import { AuthenticatedLayout } from "@/layouts/authenticated";
 import { DefaultLayout } from "@/layouts/default";
-import { LibrariesPage } from "@/pages/libraries";
+import { LibrariesPage } from "@/pages/libraries/page";
 import { MapEditorPage } from "@/pages/map-editor";
 import { LoginPage } from "@/pages/login";
 import { RegisterPage } from "@/pages/register";

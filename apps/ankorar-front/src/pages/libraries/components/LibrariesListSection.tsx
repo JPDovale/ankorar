@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { CreationActionButton } from "@/components/actions/CreationActionButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { LibraryCard } from "@/pages/libraries/components/LibraryCard";
 import type { LibraryPreview } from "@/services/libraries/listLibrariesRequest";
@@ -31,16 +31,18 @@ export function LibrariesListSection({
                 Crie bibliotecas para estruturar os mapas da organização.
               </p>
             </div>
-            <Button onClick={onCreateLibrary} className="gap-2 rounded-full px-5">
-              <Plus className="size-4" />
-              Criar biblioteca
-            </Button>
+            <CreationActionButton
+              icon={Plus}
+              label="Criar biblioteca"
+              onClick={onCreateLibrary}
+              className="h-9 min-w-56 px-5"
+            />
           </CardContent>
         </Card>
       )}
 
       {!isEmptyState && (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="space-y-3">
           {libraries.map((library) => (
             <LibraryCard key={library.id} library={library} />
           ))}
