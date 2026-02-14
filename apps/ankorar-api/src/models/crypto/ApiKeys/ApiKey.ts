@@ -1,5 +1,5 @@
 import { Entity } from "@/src/infra/shared/entities/Entity";
-import { date } from "../date";
+import { date } from "../../date";
 import { Optional } from "@/src/infra/http/types/optional";
 
 interface ApiKeyProps {
