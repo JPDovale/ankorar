@@ -1,5 +1,5 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { JsonValue } from "@/src/models/map/Map";
+import { JsonValue } from "@/src/models/map/Maps/Map";
 import { mapModule } from "@/src/models/map/MapModule";
 import {
   updateMapContentBody,

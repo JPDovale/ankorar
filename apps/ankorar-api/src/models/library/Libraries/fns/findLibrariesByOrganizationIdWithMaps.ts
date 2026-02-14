@@ -1,0 +1,82 @@
+import { db } from "@/src/infra/database/pool";
+import { Library } from "../Library";
+
+type FindLibrariesByOrganizationIdWithMapsInput = {
+  organizationId: string;
+};
+
+type LibraryMapPreview = {
+  id: string;
+  title: string;
+  created_at: Date;
+  updated_at: Date | null;
+};
+
+type LibraryWithMapsPreview = {
+  library: Library;
+  maps: LibraryMapPreview[];
+};
+
+type FindLibrariesByOrganizationIdWithMapsResponse = {
+  libraries: LibraryWithMapsPreview[];
+};
+
+export async function findLibrariesByOrganizationIdWithMaps({
+  organizationId,
+}: FindLibrariesByOrganizationIdWithMapsInput): Promise<FindLibrariesByOrganizationIdWithMapsResponse> {
+  const librariesOnDb = await db.library.findMany({
+    where: {
+      organization_id: organizationId,
+      deleted_at: null,
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+    include: {
+      maps: {
+        include: {
+          map: {
+            select: {
+              id: true,
+              title: true,
+              created_at: true,
+              updated_at: true,
+              deleted_at: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const libraries = librariesOnDb.map((libraryOnDb) => {
+    const library = Library.create(
+      {
+        organization_id: libraryOnDb.organization_id,
+        name: libraryOnDb.name,
+        created_at: libraryOnDb.created_at,
+        updated_at: libraryOnDb.updated_at,
+        deleted_at: libraryOnDb.deleted_at,
+      },
+      libraryOnDb.id,
+    );
+
+    const maps = libraryOnDb.maps
+      .map((libraryMapOnDb) => libraryMapOnDb.map)
+      .filter((mapOnDb) => mapOnDb.deleted_at === null)
+      .sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
+      .map((mapOnDb) => ({
+        id: mapOnDb.id,
+        title: mapOnDb.title,
+        created_at: mapOnDb.created_at,
+        updated_at: mapOnDb.updated_at,
+      }));
+
+    return {
+      library,
+      maps,
+    };
+  });
+
+  return { libraries };
+}
