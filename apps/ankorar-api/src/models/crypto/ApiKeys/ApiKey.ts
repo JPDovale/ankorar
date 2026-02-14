@@ -1,5 +1,5 @@
 import { Entity } from "@/src/infra/shared/entities/Entity";
-import { date } from "../../date";
+import { dateModule } from "../../date/DateModule";
 import { Optional } from "@/src/infra/http/types/optional";
 
 interface ApiKeyProps {
@@ -31,10 +31,10 @@ export class ApiKey extends Entity<ApiKeyProps> {
   static create(props: CreateApiKeyProps, id?: string): ApiKey {
     const activationTokenProps: ApiKeyProps = {
       ...props,
-      created_at: props.created_at ?? date.nowUtcDate(),
+      created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       env: props.env ?? "live",
-      last_used_at: props.last_used_at ?? date.nowUtcDate(),
+      last_used_at: props.last_used_at ?? dateModule.Date.nowUtcDate(),
       revoked_at: props.revoked_at ?? null,
       expires_at: props.expires_at ?? null,
       deleted_at: props.deleted_at ?? null,
@@ -99,7 +99,7 @@ export class ApiKey extends Entity<ApiKeyProps> {
   }
 
   touch() {
-    this.props.updated_at = date.nowUtcDate();
+    this.props.updated_at = dateModule.Date.nowUtcDate();
     this.update();
   }
 }

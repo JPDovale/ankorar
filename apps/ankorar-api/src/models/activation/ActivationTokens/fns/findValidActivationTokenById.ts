@@ -1,6 +1,6 @@
 import { db } from "@/src/infra/database/pool";
 import { ActivationTokenNotFound } from "@/src/infra/errors/ActivationTokenNotFound";
-import { date } from "../../../date";
+import { dateModule } from "../../../date/DateModule";
 import { ActivationToken } from "../ActivationToken";
 
 interface FindValidActivationTokenByIdProps {
@@ -19,7 +19,7 @@ export async function findValidActivationTokenById({
       id,
       used_at: null,
       expires_at: {
-        gt: date.nowUtcDate(),
+        gt: dateModule.Date.nowUtcDate(),
       },
     },
   });

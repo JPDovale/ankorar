@@ -1,6 +1,6 @@
 import { Entity } from "@/src/infra/shared/entities/Entity";
 import { Optional } from "@prisma/client/runtime/client";
-import { date } from "../../date";
+import { dateModule } from "../../date/DateModule";
 
 interface ActivationTokenProps {
   user_id: string;
@@ -22,7 +22,7 @@ export class ActivationToken extends Entity<ActivationTokenProps> {
   ): ActivationToken {
     const activationTokenProps: ActivationTokenProps = {
       ...props,
-      created_at: props.created_at ?? date.nowUtcDate(),
+      created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       used_at: props.used_at ?? null,
     };
@@ -58,7 +58,7 @@ export class ActivationToken extends Entity<ActivationTokenProps> {
   }
 
   touch() {
-    this.props.updated_at = date.nowUtcDate();
+    this.props.updated_at = dateModule.Date.nowUtcDate();
     this.update();
   }
 }

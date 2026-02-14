@@ -1,6 +1,6 @@
 import { Optional } from "@/src/infra/http/types/optional";
 import { Entity } from "@/src/infra/shared/entities/Entity";
-import { date } from "../date";
+import { dateModule } from "../date/DateModule";
 
 interface SessionProps {
   user_id: string;
@@ -19,7 +19,7 @@ export class Session extends Entity<SessionProps> {
   static create(props: CreateSessionProps, id?: string) {
     const sessionProps: SessionProps = {
       ...props,
-      created_at: props.created_at ?? date.nowUtcDate(),
+      created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
     };
 
@@ -59,7 +59,7 @@ export class Session extends Entity<SessionProps> {
   }
 
   touch() {
-    this.props.updated_at = date.nowUtcDate();
+    this.props.updated_at = dateModule.Date.nowUtcDate();
     this.update();
   }
 }

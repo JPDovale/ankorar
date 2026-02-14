@@ -2,7 +2,7 @@ import { db } from "@/src/infra/database/pool";
 import { OrganizationInviteNotFound } from "@/src/infra/errors/OrganizationInviteNotFound";
 import { ValidationError } from "@/src/infra/errors/ValidationError";
 import { Module } from "@/src/infra/shared/entities/Module";
-import { date } from "@/src/models/date";
+import { dateModule } from "@/src/models/date/DateModule";
 import { CreateMemberProps, Member } from "./Member";
 import {
   OrganizationInvite,
@@ -365,7 +365,7 @@ const organizationInviteActions = {
       invited_user_id: userOnDb.id,
       status: "pending",
       responded_at: null,
-      created_at: date.nowUtcDate(),
+      created_at: dateModule.Date.nowUtcDate(),
       updated_at: null,
       deleted_at: null,
     });

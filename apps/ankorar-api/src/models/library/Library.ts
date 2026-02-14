@@ -1,6 +1,6 @@
 import { Optional } from "@/src/infra/http/types/optional";
 import { Entity } from "@/src/infra/shared/entities/Entity";
-import { date } from "@/src/models/date";
+import { dateModule } from "@/src/models/date/DateModule";
 
 interface LibraryProps {
   organization_id: string;
@@ -20,7 +20,7 @@ export class Library extends Entity<LibraryProps> {
     const libraryProps: LibraryProps = {
       ...props,
       name: props.name.trim(),
-      created_at: props.created_at ?? date.nowUtcDate(),
+      created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       deleted_at: props.deleted_at ?? null,
     };
@@ -56,14 +56,14 @@ export class Library extends Entity<LibraryProps> {
   }
 
   markAsDeleted() {
-    this.props.deleted_at = date.nowUtcDate();
+    this.props.deleted_at = dateModule.Date.nowUtcDate();
     this.touch();
   }
 
   touch() {
     if (this.isNewEntity) return;
 
-    this.props.updated_at = date.nowUtcDate();
+    this.props.updated_at = dateModule.Date.nowUtcDate();
     this.update();
   }
 }

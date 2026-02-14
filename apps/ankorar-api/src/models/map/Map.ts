@@ -1,6 +1,6 @@
 import { Optional } from "@/src/infra/http/types/optional";
 import { Entity } from "@/src/infra/shared/entities/Entity";
-import { date } from "@/src/models/date";
+import { dateModule } from "@/src/models/date/DateModule";
 
 export type JsonPrimitive = string | number | boolean | null;
 export type JsonObject = { [key: string]: JsonValue };
@@ -26,7 +26,7 @@ export class Map extends Entity<MapProps> {
       ...props,
       title: props.title.trim(),
       content: props.content ?? [],
-      created_at: props.created_at ?? date.nowUtcDate(),
+      created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       deleted_at: props.deleted_at ?? null,
     };
@@ -71,14 +71,14 @@ export class Map extends Entity<MapProps> {
   }
 
   markAsDeleted() {
-    this.props.deleted_at = date.nowUtcDate();
+    this.props.deleted_at = dateModule.Date.nowUtcDate();
     this.touch();
   }
 
   touch() {
     if (this.isNewEntity) return;
 
-    this.props.updated_at = date.nowUtcDate();
+    this.props.updated_at = dateModule.Date.nowUtcDate();
     this.update();
   }
 }

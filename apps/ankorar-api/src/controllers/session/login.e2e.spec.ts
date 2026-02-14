@@ -1,4 +1,4 @@
-import { date } from "@/src/models/date";
+import { dateModule } from "@/src/models/date/DateModule";
 import { sessionModule } from "@/src/models/session/SessionModule";
 import { orchestrator } from "@/test/orchestrator";
 import { parse } from "set-cookie-parser";
@@ -133,7 +133,7 @@ describe("[POST] /v1/sessions", () => {
             userId: newUser.id,
           });
 
-        const today = date.nowUtcDate();
+        const today = dateModule.Date.nowUtcDate();
 
         today.setMilliseconds(0);
         today.setSeconds(0);
@@ -143,7 +143,7 @@ describe("[POST] /v1/sessions", () => {
         expires_at.setMilliseconds(0);
         expires_at.setSeconds(0);
 
-        const recalculatedExpirationTime = date.addSeconds(today, 604800);
+        const recalculatedExpirationTime = dateModule.Date.addSeconds(today, 604800);
 
         expect(recalculatedExpirationTime).toEqual(expires_at);
         expect(createdSession).toBeDefined();

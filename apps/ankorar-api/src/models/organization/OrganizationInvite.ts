@@ -1,6 +1,6 @@
 import { Optional } from "@/src/infra/http/types/optional";
 import { Entity } from "@/src/infra/shared/entities/Entity";
-import { date } from "@/src/models/date";
+import { dateModule } from "@/src/models/date/DateModule";
 
 export type OrganizationInviteStatus = "pending" | "accepted" | "rejected";
 
@@ -28,7 +28,7 @@ export class OrganizationInvite extends Entity<OrganizationInviteProps> {
       email: props.email.trim().toLowerCase(),
       status: props.status ?? "pending",
       responded_at: props.responded_at ?? null,
-      created_at: props.created_at ?? date.nowUtcDate(),
+      created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       deleted_at: props.deleted_at ?? null,
     };
@@ -79,25 +79,25 @@ export class OrganizationInvite extends Entity<OrganizationInviteProps> {
 
   markAsAccepted() {
     this.props.status = "accepted";
-    this.props.responded_at = date.nowUtcDate();
+    this.props.responded_at = dateModule.Date.nowUtcDate();
     this.touch();
   }
 
   markAsRejected() {
     this.props.status = "rejected";
-    this.props.responded_at = date.nowUtcDate();
+    this.props.responded_at = dateModule.Date.nowUtcDate();
     this.touch();
   }
 
   markAsDeleted() {
-    this.props.deleted_at = date.nowUtcDate();
+    this.props.deleted_at = dateModule.Date.nowUtcDate();
     this.touch();
   }
 
   touch() {
     if (this.isNewEntity) return;
 
-    this.props.updated_at = date.nowUtcDate();
+    this.props.updated_at = dateModule.Date.nowUtcDate();
     this.update();
   }
 }

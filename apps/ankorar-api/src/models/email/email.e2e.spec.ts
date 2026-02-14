@@ -1,5 +1,5 @@
 import { orchestrator } from "@/test/orchestrator";
-import { email } from ".";
+import { emailModule } from "./EmailModule";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -8,7 +8,7 @@ beforeAll(async () => {
 
 describe("Email E2E Tests", () => {
   it("should send an email", async () => {
-    await email.send({
+    await emailModule.Email.send({
       to: "<test@example.com>",
       subject: "Test Email",
       text: "This is a test email.",

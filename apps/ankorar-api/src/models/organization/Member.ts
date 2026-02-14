@@ -1,6 +1,6 @@
 import { Optional } from "@/src/infra/http/types/optional";
 import { Entity } from "@/src/infra/shared/entities/Entity";
-import { date } from "@/src/models/date";
+import { dateModule } from "@/src/models/date/DateModule";
 
 interface MemberProps {
   org_id: string;
@@ -20,7 +20,7 @@ export class Member extends Entity<MemberProps> {
   static create(props: CreateMemberProps, id?: string) {
     const MemberProps: MemberProps = {
       ...props,
-      created_at: props.created_at ?? date.nowUtcDate(),
+      created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       deleted_at: props.deleted_at ?? null,
     };
@@ -60,12 +60,12 @@ export class Member extends Entity<MemberProps> {
   }
 
   markAsDeleted() {
-    this.props.deleted_at = date.nowUtcDate();
+    this.props.deleted_at = dateModule.Date.nowUtcDate();
     this.touch();
   }
 
   touch() {
-    this.props.updated_at = date.nowUtcDate();
+    this.props.updated_at = dateModule.Date.nowUtcDate();
     this.update();
   }
 }

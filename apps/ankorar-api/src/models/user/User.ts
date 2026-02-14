@@ -1,6 +1,6 @@
 import { Optional } from "@/src/infra/http/types/optional";
 import { Entity } from "@/src/infra/shared/entities/Entity";
-import { date } from "@/src/models/date";
+import { dateModule } from "@/src/models/date/DateModule";
 
 interface UserProps {
   name: string;
@@ -24,7 +24,7 @@ export class User extends Entity<UserProps> {
       email: props.email.toLowerCase(),
       ext_id: props.ext_id ?? null,
       password: props.password ?? null,
-      created_at: props.created_at ?? date.nowUtcDate(),
+      created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       deleted_at: props.deleted_at ?? null,
     };
@@ -81,13 +81,13 @@ export class User extends Entity<UserProps> {
   }
 
   markAsDeleted() {
-    this.props.deleted_at = date.nowUtcDate();
+    this.props.deleted_at = dateModule.Date.nowUtcDate();
     this.touch();
   }
 
   touch() {
     if (this.isNewEntity) return;
-    this.props.updated_at = date.nowUtcDate();
+    this.props.updated_at = dateModule.Date.nowUtcDate();
     this.update();
   }
 }

@@ -1,5 +1,5 @@
 import { SessionExpired } from "@/src/infra/errors/SessionExpired";
-import { date } from "../../../date";
+import { dateModule } from "../../../date/DateModule";
 import { AuthTokenPayload, AuthTokenType } from "../types";
 import { jwtAlgorithm } from "./jwtAlgorithm";
 import { normalizeKey } from "./normalizeKey";
@@ -58,17 +58,17 @@ export function verifyToken({
     }
 
     if (
-      !date.isValidUnixSeconds(payload.iat) ||
-      !date.isValidUnixSeconds(payload.exp)
+      !dateModule.Date.isValidUnixSeconds(payload.iat) ||
+      !dateModule.Date.isValidUnixSeconds(payload.exp)
     ) {
       throw new SessionExpired();
     }
 
-    if (date.isAfterNowUnix(payload.iat)) {
+    if (dateModule.Date.isAfterNowUnix(payload.iat)) {
       throw new SessionExpired();
     }
 
-    if (!date.isAfterNowUnix(payload.exp)) {
+    if (!dateModule.Date.isAfterNowUnix(payload.exp)) {
       throw new SessionExpired();
     }
 

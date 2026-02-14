@@ -2,7 +2,7 @@ import { Module } from "@/src/infra/shared/entities/Module";
 import { CreateSessionProps, Session } from "./Session";
 import { SessionExpired } from "@/src/infra/errors/SessionExpired";
 import { authModule } from "../auth/AuthModule";
-import { date } from "../date";
+import { dateModule } from "../date/DateModule";
 import { db } from "@/src/infra/database/pool";
 import { User } from "../user/User";
 import { PermissionDenied } from "@/src/infra/errors/PermissionDenied";
@@ -99,8 +99,8 @@ export const sessionModule = SessionModule.create({
       const { session } = await this.create({
         user_id: user.id,
         refresh_token: refreshToken.token,
-        expires_at: date.addSeconds(date.nowUtcDate(), refreshToken.expiresIn),
-        created_at: date.nowUtcDate(),
+        expires_at: dateModule.Date.addSeconds(dateModule.Date.nowUtcDate(), refreshToken.expiresIn),
+        created_at: dateModule.Date.nowUtcDate(),
       });
 
       return {
@@ -146,8 +146,8 @@ export const sessionModule = SessionModule.create({
       });
 
       sessionValid.refresh_token = refreshToken.token;
-      sessionValid.expires_at = date.addSeconds(
-        date.nowUtcDate(),
+      sessionValid.expires_at = dateModule.Date.addSeconds(
+        dateModule.Date.nowUtcDate(),
         refreshToken.expiresIn,
       );
 
@@ -167,7 +167,7 @@ export const sessionModule = SessionModule.create({
             refresh_token: token,
             user_id: userId,
             expires_at: {
-              gt: date.nowUtcDate(),
+              gt: dateModule.Date.nowUtcDate(),
             },
           },
         });

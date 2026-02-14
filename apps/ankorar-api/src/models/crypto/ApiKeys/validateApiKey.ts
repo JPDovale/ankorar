@@ -1,5 +1,5 @@
 import { ApiKeyIsExpired } from "@/src/infra/errors/ApiKeyIsExpired";
-import { date } from "../../date";
+import { dateModule } from "../../date/DateModule";
 import { ApiKey } from "../ApiKey";
 import { computeText } from "./fns/computeText";
 import { findApiKeyByPrefix } from "./fns/findApiKeyByPrefix";
@@ -25,14 +25,14 @@ export async function validateApiKey({
     throw new ApiKeyIsExpired();
   }
 
-  if (apiKey.expires_at && apiKey.expires_at < date.nowUtcDate()) {
+  if (apiKey.expires_at && apiKey.expires_at < dateModule.Date.nowUtcDate()) {
     throw new ApiKeyIsExpired();
   }
 
   const hashedSecret = hashSecret({ secret });
   safeEqualText(hashedSecret, apiKey.secret);
 
-  apiKey.last_used_at = date.nowUtcDate();
+  apiKey.last_used_at = dateModule.Date.nowUtcDate();
 
   await persistApiKey({ apiKey });
 

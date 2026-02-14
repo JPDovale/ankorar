@@ -10,15 +10,17 @@ const transport = createTransport({
   },
 });
 
-interface SendProps {
+type SendEmailInput = {
   from: string;
   to: string;
   subject: string;
   text: string;
   html?: string;
-}
+};
 
-export function send(props: SendProps) {
+type SendEmailResponse = ReturnType<typeof transport.sendMail>;
+
+export function sendEmail(props: SendEmailInput): SendEmailResponse {
   return transport.sendMail({
     from: props.from,
     to: props.to,

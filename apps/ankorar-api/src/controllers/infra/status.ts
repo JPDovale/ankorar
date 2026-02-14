@@ -1,6 +1,6 @@
 import { db } from "@/src/infra/database/pool";
 import { Route } from "@/src/infra/shared/entities/Route";
-import { date } from "@/src/models/date";
+import { dateModule } from "@/src/models/date/DateModule";
 import { statusResponses } from "./status.gateways";
 
 export const statusRoute = Route.create({
@@ -11,7 +11,7 @@ export const statusRoute = Route.create({
   description: "Returns a status and health of services",
   response: statusResponses,
   handler: async (_, reply) => {
-    const updatedAt = date.nowUtcIso();
+    const updatedAt = dateModule.Date.nowUtcIso();
 
     const [{ total_connections: databaseOpenedConnections }] =
       await db.$queryRaw<

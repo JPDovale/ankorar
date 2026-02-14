@@ -1,4 +1,4 @@
-import { date } from "../../date";
+import { dateModule } from "../../date/DateModule";
 import { ActivationToken } from "./ActivationToken";
 import { persistActivationToken } from "./fns/persistActivationToken";
 
@@ -13,7 +13,7 @@ type MarkActivationTokenAsUsedResponse = {
 export async function markActivationTokenAsUsed({
   activationToken,
 }: MarkActivationTokenAsUsedInput): Promise<MarkActivationTokenAsUsedResponse> {
-  activationToken.used_at = date.nowUtcDate();
+  activationToken.used_at = dateModule.Date.nowUtcDate();
   await persistActivationToken({ activationToken });
 
   return { activationToken };

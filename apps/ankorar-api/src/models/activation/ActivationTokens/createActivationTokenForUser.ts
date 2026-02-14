@@ -1,4 +1,4 @@
-import { date } from "../../date";
+import { dateModule } from "../../date/DateModule";
 import { User } from "../../user/User";
 import { ActivationToken } from "./ActivationToken";
 import { createActivationToken } from "./createActivationToken";
@@ -14,7 +14,7 @@ type CreateActivationTokenForUserResponse = {
 export async function createActivationTokenForUser({
   user,
 }: CreateActivationTokenForUserInput): Promise<CreateActivationTokenForUserResponse> {
-  const expiresAt = date.addMinutes(date.nowUtcDate(), 15);
+  const expiresAt = dateModule.Date.addMinutes(dateModule.Date.nowUtcDate(), 15);
 
   const { activationToken } = await createActivationToken({
     expires_at: expiresAt,

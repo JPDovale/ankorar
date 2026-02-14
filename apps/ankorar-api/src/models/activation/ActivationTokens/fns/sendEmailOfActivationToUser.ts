@@ -1,4 +1,4 @@
-import { email } from "../../../email";
+import { emailModule } from "../../../email/EmailModule";
 import { User } from "../../../user/User";
 import { webserverModule } from "../../../webserver/WebserverModule";
 import { ActivationToken } from "../ActivationToken";
@@ -16,7 +16,7 @@ export async function sendEmailOfActivationToUser({
 }: SendEmailOfActivationToUserProps): Promise<SendEmailOfActivationToUserResponse> {
   const { Webserver: webserver } = webserverModule;
 
-  await email.send({
+  await emailModule.Email.send({
     from: "Ankorar <contato@ankorar.com>",
     to: user.email,
     subject: "Ative sua conta no Ankorar",
