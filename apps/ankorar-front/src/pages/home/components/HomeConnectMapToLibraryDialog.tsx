@@ -56,9 +56,12 @@ export function HomeConnectMapToLibraryDialog({
             <span className="inline-flex size-7 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-700">
               <Network className="size-4" />
             </span>
-            <DialogTitle className="text-base text-zinc-900">Vincular biblioteca</DialogTitle>
+            <DialogTitle className="text-base text-zinc-900">
+              Vincular biblioteca
+            </DialogTitle>
             <DialogDescription className="text-xs text-zinc-600">
-              Associe o mapa a uma biblioteca para facilitar organização por contexto.
+              Associe o mapa a uma biblioteca para facilitar organização por
+              contexto.
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -68,14 +71,19 @@ export function HomeConnectMapToLibraryDialog({
             <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
               Mapa selecionado
             </p>
-            <p className="mt-1 truncate text-sm font-medium text-zinc-900">{mapTitle}</p>
+            <p className="mt-1 truncate text-sm font-medium text-zinc-900">
+              {mapTitle}
+            </p>
           </div>
 
           <div className="space-y-1">
             <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
               Biblioteca de destino
             </p>
-            <Select value={selectedLibraryId} onValueChange={onSelectedLibraryIdChange}>
+            <Select
+              value={selectedLibraryId}
+              onValueChange={onSelectedLibraryIdChange}
+            >
               <SelectTrigger className="h-9 w-full border-zinc-200 bg-white text-sm">
                 <SelectValue placeholder="Selecione uma biblioteca" />
               </SelectTrigger>
@@ -103,14 +111,16 @@ export function HomeConnectMapToLibraryDialog({
             Cancelar
           </Button>
           <Button
-            className="h-8 gap-2 px-4 text-xs"
+            className="h-8 gap-2 bg-zinc-900 px-4 text-xs text-white hover:bg-zinc-800"
             onClick={onConfirm}
             disabled={isConnectingMapToLibrary || !selectedLibraryId}
           >
             {isConnectingMapToLibrary && (
               <LoaderCircle className="size-3.5 shrink-0 animate-spin" />
             )}
-            {!isConnectingMapToLibrary && <Link2 className="size-3.5 shrink-0" />}
+            {!isConnectingMapToLibrary && (
+              <Link2 className="size-3.5 shrink-0" />
+            )}
             Vincular mapa
           </Button>
         </DialogFooter>

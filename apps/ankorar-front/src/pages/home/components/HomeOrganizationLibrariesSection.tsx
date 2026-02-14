@@ -71,7 +71,9 @@ export function HomeOrganizationLibrariesSection() {
                   className="space-y-2 rounded-lg border border-zinc-200/80 bg-zinc-50/50 px-3.5 py-3 transition-colors hover:border-zinc-300/80"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <p className="truncate text-sm font-semibold text-zinc-900">{library.name}</p>
+                    <p className="truncate text-sm font-semibold text-zinc-900">
+                      {library.name}
+                    </p>
                     <span className="shrink-0 rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[10px] font-semibold text-zinc-600">
                       {libraryLinkedMapsText}
                     </span>
@@ -80,10 +82,15 @@ export function HomeOrganizationLibrariesSection() {
                   <LibraryMapsMosaic
                     maps={library.maps}
                     emptyText="Nenhum mapa vinculado nesta biblioteca."
-                    getMapActionLabel={(map) => (ownMapIds.has(map.id) ? "Abrir" : "Visualizar")}
-                    getMapHref={(map) =>
-                      ownMapIds.has(map.id) ? `/maps/${map.id}` : `/maps/${map.id}?mode=view`
+                    getMapActionLabel={(map) =>
+                      ownMapIds.has(map.id) ? "Abrir" : "Visualizar"
                     }
+                    getMapHref={(map) =>
+                      ownMapIds.has(map.id)
+                        ? `/maps/${map.id}`
+                        : `/maps/${map.id}?mode=view`
+                    }
+                    variant="embedded"
                   />
                 </article>
               );

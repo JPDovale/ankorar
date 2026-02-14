@@ -1,13 +1,15 @@
+import { MapPreviewCard } from "@/components/maps/MapPreviewCard";
 import type { LibraryMapPreview } from "@/services/libraries/listLibrariesRequest";
-import { buildMapLastActivityLabel } from "@/utils/buildMapLastActivityLabel";
-import { ArrowUpRight, CalendarClock, Link2, Map } from "lucide-react";
-import { Link } from "react-router";
+import { Link2 } from "lucide-react";
+
+type LibraryMapsMosaicVariant = "default" | "embedded";
 
 interface LibraryMapsMosaicProps {
   maps: LibraryMapPreview[];
   emptyText: string;
   getMapHref: (map: LibraryMapPreview) => string;
   getMapActionLabel: (map: LibraryMapPreview) => string;
+  variant?: LibraryMapsMosaicVariant;
 }
 
 export function LibraryMapsMosaic({
@@ -15,60 +17,35 @@ export function LibraryMapsMosaic({
   emptyText,
   getMapHref,
   getMapActionLabel,
+  variant = "default",
 }: LibraryMapsMosaicProps) {
   const hasMaps = maps.length > 0;
+  const isEmbedded = variant === "embedded";
+  const emptyContainerClassName = isEmbedded
+    ? "inline-flex items-center gap-1.5 rounded-md bg-zinc-100/70 px-2.5 py-1.5 text-xs text-zinc-500"
+    : "inline-flex items-center gap-1.5 rounded-lg border border-dashed border-zinc-200/80 bg-zinc-50/60 px-3 py-2 text-xs text-zinc-500";
 
   return (
     <>
       {!hasMaps && (
-        <div className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-zinc-200/80 bg-zinc-50/60 px-3 py-2 text-xs text-zinc-500">
+        <div className={emptyContainerClassName}>
           <Link2 className="size-3.5" />
           {emptyText}
         </div>
       )}
 
       {hasMaps && (
-        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-          {maps.map((map) => {
-            const mapLastActivityLabel = buildMapLastActivityLabel(map);
-            const mapLink = getMapHref(map);
-            const mapActionLabel = getMapActionLabel(map);
-
-            return (
-              <article
-                key={map.id}
-                className="group rounded-xl border border-zinc-200/80 bg-white shadow-sm transition-colors hover:border-zinc-300/80"
-              >
-                <header className="space-y-3 p-3 pb-2.5">
-                  <p className="truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-zinc-500">
-                    {map.title}
-                  </p>
-
-                  <div className="flex items-center justify-center py-2">
-                    <span className="inline-flex size-14 items-center justify-center rounded-2xl border border-zinc-200 bg-zinc-50 text-zinc-600">
-                      <Map className="size-6" />
-                    </span>
-                  </div>
-                </header>
-
-                <div className="px-3 pb-3 pt-0">
-                  <div className="flex items-center justify-between gap-2 border-t border-zinc-100 pt-2.5">
-                    <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-500">
-                      <CalendarClock className="size-3.5 shrink-0" />
-                      {mapLastActivityLabel}
-                    </span>
-                    <Link
-                      to={mapLink}
-                      className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 px-2 py-1 text-[11px] font-medium text-zinc-700 transition-colors hover:border-zinc-300 hover:text-zinc-900"
-                    >
-                      {mapActionLabel}
-                      <ArrowUpRight className="size-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
+        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+          {maps.map((map) => (
+            <MapPreviewCard
+              key={map.id}
+              map={map}
+              href={getMapHref(map)}
+              actionLabel={getMapActionLabel(map)}
+              variant={variant}
+              density="compact"
+            />
+          ))}
         </div>
       )}
     </>

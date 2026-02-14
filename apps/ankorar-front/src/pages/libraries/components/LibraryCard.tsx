@@ -8,13 +8,11 @@ import {
 import type { LibraryPreview } from "@/services/libraries/listLibrariesRequest";
 import { buildLibraryLastActivityLabel } from "@/utils/buildLibraryLastActivityLabel";
 import {
-  ArrowUpRight,
   CalendarClock,
   ChevronRight,
   MoreVertical,
   PencilLine,
 } from "lucide-react";
-import { Link } from "react-router";
 
 interface LibraryCardProps {
   library: LibraryPreview;
@@ -75,17 +73,6 @@ export function LibraryCard({ library }: LibraryCardProps) {
                   </span>
                   <ChevronRight className="size-3.5 shrink-0 opacity-70" />
                 </Button>
-
-                <Link
-                  to="/home"
-                  className="inline-flex h-9 w-full items-center justify-between gap-2 rounded-lg px-2.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
-                >
-                  <span className="inline-flex items-center gap-2">
-                    <ArrowUpRight className="size-3.5 shrink-0" />
-                    Ver mapas vinculados
-                  </span>
-                  <ChevronRight className="size-3.5 shrink-0 opacity-70" />
-                </Link>
               </div>
             </PopoverContent>
           </Popover>
@@ -97,6 +84,7 @@ export function LibraryCard({ library }: LibraryCardProps) {
         emptyText="Nenhum mapa vinculado nesta biblioteca."
         getMapActionLabel={() => "Visualizar"}
         getMapHref={(map) => `/maps/${map.id}?mode=view`}
+        variant="embedded"
       />
     </article>
   );

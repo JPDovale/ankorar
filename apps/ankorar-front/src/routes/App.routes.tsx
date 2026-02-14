@@ -1,7 +1,7 @@
 import { AuthenticatedLayout } from "@/layouts/authenticated";
 import { DefaultLayout } from "@/layouts/default";
 import { LibrariesPage } from "@/pages/libraries/page";
-import { MapEditorPage } from "@/pages/map-editor";
+import { MapEditorPage } from "@/pages/map-editor/page";
 import { LoginPage } from "@/pages/login";
 import { RegisterPage } from "@/pages/register";
 import { ProtectedRoute, PublicOnlyRoute } from "@/routes/guards";
