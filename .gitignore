@@ -35,6 +35,7 @@ Thumbs.db
 
 # Nested repository metadata from copied apps
 apps/*/.git
+apps/*-exemple/
 
 # Local overrides
 *.local
