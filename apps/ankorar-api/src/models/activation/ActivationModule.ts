@@ -1,23 +1,9 @@
 import { Module } from "@/src/infra/shared/entities/Module";
-import { createActivationToken } from "./createActivationToken";
-import { createActivationTokenForUser } from "./createActivationTokenForUser";
-import { markActivationTokenAsUsed } from "./markActivationTokenAsUsed";
-import { persistActivationToken } from "./fns/persistActivationToken";
-import { sendEmailOfActivationToUser } from "./fns/sendEmailOfActivationToUser";
-import { findValidActivationTokenById } from "./fns/findValidActivationTokenById";
+import { ActivationTokens } from "./ActivationTokens";
 
 interface ActivationModuleProps {
   name: string;
-  ActivationTokens: {
-    create: typeof createActivationToken;
-    createForUser: typeof createActivationTokenForUser;
-    markTokenAsUsed: typeof markActivationTokenAsUsed;
-    fns: {
-      persist: typeof persistActivationToken;
-      sendEmailOfActivationToUser: typeof sendEmailOfActivationToUser;
-      findValidById: typeof findValidActivationTokenById;
-    };
-  };
+  ActivationTokens: typeof ActivationTokens;
 }
 
 class ActivationModule extends Module<ActivationModuleProps> {
@@ -32,15 +18,5 @@ class ActivationModule extends Module<ActivationModuleProps> {
 
 export const activationModule = ActivationModule.create({
   name: "activationModule",
-  ActivationTokens: {
-    create: createActivationToken,
-    createForUser: createActivationTokenForUser,
-    markTokenAsUsed: markActivationTokenAsUsed,
-
-    fns: {
-      persist: persistActivationToken,
-      sendEmailOfActivationToUser: sendEmailOfActivationToUser,
-      findValidById: findValidActivationTokenById,
-    },
-  },
+  ActivationTokens,
 });

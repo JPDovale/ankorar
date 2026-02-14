@@ -1,6 +1,6 @@
-import { email } from "../../email";
-import { User } from "../../user/User";
-import { webserverModule } from "../../webserver/WebserverModule";
+import { email } from "../../../email";
+import { User } from "../../../user/User";
+import { webserverModule } from "../../../webserver/WebserverModule";
 import { ActivationToken } from "../ActivationToken";
 
 interface SendEmailOfActivationToUserProps {

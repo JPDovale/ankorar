@@ -1,4 +1,4 @@
-import { date } from "../date";
+import { date } from "../../date";
 import { ActivationToken } from "./ActivationToken";
 import { persistActivationToken } from "./fns/persistActivationToken";
 

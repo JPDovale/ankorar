@@ -1,6 +1,6 @@
 import { Entity } from "@/src/infra/shared/entities/Entity";
 import { Optional } from "@prisma/client/runtime/client";
-import { date } from "../date";
+import { date } from "../../date";
 
 interface ActivationTokenProps {
   user_id: string;

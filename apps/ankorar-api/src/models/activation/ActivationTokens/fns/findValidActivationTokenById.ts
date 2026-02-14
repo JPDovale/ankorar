@@ -1,6 +1,6 @@
 import { db } from "@/src/infra/database/pool";
 import { ActivationTokenNotFound } from "@/src/infra/errors/ActivationTokenNotFound";
-import { date } from "../../date";
+import { date } from "../../../date";
 import { ActivationToken } from "../ActivationToken";
 
 interface FindValidActivationTokenByIdProps {

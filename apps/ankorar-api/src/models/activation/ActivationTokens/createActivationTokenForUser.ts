@@ -1,5 +1,5 @@
-import { date } from "../date";
-import { User } from "../user/User";
+import { date } from "../../date";
+import { User } from "../../user/User";
 import { ActivationToken } from "./ActivationToken";
 import { createActivationToken } from "./createActivationToken";
 
