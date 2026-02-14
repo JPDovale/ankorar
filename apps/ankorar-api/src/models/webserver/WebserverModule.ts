@@ -10,6 +10,8 @@ import { Member } from "../organization/Member";
 import { organizationModule } from "../organization/OrganizationModule";
 import { cryptoModule } from "../crypto/CryptoModule";
 import { InvalidApiKey } from "@/src/infra/errors/InvalidApiKey";
+import { UserNotFound } from "@/src/infra/errors/UserNotFound";
+import { OrganizationNotFound } from "@/src/infra/errors/OrganizationNotFound";
 
 interface WebserverModuleProps {
   name: string;
@@ -270,26 +272,35 @@ export const webserverModule = WebserverModule.create({
         }
 
         if (payload) {
-          const { user } = await Users.fns.findById({
-            id: payload.sub,
-          });
+          try {
+            const { user } = await Users.fns.findById({
+              id: payload.sub,
+            });
 
-          const { organization } = await Organizations.fns.findById({
-            id: orgId,
-          });
+            const { organization } = await Organizations.fns.findById({
+              id: orgId,
+            });
 
-          const { member } = await Members.fns.findById({
-            id: memberId,
-          });
+            const { member } = await Members.fns.findById({
+              id: memberId,
+            });
 
-          request.context = {
-            ...request.context,
-            user,
-            member,
-            organization,
-            refresh_token: parsedCookies.refresh_token,
-            access_token: parsedCookies.access_token,
-          };
+            request.context = {
+              ...request.context,
+              user,
+              member,
+              organization,
+              refresh_token: parsedCookies.refresh_token,
+              access_token: parsedCookies.access_token,
+            };
+          } catch (error) {
+            if (error instanceof UserNotFound) {
+              this.injectAnonymousUser({ request });
+              return;
+            }
+
+            throw error;
+          }
         }
       },
 

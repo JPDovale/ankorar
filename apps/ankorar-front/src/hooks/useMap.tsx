@@ -240,6 +240,7 @@ export function useMap({ id }: UseMapProps) {
     retry: false,
     refetchOnWindowFocus: false,
   });
+  const canEditCurrentMap = mapQuery.data?.can_edit ?? false;
 
   const updateMapContentMutation = useMutation({
     mutationFn: updateMapContentMutationFn,
@@ -302,6 +303,12 @@ export function useMap({ id }: UseMapProps) {
         };
       }
 
+      if (!canEditCurrentMap) {
+        return {
+          success: false,
+        };
+      }
+
       const sanitizedContent = sanitizeMapContent(content);
 
       return updateMapContentMutation
@@ -317,7 +324,7 @@ export function useMap({ id }: UseMapProps) {
           };
         });
     },
-    [id, updateMapContentMutation],
+    [canEditCurrentMap, id, updateMapContentMutation],
   );
 
   return {

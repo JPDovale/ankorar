@@ -15,19 +15,27 @@ export function SideBarItem({ item }: SideBarItemProps) {
       title={item.label}
       className={({ isActive }) =>
         cn(
-          "group flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-          "group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-2",
-          "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950",
-          isActive &&
-            "bg-zinc-950 text-zinc-50 hover:bg-zinc-950 hover:text-zinc-50",
+          "group/item flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-all",
+          "group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-0",
+          isActive
+            ? "bg-zinc-900 text-zinc-50 shadow-sm"
+            : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
         )
       }
     >
-      <Icon className="size-4 shrink-0" />
-      <span className="flex flex-col group-data-[collapsed=true]:hidden">
-        <span className="text-sm font-medium">{item.label}</span>
-        <span className="text-xs opacity-80">{item.description}</span>
-      </span>
+      {({ isActive }) => (
+        <>
+          <Icon className="size-3.5 shrink-0" />
+          <span
+            className={cn(
+              "truncate text-[13px] font-medium leading-none group-data-[collapsed=true]:hidden",
+              isActive ? "text-zinc-50" : "text-zinc-700",
+            )}
+          >
+            {item.label}
+          </span>
+        </>
+      )}
     </NavLink>
   );
 }

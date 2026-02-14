@@ -14,18 +14,24 @@ export const listLibrariesRoute = Route.create({
     const { Libraries } = libraryModule;
     const organization = request.context.organization;
 
-    const { libraries } = await Libraries.fns.findByOrganizationId({
+    const { libraries } = await Libraries.fns.findByOrganizationIdWithMaps({
       organizationId: organization.id,
     });
 
     return reply.status(200).send({
       status: 200,
       data: {
-        libraries: libraries.map((library) => ({
+        libraries: libraries.map(({ library, maps }) => ({
           id: library.id,
           name: library.name,
           created_at: library.created_at,
           updated_at: library.updated_at,
+          maps: maps.map((map) => ({
+            id: map.id,
+            title: map.title,
+            created_at: map.created_at,
+            updated_at: map.updated_at,
+          })),
         })),
       },
     });

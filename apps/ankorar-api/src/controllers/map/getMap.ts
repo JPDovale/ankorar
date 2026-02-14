@@ -7,17 +7,18 @@ export const getMapRoute = Route.create({
   method: "get",
   tags: ["Maps"],
   summary: "Get map by id",
-  description: "Get a full map by id from authenticated member",
+  description: "Get a full map by id from authenticated organization",
   params: getMapParams,
   response: getMapResponses,
   preHandler: [Route.canRequest("read:organization")],
   handler: async (request, reply) => {
     const { Maps } = mapModule;
+    const organization = request.context.organization;
     const member = request.context.member;
 
-    const { map } = await Maps.fns.findByIdAndMemberId({
+    const { map } = await Maps.fns.findByIdAndOrganizationId({
       id: request.params.map_id,
-      memberId: member.id,
+      organizationId: organization.id,
     });
 
     return reply.status(200).send({
@@ -29,6 +30,7 @@ export const getMapRoute = Route.create({
           content: map.content,
           created_at: map.created_at,
           updated_at: map.updated_at,
+          can_edit: map.member_id === member.id,
         },
       },
     });

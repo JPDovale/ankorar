@@ -25,18 +25,19 @@ interface NodeStylePopoverProps {
 }
 
 export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
-  const { zenMode, scale, offset, selectedNodeId } = useMindMapState(
+  const { zenMode, scale, offset, selectedNodeId, readOnly } = useMindMapState(
     useShallow((state) => ({
       zenMode: state.zenMode,
       scale: state.scale,
       offset: state.offset,
       selectedNodeId: state.selectedNodeId,
+      readOnly: state.readOnly,
     })),
   );
 
   const { node: selectedNode } = useMindMapNode({ nodeId: selectedNodeId });
 
-  if (!selectedNode || zenMode || selectedNode.type === "central") {
+  if (!selectedNode || zenMode || selectedNode.type === "central" || readOnly) {
     return null;
   }
 

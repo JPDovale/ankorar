@@ -1,5 +1,10 @@
 import { useCallback } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import {
   createLibraryRequest,
   type CreateLibraryRequestBody,
@@ -57,16 +62,24 @@ async function listLibrariesQueryFn(): Promise<LibraryPreview[]> {
   return [];
 }
 
-export function useLibraries() {
-  const queryClient = useQueryClient();
-
-  const librariesQuery = useQuery({
+function buildLibrariesQueryConfig() {
+  return {
     queryKey: librariesQueryKey,
     queryFn: listLibrariesQueryFn,
     staleTime: 2 * 60 * 1000,
     retry: false,
     refetchOnWindowFocus: false,
-  });
+  };
+}
+
+export function useSuspenseLibraries() {
+  return useSuspenseQuery(buildLibrariesQueryConfig());
+}
+
+export function useLibraries() {
+  const queryClient = useQueryClient();
+
+  const librariesQuery = useQuery(buildLibrariesQueryConfig());
 
   const createLibraryMutation = useMutation({
     mutationFn: createLibraryMutationFn,

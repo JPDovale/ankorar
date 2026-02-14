@@ -22,10 +22,11 @@ export function useMindMapNodeEditor({
   textRef,
 }: UseMindMapNodeEditorParams): UseMindMapNodeEditorResult {
   const { node } = useMindMapNode({ nodeId });
-  const { editingNodeId, setEditingNode } = useMindMapState(
+  const { editingNodeId, setEditingNode, readOnly } = useMindMapState(
     useShallow((state) => ({
       editingNodeId: state.editingNodeId,
       setEditingNode: state.setEditingNode,
+      readOnly: state.readOnly,
     })),
   );
 
@@ -64,12 +65,18 @@ export function useMindMapNodeEditor({
   return {
     onFocus: () => {
       node?.select();
-      node?.edit();
+      if (!readOnly) {
+        node?.edit();
+      }
     },
     onBlur: () => {
       setEditingNode(null);
     },
     onInput: (event) => {
+      if (readOnly) {
+        return;
+      }
+
       if (!node) {
         return;
       }

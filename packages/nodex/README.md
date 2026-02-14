@@ -45,7 +45,7 @@ export function MindMapPage() {
 
   return (
     <section className="h-[calc(100dvh-11rem)] min-h-[38rem]">
-      <Nodex>
+      <Nodex readOnly={false}>
         <MindMapHeader title="Mind Map" />
         <Board>
           <Background />
@@ -57,6 +57,23 @@ export function MindMapPage() {
   );
 }
 ```
+
+## Read-only Mode
+
+Use `Nodex` with `readOnly` when the map should be visual-only:
+
+```tsx
+<Nodex readOnly>
+  <MindMapHeader title="Mind Map (View)" />
+  <Board>
+    <Background />
+    <MineMap />
+    <ZenCard />
+  </Board>
+</Nodex>
+```
+
+In `readOnly` mode, the package blocks content mutations (keyboard shortcuts, inline edits, add/remove node actions, and style popover updates).
 
 ## Initial State
 

@@ -1,10 +1,22 @@
 import { createServerInstance } from "@/src/server";
-import { beforeAll } from "vitest";
+import { afterAll, beforeAll } from "vitest";
+import { cleanupDatabaseAfterSuite } from "./resetDatabase";
+
+type TestServerInstance = ReturnType<typeof createServerInstance>;
+let testServer: TestServerInstance | null = null;
 
 beforeAll(async () => {
-  if (!(globalThis as any).__TEST_SERVER_RUNNING__) {
-    const app = createServerInstance({ log: "never" });
-    await app.run();
-    (globalThis as any).__TEST_SERVER_RUNNING__ = true;
+  if (!testServer) {
+    testServer = createServerInstance({ log: "never" });
+    await testServer.run();
   }
+});
+
+afterAll(async () => {
+  if (testServer) {
+    await testServer.close();
+    testServer = null;
+  }
+
+  await cleanupDatabaseAfterSuite();
 });

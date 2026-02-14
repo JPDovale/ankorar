@@ -22,7 +22,9 @@ export function useMindMapNode({ nodeId }: UseMindMapNodeProps) {
     setSelectedNode,
     setEditingNode,
     removeNode,
+    toggleNodeChildrenVisibility,
     makeChildNode,
+    readOnly,
   } = useMindMapState(
     useShallow((state) => ({
       nodes: state.nodes,
@@ -32,7 +34,9 @@ export function useMindMapNode({ nodeId }: UseMindMapNodeProps) {
       setSelectedNode: state.setSelectedNode,
       setEditingNode: state.setEditingNode,
       removeNode: state.removeNode,
+      toggleNodeChildrenVisibility: state.toggleNodeChildrenVisibility,
       makeChildNode: state.makeChildNode,
+      readOnly: state.readOnly,
     }))
   );
 
@@ -46,6 +50,10 @@ export function useMindMapNode({ nodeId }: UseMindMapNodeProps) {
   );
 
   const updater = (cb: () => void) => {
+    if (readOnly) {
+      return createLogicalNode();
+    }
+
     cb();
     return createLogicalNode();
   };
@@ -109,7 +117,7 @@ export function useMindMapNode({ nodeId }: UseMindMapNodeProps) {
     });
 
   const commit = () => {
-    if (!node) return;
+    if (!node || readOnly) return;
     updateNode(node);
   };
 
@@ -123,7 +131,7 @@ export function useMindMapNode({ nodeId }: UseMindMapNodeProps) {
   };
 
   const edit = () => {
-    if (!node) return;
+    if (!node || readOnly) return;
     setEditingNode(node.id);
   };
 
@@ -132,23 +140,17 @@ export function useMindMapNode({ nodeId }: UseMindMapNodeProps) {
   };
 
   const destroy = () => {
-    if (!node) return;
+    if (!node || readOnly) return;
     removeNode(node.id);
   };
 
   const togglechildrensVisibility = () => {
     if (!node) return;
-    const childs = node.childrens.map((child) => ({
-      ...child,
-      isVisible: !child.isVisible,
-    }));
-
-    node.childrens = childs;
-    updateNode(node);
+    toggleNodeChildrenVisibility(node.id);
   };
 
   const addChild = () => {
-    if (!node) return;
+    if (!node || readOnly) return;
     const newchildrens = node.childrens;
 
     const newChilderen = makeChildNode(node);

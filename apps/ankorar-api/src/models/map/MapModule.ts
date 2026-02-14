@@ -20,6 +20,10 @@ interface MapModuleProps {
         id: string;
         memberId: string;
       }) => Promise<{ map: Map }>;
+      findByIdAndOrganizationId: (props: {
+        id: string;
+        organizationId: string;
+      }) => Promise<{ map: Map }>;
       findByMemberId: (props: { memberId: string }) => Promise<{ maps: Map[] }>;
       createCentralNode: (title: string) => JsonValue;
       extractCentralNodeTitle: (content: JsonValue[]) => string | null;
@@ -178,6 +182,39 @@ export const mapModule = MapModule.create({
             id,
             member_id: memberId,
             deleted_at: null,
+          },
+        });
+
+        if (!mapOnDb) {
+          throw new MapNotFound();
+        }
+
+        const map = Map.create(
+          {
+            member_id: mapOnDb.member_id,
+            title: mapOnDb.title,
+            content: mapOnDb.content as JsonValue[],
+            created_at: mapOnDb.created_at,
+            updated_at: mapOnDb.updated_at,
+            deleted_at: mapOnDb.deleted_at,
+          },
+          mapOnDb.id,
+        );
+
+        return { map };
+      },
+
+      async findByIdAndOrganizationId({ id, organizationId }) {
+        const mapOnDb = await db.map.findFirst({
+          where: {
+            id,
+            deleted_at: null,
+            member: {
+              is: {
+                org_id: organizationId,
+                deleted_at: null,
+              },
+            },
           },
         });
 

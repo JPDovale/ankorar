@@ -14,13 +14,15 @@ type ImageNodeProps = {
 export function ImageNode({ node, className }: ImageNodeProps) {
   const { node: logicalNode } = useMindMapNode({ nodeId: node.id });
 
-  const { selectedNodeId, editingNodeId, setEditingNode } = useMindMapState(
+  const { selectedNodeId, editingNodeId, setEditingNode, readOnly } =
+    useMindMapState(
     useShallow((state) => ({
       selectedNodeId: state.selectedNodeId,
       editingNodeId: state.editingNodeId,
       setEditingNode: state.setEditingNode,
+      readOnly: state.readOnly,
     })),
-  );
+    );
 
   const isLeft = logicalNode?.getSide() === "left";
   const hasChildren = node.childrens.length > 0;
@@ -38,7 +40,7 @@ export function ImageNode({ node, className }: ImageNodeProps) {
     }
   }, [hasUrl, node.text]);
   const isEditing = editingNodeId === node.id;
-  const showInput = !isValidUrl || isEditing;
+  const showInput = readOnly ? !isValidUrl : !isValidUrl || isEditing;
   const isLoadingRef = useRef(false);
   const lastSizedUrlRef = useRef<string | null>(null);
   const textRef = useRef<HTMLSpanElement | null>(null);
@@ -98,6 +100,10 @@ export function ImageNode({ node, className }: ImageNodeProps) {
   };
 
   const handleUrlChange = (value: string) => {
+    if (readOnly) {
+      return;
+    }
+
     const trimmed = value.trim();
     logicalNode?.chain().updateText(value).commit();
 
@@ -192,7 +198,7 @@ export function ImageNode({ node, className }: ImageNodeProps) {
               <span
                 ref={textRef}
                 className="absolute inset-0 rounded-xl bg-transparent px-3 py-2 text-sm outline-none whitespace-pre"
-                contentEditable={isEditing}
+                contentEditable={!readOnly && isEditing}
                 suppressContentEditableWarning
                 data-nodex-ui
                 onMouseDown={(event) => {
@@ -203,13 +209,17 @@ export function ImageNode({ node, className }: ImageNodeProps) {
                 }}
                 onFocus={() => {
                   logicalNode?.select();
-                  setEditingNode(node.id);
+                  if (!readOnly) {
+                    setEditingNode(node.id);
+                  }
                 }}
                 onInput={(event) => {
                   handleUrlChange(event.currentTarget.textContent ?? "");
                 }}
                 onBlur={(event) => {
-                  setEditingNode(null);
+                  if (!readOnly) {
+                    setEditingNode(null);
+                  }
                   handleUrlChange(event.currentTarget.textContent ?? "");
                 }}
               />
@@ -279,7 +289,7 @@ export function ImageNode({ node, className }: ImageNodeProps) {
       <button
         type="button"
         className={`absolute top-1/2 h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white text-sm font-bold text-slate-700 shadow-sm transition ${
-          selectedNodeId === node.id && editingNodeId !== node.id
+          selectedNodeId === node.id && editingNodeId !== node.id && !readOnly
             ? "flex"
             : "hidden"
         } ${isLeft ? "-left-2.5" : "-right-2.5"}`}
@@ -299,7 +309,7 @@ export function ImageNode({ node, className }: ImageNodeProps) {
       <button
         type="button"
         className={`absolute top-1/2 h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white text-sm font-semibold text-slate-700 shadow-sm transition ${
-          selectedNodeId === node.id ? "flex" : "hidden"
+          selectedNodeId === node.id && !readOnly ? "flex" : "hidden"
         } ${isLeft ? "-right-3" : "-left-3"}`}
         style={{ borderColor: node.style.color, color: node.style.color }}
         onMouseDown={(event) => {

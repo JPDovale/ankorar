@@ -1,5 +1,10 @@
 import { useCallback } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { librariesQueryKey } from "@/hooks/useLibraries";
 import { connectMapToLibraryRequest } from "@/services/libraries/connectMapToLibraryRequest";
 import {
@@ -74,6 +79,20 @@ async function listMapsQueryFn(): Promise<MapPreview[]> {
   return [];
 }
 
+function buildMapsQueryConfig() {
+  return {
+    queryKey: mapsQueryKey,
+    queryFn: listMapsQueryFn,
+    staleTime: 2 * 60 * 1000,
+    retry: false,
+    refetchOnWindowFocus: false,
+  };
+}
+
+export function useSuspenseMaps() {
+  return useSuspenseQuery(buildMapsQueryConfig());
+}
+
 async function deleteMapMutationFn(
   payload: DeleteMapMutationPayload,
 ): Promise<DeleteMapMutationResult> {
@@ -126,13 +145,7 @@ async function connectMapToLibraryMutationFn(
 export function useMaps() {
   const queryClient = useQueryClient();
 
-  const mapsQuery = useQuery({
-    queryKey: mapsQueryKey,
-    queryFn: listMapsQueryFn,
-    staleTime: 2 * 60 * 1000,
-    retry: false,
-    refetchOnWindowFocus: false,
-  });
+  const mapsQuery = useQuery(buildMapsQueryConfig());
 
   const createMapMutation = useMutation({
     mutationFn: createMapMutationFn,

@@ -33,12 +33,14 @@ interface UseMindMapState {
   scale: number;
   maxScale: number;
   minScale: number;
+  readOnly: boolean;
 
   offset: MindMapPos;
 
   clampScale: (nextScale: number) => number;
   setScale: (nextScale: number) => void;
   setOffset: (nextOffset: { x: number; y: number }) => void;
+  setReadOnly: (nextValue: boolean) => void;
 
   nodes: MindMapNode[];
   selectedNodeId: string | null;
@@ -54,6 +56,7 @@ interface UseMindMapState {
   setZenMode: (nextValue: boolean) => void;
   setHelpOpen: (nextValue: boolean) => void;
   removeNode: (nodeId: string) => void;
+  toggleNodeChildrenVisibility: (nodeId: string) => void;
   showAllNodes: () => void;
   hideNonCentralChildren: () => void;
   getFlatNodes: () => MindMapNode[];
@@ -330,6 +333,7 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
   maxScale: 12,
   minScale: 0.1,
   scale: 1,
+  readOnly: false,
   selectedNodeId: null,
   editingNodeId: null,
   zenMode: false,
@@ -420,10 +424,26 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
     }
     set({ offset: nextOffset });
   },
+  setReadOnly: (nextValue) => {
+    const currentReadOnly = get().readOnly;
+
+    if (currentReadOnly === nextValue) {
+      return;
+    }
+
+    set({
+      readOnly: nextValue,
+      editingNodeId: nextValue ? null : get().editingNodeId,
+    });
+  },
   setSelectedNode: (nodeId) => {
     set({ selectedNodeId: nodeId });
   },
   setEditingNode: (nodeId) => {
+    if (get().readOnly) {
+      return;
+    }
+
     set({ editingNodeId: nodeId });
   },
   setZenMode: (nextValue) => {
@@ -435,6 +455,10 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
     );
   },
   removeNode: (nodeId) => {
+    if (get().readOnly) {
+      return;
+    }
+
     const { nodes, selectedNodeId, editingNodeId } = get();
     const centralNode = nodes.find((node) => node.type === "central");
     if (centralNode?.id === nodeId) {
@@ -451,12 +475,68 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
       editingNodeId: editingNodeId === nodeId ? null : editingNodeId,
     });
   },
+  toggleNodeChildrenVisibility: (nodeId) => {
+    const { nodes } = get();
+
+    const updater = (items: MindMapNode[]): MindMapNode[] => {
+      let changedInside = false;
+
+      const nextItems = items.map((node) => {
+        if (node.id === nodeId) {
+          changedInside = true;
+          return {
+            ...node,
+            childrens: node.childrens.map((child) => ({
+              ...child,
+              isVisible: !child.isVisible,
+            })),
+          };
+        }
+
+        const nextChildren = updater(node.childrens);
+
+        if (nextChildren === node.childrens) {
+          return node;
+        }
+
+        changedInside = true;
+        return {
+          ...node,
+          childrens: nextChildren,
+        };
+      });
+
+      if (!changedInside) {
+        return items;
+      }
+
+      return nextItems;
+    };
+
+    const nextNodes = updater(nodes);
+
+    if (nextNodes === nodes) {
+      return;
+    }
+
+    set({
+      nodes: layoutNodes(nextNodes),
+    });
+  },
   showAllNodes: () => {
+    if (get().readOnly) {
+      return;
+    }
+
     const { nodes } = get();
     const nextNodes = updateVisibilityTree(nodes, () => true);
     set({ nodes: layoutNodes(nextNodes) });
   },
   hideNonCentralChildren: () => {
+    if (get().readOnly) {
+      return;
+    }
+
     const { nodes } = get();
     const nextNodes = updateVisibilityTree(nodes, (node, parent) => {
       if (node.type === "central") {
@@ -467,6 +547,10 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
     set({ nodes: layoutNodes(nextNodes) });
   },
   updateNode: (node) => {
+    if (get().readOnly) {
+      return;
+    }
+
     const { nodes, scale } = get();
 
     if (node.type !== "image") {

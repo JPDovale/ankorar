@@ -10,6 +10,14 @@ export const listLibrariesResponses = {
           name: z.string().min(1).max(256).trim(),
           created_at: z.date(),
           updated_at: z.date().nullable(),
+          maps: z.array(
+            z.object({
+              id: z.uuidv7(),
+              title: z.string().min(1).max(256).trim(),
+              created_at: z.date(),
+              updated_at: z.date().nullable(),
+            }),
+          ),
         }),
       ),
     }),

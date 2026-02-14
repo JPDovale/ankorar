@@ -4,14 +4,19 @@ import { useMindMapState } from "../../state/mindMap";
 import { type RootKeyBinds, rootKeyBinds } from "../../config/rootKeyBinds";
 
 export function useRootKeyBindHandlers() {
-  const { editingNodeId } = useMindMapState(
+  const { editingNodeId, readOnly } = useMindMapState(
     useShallow((state) => ({
       editingNodeId: state.editingNodeId,
+      readOnly: state.readOnly,
     }))
   );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (readOnly) {
+        return;
+      }
+
       const isEditing = !!editingNodeId;
       let key = e.key;
 
@@ -40,5 +45,5 @@ export function useRootKeyBindHandlers() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown, listenerOptions);
     };
-  }, [editingNodeId]);
+  }, [editingNodeId, readOnly]);
 }

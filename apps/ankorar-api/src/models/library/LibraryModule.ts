@@ -4,6 +4,18 @@ import { LibraryNotFound } from "@/src/infra/errors/LibraryNotFound";
 import { Module } from "@/src/infra/shared/entities/Module";
 import { CreateLibraryProps, Library } from "./Library";
 
+interface LibraryMapPreview {
+  id: string;
+  title: string;
+  created_at: Date;
+  updated_at: Date | null;
+}
+
+interface LibraryWithMapsPreview {
+  library: Library;
+  maps: LibraryMapPreview[];
+}
+
 interface LibraryModuleProps {
   name: string;
   Libraries: {
@@ -17,6 +29,9 @@ interface LibraryModuleProps {
       findByOrganizationId: (props: {
         organizationId: string;
       }) => Promise<{ libraries: Library[] }>;
+      findByOrganizationIdWithMaps: (props: {
+        organizationId: string;
+      }) => Promise<{ libraries: LibraryWithMapsPreview[] }>;
       findByIdAndOrganizationId: (props: {
         id: string;
         organizationId: string;
@@ -89,6 +104,64 @@ export const libraryModule = LibraryModule.create({
             libraryOnDb.id,
           ),
         );
+
+        return { libraries };
+      },
+
+      async findByOrganizationIdWithMaps({ organizationId }) {
+        const librariesOnDb = await db.library.findMany({
+          where: {
+            organization_id: organizationId,
+            deleted_at: null,
+          },
+          orderBy: {
+            created_at: "desc",
+          },
+          include: {
+            maps: {
+              include: {
+                map: {
+                  select: {
+                    id: true,
+                    title: true,
+                    created_at: true,
+                    updated_at: true,
+                    deleted_at: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        const libraries = librariesOnDb.map((libraryOnDb) => {
+          const library = Library.create(
+            {
+              organization_id: libraryOnDb.organization_id,
+              name: libraryOnDb.name,
+              created_at: libraryOnDb.created_at,
+              updated_at: libraryOnDb.updated_at,
+              deleted_at: libraryOnDb.deleted_at,
+            },
+            libraryOnDb.id,
+          );
+
+          const maps = libraryOnDb.maps
+            .map((libraryMapOnDb) => libraryMapOnDb.map)
+            .filter((mapOnDb) => mapOnDb.deleted_at === null)
+            .sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
+            .map((mapOnDb) => ({
+              id: mapOnDb.id,
+              title: mapOnDb.title,
+              created_at: mapOnDb.created_at,
+              updated_at: mapOnDb.updated_at,
+            }));
+
+          return {
+            library,
+            maps,
+          };
+        });
 
         return { libraries };
       },

@@ -1,12 +1,12 @@
-import { Logo } from "@/components/assets/logo";
 import { useUser } from "@/hooks/useUser";
+import { Link2 } from "lucide-react";
 import { Navigate, Outlet, useLocation } from "react-router";
 
 function AuthLoadingScreen() {
   return (
     <main className="flex h-screen w-screen items-center justify-center bg-zinc-950 text-zinc-100">
       <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-sm">
-        <Logo className="h-8 w-8" />
+        <Link2 className="h-8 w-8" />
         <div>
           <p className="text-sm font-semibold">ANKORAR</p>
           <p className="text-xs text-zinc-400">Carregando sessão...</p>

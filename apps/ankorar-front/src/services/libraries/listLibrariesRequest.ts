@@ -5,6 +5,14 @@ export interface LibraryPreview {
   name: string;
   created_at: string;
   updated_at: string | null;
+  maps: LibraryMapPreview[];
+}
+
+export interface LibraryMapPreview {
+  id: string;
+  title: string;
+  created_at: string;
+  updated_at: string | null;
 }
 
 interface ListLibrariesRequestData {

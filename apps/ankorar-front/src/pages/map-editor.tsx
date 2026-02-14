@@ -15,7 +15,7 @@ import {
 } from "@ankorar/nodex";
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 
 const initialMindMapState = (() => {
   const state = useMindMapState.getState();
@@ -40,10 +40,13 @@ function getNodesFromContent(content: unknown[]): MindMapNode[] {
 
 export function MapEditorPage() {
   const params = useParams<{ map_id: string }>();
+  const [searchParams] = useSearchParams();
   const mapId = params.map_id ?? "";
   const { map, isLoadingMap, updateMapContent, isUpdatingMapContent } = useMap({
     id: mapId,
   });
+  const requestedViewMode = searchParams.get("mode") === "view";
+  const isReadOnly = requestedViewMode || (map ? !map.can_edit : false);
   const nodes = useMindMapState((state) => state.nodes);
   const [lastPersistedSnapshot, setLastPersistedSnapshot] = useState<{
     mapId: string | null;
@@ -63,17 +66,19 @@ export function MapEditorPage() {
   const isDirty =
     map !== null &&
     currentSerializedNodes !== (lastPersistedSerializedContent ?? "[]");
-  const saveStatus: MindMapSaveStatus = !map
-    ? "saved"
-    : isUpdatingMapContent
-      ? "saving"
-      : isDirty
-        ? "unsaved"
-        : "saved";
+  const saveStatus: MindMapSaveStatus | null = !map
+    ? null
+    : isReadOnly
+      ? null
+      : isUpdatingMapContent
+        ? "saving"
+        : isDirty
+          ? "unsaved"
+          : "saved";
 
   useMindMapDebounce(
     async (nodes) => {
-      if (!mapId || !map) {
+      if (!mapId || !map || isReadOnly) {
         return;
       }
 
@@ -120,43 +125,52 @@ export function MapEditorPage() {
       editingNodeId: null,
       zenMode: false,
       helpOpen: false,
+      readOnly: isReadOnly,
     });
     hydratedMapIdRef.current = map.id;
-  }, [map]);
+  }, [isReadOnly, map]);
+
+  useEffect(() => {
+    useMindMapState.getState().setReadOnly(isReadOnly);
+  }, [isReadOnly]);
 
   return (
-    <div className="flex h-dvh bg-zinc-100/70">
-      <SideBar />
+    <div className="h-dvh overflow-hidden bg-zinc-100/80 p-2">
+      <div className="flex h-full gap-2">
+        <SideBar showExpandControlWhenCollapsed />
 
-      <main className="h-dvh flex-1 overflow-hidden p-0">
-        <div className="h-full w-full p-0">
-          {isLoadingMap ? (
-            <section className="flex h-full items-center justify-center bg-white text-sm text-zinc-600">
-              <span className="inline-flex items-center gap-2">
-                <LoaderCircle className="size-4 animate-spin" />
-                Carregando mapa mental...
-              </span>
-            </section>
-          ) : !map ? (
-            <section className="flex h-full items-center justify-center bg-white text-sm text-zinc-600">
-              Mapa mental não encontrado.
-            </section>
-          ) : (
-            <Nodex>
-              <MindMapHeader
-                title={map.title}
-                className="h-16"
-                saveStatus={saveStatus}
-              />
-              <Board>
-                <Background />
-                <MineMap />
-                <ZenCard />
-              </Board>
-            </Nodex>
-          )}
-        </div>
-      </main>
+        <main className="relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.06)]">
+          <div className="h-full w-full p-0">
+            {isLoadingMap ? (
+              <section className="flex h-full items-center justify-center bg-white text-sm text-zinc-600">
+                <span className="inline-flex items-center gap-2">
+                  <LoaderCircle className="size-4 animate-spin" />
+                  Carregando mapa mental...
+                </span>
+              </section>
+            ) : !map ? (
+              <section className="flex h-full items-center justify-center bg-white text-sm text-zinc-600">
+                Mapa mental não encontrado.
+              </section>
+            ) : (
+              <Nodex readOnly={isReadOnly}>
+                <MindMapHeader
+                  title={
+                    isReadOnly ? `${map.title} (visualização)` : map.title
+                  }
+                  className="h-16"
+                  saveStatus={saveStatus}
+                />
+                <Board>
+                  <Background />
+                  <MineMap />
+                  <ZenCard />
+                </Board>
+              </Nodex>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

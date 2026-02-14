@@ -5,7 +5,6 @@ import type { OrganizationOption } from "@/types/auth";
 import { PanelLeftOpen } from "lucide-react";
 import { useMemo } from "react";
 import { OrganizationSwitcher } from "./OrganizationSwitcher";
-import { UserInfo } from "./UserInfo";
 
 function getOrganizationSlug(name: string, id: string) {
   const letters = name
@@ -76,22 +75,23 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/90 backdrop-blur">
-      <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+    <header className="sticky top-0 z-30 border-b border-zinc-200/80 bg-white/90 backdrop-blur">
+      <div className="flex h-16 items-center px-4 sm:px-4">
         <div className="flex items-center gap-2">
           {collapsed && (
             <Button
               variant="ghost"
               size="icon"
-              className="size-8 text-zinc-600 hover:text-zinc-950 -ml-4"
+              className="size-8 rounded-lg text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
               onClick={toggleCollapsed}
+              aria-label="Expandir sidebar"
             >
               <PanelLeftOpen className="size-4" />
             </Button>
           )}
           {isLoadingOrganizations ? (
             <Button variant="outline" className="h-10 gap-3 px-3" disabled>
-              Carregando organizacoes...
+              Carregando organizações...
             </Button>
           ) : organizations.length > 0 ? (
             <OrganizationSwitcher
@@ -110,11 +110,10 @@ export function Header() {
             />
           ) : (
             <Button variant="outline" className="h-10 gap-3 px-3" disabled>
-              Sem organizacoes
+              Sem organizações
             </Button>
           )}
         </div>
-        <UserInfo />
       </div>
     </header>
   );

@@ -17,10 +17,11 @@ export function DefaultNode({ node, className }: DefaultNodeProps) {
 
   if (!logicalNode) return;
 
-  const { editingNodeId, selectedNodeId } = useMindMapState(
+  const { editingNodeId, selectedNodeId, readOnly } = useMindMapState(
     useShallow((state) => ({
       selectedNodeId: state.selectedNodeId,
       editingNodeId: state.editingNodeId,
+      readOnly: state.readOnly,
     })),
   );
 
@@ -76,7 +77,7 @@ export function DefaultNode({ node, className }: DefaultNodeProps) {
           <span
             ref={textRef}
             className="inline-block whitespace-pre outline-none"
-            contentEditable={editingNodeId === node.id}
+            contentEditable={!readOnly && editingNodeId === node.id}
             suppressContentEditableWarning
             onMouseDown={(event) => {
               if (event.detail > 1) {
@@ -147,7 +148,7 @@ export function DefaultNode({ node, className }: DefaultNodeProps) {
       <button
         type="button"
         className={`absolute top-1/2 h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white text-sm font-bold text-slate-700 shadow-sm transition ${
-          selectedNodeId === node.id && editingNodeId !== node.id
+          selectedNodeId === node.id && editingNodeId !== node.id && !readOnly
             ? "flex"
             : "hidden"
         } ${isLeft ? "-left-2.5" : "-right-2.5"}`}
@@ -167,7 +168,7 @@ export function DefaultNode({ node, className }: DefaultNodeProps) {
       <button
         type="button"
         className={`absolute top-1/2 h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white text-sm font-semibold text-slate-700 shadow-sm transition ${
-          selectedNodeId === node.id ? "flex" : "hidden"
+          selectedNodeId === node.id && !readOnly ? "flex" : "hidden"
         } ${isLeft ? "-right-3" : "-left-3"}`}
         style={{ borderColor: node.style.color, color: node.style.color }}
         onMouseDown={(event) => {

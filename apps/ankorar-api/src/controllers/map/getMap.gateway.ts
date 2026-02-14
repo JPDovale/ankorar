@@ -10,6 +10,7 @@ export const getMapResponses = {
         content: z.array(z.unknown()),
         created_at: z.date(),
         updated_at: z.date().nullable(),
+        can_edit: z.boolean(),
       }),
     }),
   }),

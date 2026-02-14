@@ -1,4 +1,4 @@
-import { Logo } from "@/components/assets/logo";
+import { Link2 } from "lucide-react";
 import { type ReactNode } from "react";
 
 type Shape = "s" | "o" | "c";
@@ -366,7 +366,7 @@ export function AuthScene({
         <div className="w-full max-w-lg rounded-xl border-3 border-white bg-zinc-50/30 p-6 shadow-2xl shadow-black/50 backdrop-blur-xl dark:border-zinc-900 dark:bg-zinc-950/50 dark:text-white">
           <div className="flex flex-col items-center">
             <h1 className="flex items-center justify-center gap-1 text-4xl font-extrabold">
-              <Logo className="h-10 w-10" />
+              <Link2 className="h-10 w-10" />
               ANKORAR
             </h1>
             <span className="text-xs font-semibold opacity-80">{subtitle}</span>

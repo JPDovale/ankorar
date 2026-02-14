@@ -6,6 +6,7 @@ export interface MapDetails {
   content: unknown[];
   created_at: string;
   updated_at: string | null;
+  can_edit: boolean;
 }
 
 interface GetMapRequestData {

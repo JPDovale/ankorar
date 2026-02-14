@@ -11,6 +11,8 @@ import {
 import { CreateOrganizationProps, Organization } from "./Organization";
 import { User } from "../user/User";
 import { safeCall } from "@/src/utils/safeCall";
+import { OrganizationNotFound } from "@/src/infra/errors/OrganizationNotFound";
+import { MemberNotFound } from "@/src/infra/errors/MemberNotFound";
 
 interface MemberFns {
   findById: (props: { id: string }) => Promise<{ member: Member }>;
@@ -153,7 +155,7 @@ const memberFns: MemberFns = {
     });
 
     if (!memberOnDb) {
-      throw new Error("Member not found");
+      throw new MemberNotFound();
     }
 
     const member = Member.create(
@@ -515,7 +517,7 @@ export const organizationModule = OrganizationModule.create({
         });
 
         if (!organizationOnDb) {
-          throw new Error("Organization not found");
+          throw new OrganizationNotFound();
         }
 
         const organization = Organization.create(
