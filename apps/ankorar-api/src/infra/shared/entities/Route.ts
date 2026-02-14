@@ -155,6 +155,12 @@ export class Route<
     const bodyLimit =
       route.bodyLimit === undefined ? {} : { bodyLimit: route.bodyLimit };
 
+    if (opts.log === "all") {
+      console.log(
+        `    [V] Register route ${route.method.toUpperCase()} ${route.path}`,
+      );
+    }
+
     app.register((app) => {
       app[route.method](
         route.path,
@@ -172,12 +178,6 @@ export class Route<
         },
         route.handler,
       );
-
-      if (opts.log === "all") {
-        console.log(
-          `[V] Register route ${route.method.toUpperCase()} ${route.path}`,
-        );
-      }
     });
   }
 

@@ -8,7 +8,7 @@ let testServer: TestServerInstance | null = null;
 beforeAll(async () => {
   if (!testServer) {
     testServer = createServerInstance({ log: "never" });
-    await testServer.run();
+    await testServer.listen();
   }
 });
 
