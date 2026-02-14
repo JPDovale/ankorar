@@ -1,5 +1,4 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { libraryModule } from "@/src/models/library/LibraryModule";
 import {
   createLibraryBody,
   createLibraryResponses,
@@ -14,8 +13,8 @@ export const createLibraryRoute = Route.create({
   body: createLibraryBody,
   response: createLibraryResponses,
   preHandler: [Route.canRequest("read:organization")],
-  handler: async (request, reply) => {
-    const { Libraries } = libraryModule;
+  handler: async (request, reply, { modules }) => {
+    const { Libraries } = modules.library;
     const organization = request.context.organization;
 
     await Libraries.create({

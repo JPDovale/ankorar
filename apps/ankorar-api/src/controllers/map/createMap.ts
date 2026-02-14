@@ -1,6 +1,5 @@
 import { Route } from "@/src/infra/shared/entities/Route";
 import { createMapBody, createMapResponses } from "./createMap.gateway";
-import { mapModule } from "@/src/models/map/MapModule";
 
 export const createMapRoute = Route.create({
   path: "/v1/maps",
@@ -11,8 +10,8 @@ export const createMapRoute = Route.create({
   body: createMapBody,
   response: createMapResponses,
   preHandler: [Route.canRequest("read:organization")],
-  handler: async (request, reply) => {
-    const { Maps } = mapModule;
+  handler: async (request, reply, { modules }) => {
+    const { Maps } = modules.map;
     const member = request.context.member;
 
     await Maps.create({

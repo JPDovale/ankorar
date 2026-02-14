@@ -1,5 +1,4 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { organizationModule } from "@/src/models/organization/OrganizationModule";
 import { listOrganizationInvitesResponses } from "./listOrganizationInvites.gateway";
 
 export const listOrganizationInvitesRoute = Route.create({
@@ -10,8 +9,8 @@ export const listOrganizationInvitesRoute = Route.create({
   description: "List pending invites where authenticated user is target",
   response: listOrganizationInvitesResponses,
   preHandler: [Route.canRequest("read:session")],
-  handler: async (request, reply) => {
-    const { Organizations } = organizationModule;
+  handler: async (request, reply, { modules }) => {
+    const { Organizations } = modules.organization;
     const user = request.context.user;
 
     const { invites } = await Organizations.listPendingInvitesByUserId({

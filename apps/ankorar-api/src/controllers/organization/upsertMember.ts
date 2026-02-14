@@ -3,8 +3,6 @@ import {
   upsertMemberBody,
   upsertMemberResponses,
 } from "./upsertMember.gateway";
-import { userModule } from "@/src/models/user/UserModule";
-import { organizationModule } from "@/src/models/organization/OrganizationModule";
 import { User } from "@/src/models/user/Users/User";
 import { InternalServerError } from "@/src/infra/errors/InternalServerError";
 import { safeCall } from "@/src/utils/safeCall";
@@ -19,11 +17,11 @@ export const upsertMemberRoute = Route.create({
   body: upsertMemberBody,
   response: upsertMemberResponses,
   preHandler: [Route.canRequest("create:user:other")],
-  handler: async (request, reply) => {
+  handler: async (request, reply, { modules }) => {
     const organization = request.context.organization;
 
-    const { Users } = userModule;
-    const { Organizations } = organizationModule;
+    const { Users } = modules.user;
+    const { Organizations } = modules.organization;
 
     const userResult = await safeCall(() =>
       Users.fns.findByExtId({

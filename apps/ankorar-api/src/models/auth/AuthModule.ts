@@ -1,4 +1,8 @@
 import { Module } from "@/src/infra/shared/entities/Module";
+import {
+  createModuleProxy,
+  registerModuleClass,
+} from "@/src/infra/shared/entities/Modules";
 import { Auth } from "./Auth";
 
 interface AuthModuleProps {
@@ -6,9 +10,17 @@ interface AuthModuleProps {
   Auth: typeof Auth;
 }
 
-class AuthModule extends Module<AuthModuleProps> {
-  static create(props: AuthModuleProps) {
-    return new AuthModule(props, props.name);
+export class AuthModule extends Module<AuthModuleProps> {
+  static readonly moduleKey = "auth";
+
+  static create() {
+    return new AuthModule(
+      {
+        name: "auth",
+        Auth,
+      },
+      "auth",
+    );
   }
 
   get Auth() {
@@ -16,7 +28,12 @@ class AuthModule extends Module<AuthModuleProps> {
   }
 }
 
-export const authModule = AuthModule.create({
-  name: "AuthModule",
-  Auth,
-});
+registerModuleClass(AuthModule);
+
+declare module "@/src/infra/shared/entities/Modules" {
+  interface AppModules {
+    auth: AuthModule;
+  }
+}
+
+export const authModule = createModuleProxy("auth");

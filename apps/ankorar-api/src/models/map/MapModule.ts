@@ -1,4 +1,8 @@
 import { Module } from "@/src/infra/shared/entities/Module";
+import {
+  createModuleProxy,
+  registerModuleClass,
+} from "@/src/infra/shared/entities/Modules";
 import { Maps } from "./Maps";
 
 interface MapModuleProps {
@@ -6,9 +10,17 @@ interface MapModuleProps {
   Maps: typeof Maps;
 }
 
-class MapModule extends Module<MapModuleProps> {
-  static create(props: MapModuleProps) {
-    return new MapModule(props, props.name);
+export class MapModule extends Module<MapModuleProps> {
+  static readonly moduleKey = "map";
+
+  static create() {
+    return new MapModule(
+      {
+        name: "map",
+        Maps,
+      },
+      "map",
+    );
   }
 
   get Maps() {
@@ -16,7 +28,12 @@ class MapModule extends Module<MapModuleProps> {
   }
 }
 
-export const mapModule = MapModule.create({
-  name: "MapModule",
-  Maps,
-});
+registerModuleClass(MapModule);
+
+declare module "@/src/infra/shared/entities/Modules" {
+  interface AppModules {
+    map: MapModule;
+  }
+}
+
+export const mapModule = createModuleProxy("map");

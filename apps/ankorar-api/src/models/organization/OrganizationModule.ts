@@ -1,4 +1,8 @@
 import { Module } from "@/src/infra/shared/entities/Module";
+import {
+  createModuleProxy,
+  registerModuleClass,
+} from "@/src/infra/shared/entities/Modules";
 import { Members } from "./Members";
 import { Organizations } from "./Organizations";
 
@@ -8,9 +12,18 @@ interface OrganizationModuleProps {
   Members: typeof Members;
 }
 
-class OrganizationModule extends Module<OrganizationModuleProps> {
-  static create(props: OrganizationModuleProps) {
-    return new OrganizationModule(props, props.name);
+export class OrganizationModule extends Module<OrganizationModuleProps> {
+  static readonly moduleKey = "organization";
+
+  static create() {
+    return new OrganizationModule(
+      {
+        name: "organization",
+        Organizations,
+        Members,
+      },
+      "organization",
+    );
   }
 
   get Organizations() {
@@ -22,8 +35,12 @@ class OrganizationModule extends Module<OrganizationModuleProps> {
   }
 }
 
-export const organizationModule = OrganizationModule.create({
-  name: "organization",
-  Organizations,
-  Members,
-});
+registerModuleClass(OrganizationModule);
+
+declare module "@/src/infra/shared/entities/Modules" {
+  interface AppModules {
+    organization: OrganizationModule;
+  }
+}
+
+export const organizationModule = createModuleProxy("organization");

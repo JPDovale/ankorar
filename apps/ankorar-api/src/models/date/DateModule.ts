@@ -1,4 +1,8 @@
 import { Module } from "@/src/infra/shared/entities/Module";
+import {
+  createModuleProxy,
+  registerModuleClass,
+} from "@/src/infra/shared/entities/Modules";
 import { Date } from "./Date";
 
 interface DateModuleProps {
@@ -6,9 +10,17 @@ interface DateModuleProps {
   Date: typeof Date;
 }
 
-class DateModule extends Module<DateModuleProps> {
-  static create(props: DateModuleProps) {
-    return new DateModule(props, props.name);
+export class DateModule extends Module<DateModuleProps> {
+  static readonly moduleKey = "date";
+
+  static create() {
+    return new DateModule(
+      {
+        name: "date",
+        Date,
+      },
+      "date",
+    );
   }
 
   get Date() {
@@ -16,7 +28,12 @@ class DateModule extends Module<DateModuleProps> {
   }
 }
 
-export const dateModule = DateModule.create({
-  name: "DateModule",
-  Date,
-});
+registerModuleClass(DateModule);
+
+declare module "@/src/infra/shared/entities/Modules" {
+  interface AppModules {
+    date: DateModule;
+  }
+}
+
+export const dateModule = createModuleProxy("date");

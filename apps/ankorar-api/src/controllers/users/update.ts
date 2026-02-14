@@ -4,7 +4,6 @@ import {
   updateUserParams,
   updateUserResponses,
 } from "./update.gateway";
-import { userModule } from "@/src/models/user/UserModule";
 
 export const updateUserRoute = Route.create({
   path: "/v1/users/:email",
@@ -16,8 +15,8 @@ export const updateUserRoute = Route.create({
   body: updateUserBody,
   params: updateUserParams,
   preHandler: [Route.canRequest("create:user")],
-  handler: async (request, reply) => {
-    const { Users } = userModule;
+  handler: async (request, reply, { modules }) => {
+    const { Users } = modules.user;
     const { email: currentEmail } = request.params;
     const { email, name, password } = request.body;
 

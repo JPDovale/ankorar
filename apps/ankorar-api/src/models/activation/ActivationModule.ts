@@ -1,4 +1,8 @@
 import { Module } from "@/src/infra/shared/entities/Module";
+import {
+  createModuleProxy,
+  registerModuleClass,
+} from "@/src/infra/shared/entities/Modules";
 import { ActivationTokens } from "./ActivationTokens";
 
 interface ActivationModuleProps {
@@ -6,9 +10,17 @@ interface ActivationModuleProps {
   ActivationTokens: typeof ActivationTokens;
 }
 
-class ActivationModule extends Module<ActivationModuleProps> {
-  static create(props: ActivationModuleProps) {
-    return new ActivationModule(props, props.name);
+export class ActivationModule extends Module<ActivationModuleProps> {
+  static readonly moduleKey = "activation";
+
+  static create() {
+    return new ActivationModule(
+      {
+        name: "activation",
+        ActivationTokens,
+      },
+      "activation",
+    );
   }
 
   get ActivationTokens() {
@@ -16,7 +28,12 @@ class ActivationModule extends Module<ActivationModuleProps> {
   }
 }
 
-export const activationModule = ActivationModule.create({
-  name: "activationModule",
-  ActivationTokens,
-});
+registerModuleClass(ActivationModule);
+
+declare module "@/src/infra/shared/entities/Modules" {
+  interface AppModules {
+    activation: ActivationModule;
+  }
+}
+
+export const activationModule = createModuleProxy("activation");

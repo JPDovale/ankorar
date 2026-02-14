@@ -1,6 +1,4 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { libraryModule } from "@/src/models/library/LibraryModule";
-import { mapModule } from "@/src/models/map/MapModule";
 import {
   connectMapToLibraryParams,
   connectMapToLibraryResponses,
@@ -15,9 +13,9 @@ export const connectMapToLibraryRoute = Route.create({
   params: connectMapToLibraryParams,
   response: connectMapToLibraryResponses,
   preHandler: [Route.canRequest("read:organization")],
-  handler: async (request, reply) => {
-    const { Libraries } = libraryModule;
-    const { Maps } = mapModule;
+  handler: async (request, reply, { modules }) => {
+    const { Libraries } = modules.library;
+    const { Maps } = modules.map;
     const member = request.context.member;
     const organization = request.context.organization;
 

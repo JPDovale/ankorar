@@ -1,4 +1,8 @@
 import { Module } from "@/src/infra/shared/entities/Module";
+import {
+  createModuleProxy,
+  registerModuleClass,
+} from "@/src/infra/shared/entities/Modules";
 import { Libraries } from "./Libraries";
 
 interface LibraryModuleProps {
@@ -6,9 +10,17 @@ interface LibraryModuleProps {
   Libraries: typeof Libraries;
 }
 
-class LibraryModule extends Module<LibraryModuleProps> {
-  static create(props: LibraryModuleProps) {
-    return new LibraryModule(props, props.name);
+export class LibraryModule extends Module<LibraryModuleProps> {
+  static readonly moduleKey = "library";
+
+  static create() {
+    return new LibraryModule(
+      {
+        name: "library",
+        Libraries,
+      },
+      "library",
+    );
   }
 
   get Libraries() {
@@ -16,7 +28,12 @@ class LibraryModule extends Module<LibraryModuleProps> {
   }
 }
 
-export const libraryModule = LibraryModule.create({
-  name: "LibraryModule",
-  Libraries,
-});
+registerModuleClass(LibraryModule);
+
+declare module "@/src/infra/shared/entities/Modules" {
+  interface AppModules {
+    library: LibraryModule;
+  }
+}
+
+export const libraryModule = createModuleProxy("library");

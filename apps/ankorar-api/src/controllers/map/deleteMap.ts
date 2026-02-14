@@ -1,5 +1,4 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { mapModule } from "@/src/models/map/MapModule";
 import { deleteMapParams, deleteMapResponses } from "./deleteMap.gateway";
 
 export const deleteMapRoute = Route.create({
@@ -11,8 +10,8 @@ export const deleteMapRoute = Route.create({
   params: deleteMapParams,
   response: deleteMapResponses,
   preHandler: [Route.canRequest("read:organization")],
-  handler: async (request, reply) => {
-    const { Maps } = mapModule;
+  handler: async (request, reply, { modules }) => {
+    const { Maps } = modules.map;
     const member = request.context.member;
 
     await Maps.delete({

@@ -1,5 +1,5 @@
 import { PermissionDenied } from "@/src/infra/errors/PermissionDenied";
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { authModule } from "../../auth/AuthModule";
 
 type CanRequestInput = string;
@@ -7,14 +7,12 @@ type CanRequestInput = string;
 type CanRequestResponse = (
   request: FastifyRequest,
   reply: FastifyReply,
-  done: HookHandlerDoneFunction,
 ) => void;
 
 export function canRequest(feature: CanRequestInput): CanRequestResponse {
   return function canRequestHook(
     request: FastifyRequest,
     _reply: FastifyReply,
-    done: HookHandlerDoneFunction,
   ) {
     const { Auth } = authModule;
     const user = request.context.user;
@@ -29,7 +27,7 @@ export function canRequest(feature: CanRequestInput): CanRequestResponse {
         feature,
       })
     ) {
-      return done();
+      return;
     }
 
     throw new PermissionDenied();

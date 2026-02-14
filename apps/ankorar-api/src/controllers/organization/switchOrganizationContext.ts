@@ -1,7 +1,5 @@
 import { PermissionDenied } from "@/src/infra/errors/PermissionDenied";
 import { Route } from "@/src/infra/shared/entities/Route";
-import { organizationModule } from "@/src/models/organization/OrganizationModule";
-import { webserverModule } from "@/src/models/webserver/WebserverModule";
 import { safeCall } from "@/src/utils/safeCall";
 import {
   switchOrganizationContextBody,
@@ -18,9 +16,9 @@ export const switchOrganizationContextRoute = Route.create({
   body: switchOrganizationContextBody,
   response: switchOrganizationContextResponses,
   preHandler: [Route.canRequest("read:session")],
-  handler: async (request, reply) => {
-    const { Organizations, Members } = organizationModule;
-    const { Controller } = webserverModule;
+  handler: async (request, reply, { modules }) => {
+    const { Organizations, Members } = modules.organization;
+    const { Controller } = modules.webserver;
     const user = request.context.user;
     const refreshToken = request.context.refresh_token;
     const accessToken = request.context.access_token;

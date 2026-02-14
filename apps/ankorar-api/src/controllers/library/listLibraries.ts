@@ -1,5 +1,4 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { libraryModule } from "@/src/models/library/LibraryModule";
 import { listLibrariesResponses } from "./listLibraries.gateway";
 
 export const listLibrariesRoute = Route.create({
@@ -10,8 +9,8 @@ export const listLibrariesRoute = Route.create({
   description: "List libraries from authenticated organization",
   response: listLibrariesResponses,
   preHandler: [Route.canRequest("read:organization")],
-  handler: async (request, reply) => {
-    const { Libraries } = libraryModule;
+  handler: async (request, reply, { modules }) => {
+    const { Libraries } = modules.library;
     const organization = request.context.organization;
 
     const { libraries } = await Libraries.fns.findByOrganizationIdWithMaps({

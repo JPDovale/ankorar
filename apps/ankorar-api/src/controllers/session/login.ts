@@ -1,8 +1,5 @@
 import { Route } from "@/src/infra/shared/entities/Route";
 import { loginBody, loginResponses } from "./login.gateway";
-import { sessionModule } from "@/src/models/session/SessionModule";
-import { authModule } from "@/src/models/auth/AuthModule";
-import { webserverModule } from "@/src/models/webserver/WebserverModule";
 
 export const loginRoute = Route.create({
   path: "/v1/sessions",
@@ -13,12 +10,12 @@ export const loginRoute = Route.create({
   response: loginResponses,
   body: loginBody,
   preHandler: [Route.canRequest("create:session")],
-  handler: async (request, reply) => {
+  handler: async (request, reply, { modules }) => {
     const { email, password } = request.body;
 
-    const { Sessions } = sessionModule;
-    const { Auth } = authModule;
-    const { Controller } = webserverModule;
+    const { Sessions } = modules.session;
+    const { Auth } = modules.auth;
+    const { Controller } = modules.webserver;
 
     const { user, organization, member } = await Auth.getAuthenticatedUser({
       email,

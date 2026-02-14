@@ -1,5 +1,4 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { organizationModule } from "@/src/models/organization/OrganizationModule";
 import {
   createOrganizationInviteBody,
   createOrganizationInviteResponses,
@@ -14,8 +13,8 @@ export const createOrganizationInviteRoute = Route.create({
   body: createOrganizationInviteBody,
   response: createOrganizationInviteResponses,
   preHandler: [Route.canRequest("read:organization")],
-  handler: async (request, reply) => {
-    const { Organizations } = organizationModule;
+  handler: async (request, reply, { modules }) => {
+    const { Organizations } = modules.organization;
     const organization = request.context.organization;
     const user = request.context.user;
 

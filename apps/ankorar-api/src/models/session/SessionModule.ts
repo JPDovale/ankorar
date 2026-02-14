@@ -1,4 +1,8 @@
 import { Module } from "@/src/infra/shared/entities/Module";
+import {
+  createModuleProxy,
+  registerModuleClass,
+} from "@/src/infra/shared/entities/Modules";
 import { Sessions } from "./Sessions";
 
 interface SessionModuleProps {
@@ -6,9 +10,17 @@ interface SessionModuleProps {
   Sessions: typeof Sessions;
 }
 
-class SessionModule extends Module<SessionModuleProps> {
-  static create(props: SessionModuleProps) {
-    return new SessionModule(props, props.name);
+export class SessionModule extends Module<SessionModuleProps> {
+  static readonly moduleKey = "session";
+
+  static create() {
+    return new SessionModule(
+      {
+        name: "session",
+        Sessions,
+      },
+      "session",
+    );
   }
 
   get Sessions() {
@@ -16,7 +28,12 @@ class SessionModule extends Module<SessionModuleProps> {
   }
 }
 
-export const sessionModule = SessionModule.create({
-  name: "SessionModule",
-  Sessions,
-});
+registerModuleClass(SessionModule);
+
+declare module "@/src/infra/shared/entities/Modules" {
+  interface AppModules {
+    session: SessionModule;
+  }
+}
+
+export const sessionModule = createModuleProxy("session");

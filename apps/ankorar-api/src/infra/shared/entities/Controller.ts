@@ -1,12 +1,13 @@
 import { FastifyTypedInstance } from "../../http/types/fastify";
 import type { AnyRoute } from "./Route";
+import type { AppModules } from "./Modules";
 
 interface CreateModelProps {
   name: string;
   routeConversor: (
     app: FastifyTypedInstance,
     route: AnyRoute,
-    opts: { log: "all" | "never" },
+    opts: { log: "all" | "never"; modules: AppModules },
   ) => void;
 }
 
@@ -16,7 +17,7 @@ export class Controller {
   routeConversor: (
     app: FastifyTypedInstance,
     route: AnyRoute,
-    opts: { log: "never" | "all" },
+    opts: { log: "never" | "all"; modules: AppModules },
   ) => void;
 
   protected constructor({ name, routeConversor }: CreateModelProps) {
@@ -34,7 +35,7 @@ export class Controller {
 
   convertRoutes(
     app: FastifyTypedInstance,
-    opts: { log: "never" | "all" } = { log: "all" },
+    opts: { log: "never" | "all"; modules: AppModules },
   ) {
     this.routes.forEach((route) => this.routeConversor(app, route, opts));
   }

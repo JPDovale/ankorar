@@ -1,7 +1,5 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { sessionModule } from "@/src/models/session/SessionModule";
 import { getUserResponses } from "./getUser.gateway";
-import { webserverModule } from "@/src/models/webserver/WebserverModule";
 
 export const getUserRoute = Route.create({
   path: "/v1/users",
@@ -11,14 +9,14 @@ export const getUserRoute = Route.create({
   description: "Returns the user info from the access token",
   response: getUserResponses,
   preHandler: [Route.canRequest("read:session")],
-  handler: async (request, reply) => {
+  handler: async (request, reply, { modules }) => {
     const payload = request.context.user;
     const token = request.context.refresh_token;
     const orgId = request.context.organization.id;
     const memberId = request.context.member.id;
 
-    const { Sessions } = sessionModule;
-    const { Controller } = webserverModule;
+    const { Sessions } = modules.session;
+    const { Controller } = modules.webserver;
 
     const { accessToken, refreshToken } = await Sessions.refresh({
       token,

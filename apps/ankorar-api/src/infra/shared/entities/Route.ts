@@ -1,15 +1,11 @@
 import type {
   FastifyReply,
   FastifyRequest,
-  RawReplyDefaultExpression,
-  RawRequestDefaultExpression,
-  RawServerDefault,
-  preHandlerAsyncHookHandler,
   preHandlerHookHandler,
 } from "fastify";
 import { FastifyTypedInstance } from "../../http/types/fastify";
 import z from "zod";
-import { webserverModule } from "@/src/models/webserver/WebserverModule";
+import type { AppModules } from "./Modules";
 
 type Method = "get" | "post" | "put" | "patch" | "delete";
 export type RouteBodySchema = z.ZodTypeAny;
@@ -33,19 +29,18 @@ type RouteGenericFromSchemas<TBodySchema, TResponseSchema, TParamsSchema> = {
   Reply: ReplyFromSchema<TResponseSchema>;
   Params: ParamsFromSchema<TParamsSchema>;
 };
-type PreHandler<TBodySchema, TResponseSchema, TParamsSchema> =
-  | preHandlerHookHandler<
-      RawServerDefault,
-      RawRequestDefaultExpression<RawServerDefault>,
-      RawReplyDefaultExpression<RawServerDefault>,
+type RouteExecutionContext = { modules: AppModules };
+type PreHandler<TBodySchema, TResponseSchema, TParamsSchema> = {
+  bivarianceHack(
+    r: FastifyRequest<
       RouteGenericFromSchemas<TBodySchema, TResponseSchema, TParamsSchema>
-    >
-  | preHandlerAsyncHookHandler<
-      RawServerDefault,
-      RawRequestDefaultExpression<RawServerDefault>,
-      RawReplyDefaultExpression<RawServerDefault>,
+    >,
+    t: FastifyReply<
       RouteGenericFromSchemas<TBodySchema, TResponseSchema, TParamsSchema>
-    >;
+    >,
+    context: RouteExecutionContext,
+  ): Promise<void> | void;
+}["bivarianceHack"];
 type Handler<TBodySchema, TResponseSchema, TParamsSchema> = {
   bivarianceHack(
     r: FastifyRequest<
@@ -54,6 +49,7 @@ type Handler<TBodySchema, TResponseSchema, TParamsSchema> = {
     t: FastifyReply<
       RouteGenericFromSchemas<TBodySchema, TResponseSchema, TParamsSchema>
     >,
+    context: RouteExecutionContext,
   ):
     | Promise<void>
     | void
@@ -143,15 +139,31 @@ export class Route<
   static fastifyRouterConversor(
     app: FastifyTypedInstance,
     route: AnyRoute,
-    opts: { log: "never" | "all" },
+    opts: { log: "never" | "all"; modules: AppModules },
   ) {
+    const wrapPreHandler = (
+      preHandler: PreHandler<any, any, any>,
+    ): preHandlerHookHandler =>
+      (request, reply) =>
+        preHandler(request as any, reply as any, {
+          modules: opts.modules,
+        });
+
     const bodyValidator = route.body === undefined ? {} : { body: route.body };
     const responseValidator =
       route.response === undefined ? {} : { response: route.response };
     const paramsValidator =
       route.params === undefined ? {} : { params: route.params };
     const preHandler =
-      route.preHandler === undefined ? {} : { preHandler: route.preHandler };
+      route.preHandler === undefined
+        ? {}
+        : {
+            preHandler: Array.isArray(route.preHandler)
+              ? route.preHandler.map(
+                  (preHandler) => wrapPreHandler(preHandler),
+                )
+              : wrapPreHandler(route.preHandler),
+          };
     const bodyLimit =
       route.bodyLimit === undefined ? {} : { bodyLimit: route.bodyLimit };
 
@@ -176,14 +188,23 @@ export class Route<
             ...paramsValidator,
           },
         },
-        route.handler,
+        (request, reply) =>
+          route.handler(request as any, reply as any, {
+            modules: opts.modules,
+          }),
       );
     });
   }
 
   static canRequest(feature: string) {
-    const { Controller: controller } = webserverModule;
-    return controller.canRequest(feature);
+    return (
+      request: FastifyRequest,
+      reply: FastifyReply,
+      context: RouteExecutionContext,
+    ) => {
+      const { Controller } = context.modules.webserver;
+      return Controller.canRequest(feature)(request, reply);
+    };
   }
 }
 

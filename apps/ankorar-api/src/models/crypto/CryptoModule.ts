@@ -1,4 +1,8 @@
 import { Module } from "@/src/infra/shared/entities/Module";
+import {
+  createModuleProxy,
+  registerModuleClass,
+} from "@/src/infra/shared/entities/Modules";
 import { ApiKeys } from "./ApiKeys";
 import { Crypto } from "./Crypto";
 
@@ -8,9 +12,18 @@ interface CryptoModuleProps {
   Crypto: typeof Crypto;
 }
 
-class CryptoModule extends Module<CryptoModuleProps> {
-  static create(props: CryptoModuleProps) {
-    return new CryptoModule(props, props.name);
+export class CryptoModule extends Module<CryptoModuleProps> {
+  static readonly moduleKey = "crypto";
+
+  static create() {
+    return new CryptoModule(
+      {
+        name: "crypto",
+        ApiKeys,
+        Crypto,
+      },
+      "crypto",
+    );
   }
 
   get Crypto() {
@@ -22,8 +35,12 @@ class CryptoModule extends Module<CryptoModuleProps> {
   }
 }
 
-export const cryptoModule = CryptoModule.create({
-  name: "CryptoModule",
-  ApiKeys,
-  Crypto,
-});
+registerModuleClass(CryptoModule);
+
+declare module "@/src/infra/shared/entities/Modules" {
+  interface AppModules {
+    crypto: CryptoModule;
+  }
+}
+
+export const cryptoModule = createModuleProxy("crypto");

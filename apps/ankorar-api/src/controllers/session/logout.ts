@@ -1,6 +1,4 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { sessionModule } from "@/src/models/session/SessionModule";
-import { webserverModule } from "@/src/models/webserver/WebserverModule";
 import { logoutResponses } from "./logout.gateway";
 
 export const logoutRoute = Route.create({
@@ -11,9 +9,9 @@ export const logoutRoute = Route.create({
   description: "Terminate authenticated session and clear cookies",
   response: logoutResponses,
   preHandler: [Route.canRequest("read:session")],
-  handler: async (request, reply) => {
-    const { Sessions } = sessionModule;
-    const { Controller } = webserverModule;
+  handler: async (request, reply, { modules }) => {
+    const { Sessions } = modules.session;
+    const { Controller } = modules.webserver;
     const user = request.context.user;
     const refreshToken = request.context.refresh_token;
 

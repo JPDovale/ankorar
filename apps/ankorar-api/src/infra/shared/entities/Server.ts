@@ -16,8 +16,20 @@ import {
 import { ApplicationError } from "../../errors/ApplicationError";
 import { InternalServerError } from "../../errors/InternalServerError";
 import { FastifyTypedInstance } from "../../http/types/fastify";
+import {
+  AppModuleClass,
+  AppModules,
+  setActiveModules,
+} from "./Modules";
 
-type ControllerConvertOptions = { log: "never" | "all" };
+type ControllerConvertOptions = {
+  log: "never" | "all";
+  modules: AppModules;
+};
+
+type ControllerConvertInputOptions = {
+  log: "never" | "all";
+};
 
 interface AppController {
   name: string;
@@ -67,6 +79,7 @@ export class Server {
 
   private app: FastifyTypedInstance;
   private opts: ResolvedServerOptions;
+  private modulesStore: Partial<AppModules> = {};
   private didConvertRoutes = false;
 
   protected constructor({
@@ -95,6 +108,22 @@ export class Server {
     return this.app;
   }
 
+  get modules() {
+    return this.modulesStore as AppModules;
+  }
+
+  appendModule<TKey extends keyof AppModules & string>(
+    moduleClass: AppModuleClass<TKey, AppModules[TKey]>,
+  ) {
+    this.modulesStore[moduleClass.moduleKey] = moduleClass.create();
+
+    if (this.opts.log === "all") {
+      console.log(`[V] Register module ${moduleClass.moduleKey}`);
+    }
+
+    this.syncActiveModules();
+  }
+
   appendController(controller: AppController) {
     this.controllers.push(controller);
   }
@@ -109,17 +138,29 @@ export class Server {
     this.app.addHook("onRequest", async (request) => handler(request));
   }
 
-  convertRoutes(opts: ControllerConvertOptions = { log: this.opts.log }) {
+  setOrigin(origin: string) {
+    this.opts.origin = origin;
+  }
+
+  convertRoutes(
+    opts: ControllerConvertInputOptions = { log: this.opts.log },
+  ) {
     if (this.didConvertRoutes) {
       return;
     }
+
+    this.syncActiveModules();
+    const conversorOptions: ControllerConvertOptions = {
+      ...opts,
+      modules: this.modules,
+    };
 
     this.controllers.forEach((controller) => {
       if (opts.log === "all") {
         console.log(`\n[V] Register controller ${controller.name}`);
       }
 
-      this.controllerConversor(this.app, controller, opts);
+      this.controllerConversor(this.app, controller, conversorOptions);
     });
     this.didConvertRoutes = true;
   }
@@ -202,6 +243,10 @@ export class Server {
       console.error(err);
       return reply.send(err);
     });
+  }
+
+  private syncActiveModules() {
+    setActiveModules(this.modulesStore);
   }
 
   private resolveOptions(opts?: ServerOptions): ResolvedServerOptions {

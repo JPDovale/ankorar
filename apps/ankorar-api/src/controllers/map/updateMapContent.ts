@@ -1,6 +1,5 @@
 import { Route } from "@/src/infra/shared/entities/Route";
 import { JsonValue } from "@/src/models/map/Maps/Map";
-import { mapModule } from "@/src/models/map/MapModule";
 import {
   updateMapContentBody,
   updateMapContentParams,
@@ -18,8 +17,8 @@ export const updateMapContentRoute = Route.create({
   body: updateMapContentBody,
   response: updateMapContentResponses,
   preHandler: [Route.canRequest("read:organization")],
-  handler: async (request, reply) => {
-    const { Maps } = mapModule;
+  handler: async (request, reply, { modules }) => {
+    const { Maps } = modules.map;
     const member = request.context.member;
     const sanitizedContent = request.body.content as JsonValue[];
 

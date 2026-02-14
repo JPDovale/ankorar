@@ -1,5 +1,4 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { cryptoModule } from "@/src/models/crypto/CryptoModule";
 import { createApiKeyResponses } from "./createApiKey.gateway";
 
 export const createApiKeyRoute = Route.create({
@@ -10,8 +9,8 @@ export const createApiKeyRoute = Route.create({
   description: "Create a api key for organization on system",
   response: createApiKeyResponses,
   preHandler: [Route.canRequest("create:api_key")],
-  handler: async (request, reply) => {
-    const { ApiKeys } = cryptoModule;
+  handler: async (request, reply, { modules }) => {
+    const { ApiKeys } = modules.crypto;
 
     const organization = request.context.organization;
 

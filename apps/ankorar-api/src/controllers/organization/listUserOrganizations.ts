@@ -1,5 +1,4 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { organizationModule } from "@/src/models/organization/OrganizationModule";
 import { listUserOrganizationsResponses } from "./listUserOrganizations.gateway";
 
 export const listUserOrganizationsRoute = Route.create({
@@ -10,8 +9,8 @@ export const listUserOrganizationsRoute = Route.create({
   description: "List all organizations where authenticated user is member",
   response: listUserOrganizationsResponses,
   preHandler: [Route.canRequest("read:organization")],
-  handler: async (request, reply) => {
-    const { Organizations } = organizationModule;
+  handler: async (request, reply, { modules }) => {
+    const { Organizations } = modules.organization;
 
     const user = request.context.user;
     const currentOrganization = request.context.organization;

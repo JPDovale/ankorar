@@ -1,5 +1,4 @@
 import { Route } from "@/src/infra/shared/entities/Route";
-import { mapModule } from "@/src/models/map/MapModule";
 import { listMapsResponses } from "./listMaps.gateway";
 
 export const listMapsRoute = Route.create({
@@ -10,8 +9,8 @@ export const listMapsRoute = Route.create({
   description: "List maps from authenticated member",
   response: listMapsResponses,
   preHandler: [Route.canRequest("read:organization")],
-  handler: async (request, reply) => {
-    const { Maps } = mapModule;
+  handler: async (request, reply, { modules }) => {
+    const { Maps } = modules.map;
     const member = request.context.member;
 
     const { maps } = await Maps.fns.findByMemberId({
