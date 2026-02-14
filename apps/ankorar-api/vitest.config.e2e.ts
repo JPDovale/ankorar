@@ -20,9 +20,9 @@ export default defineConfig({
     setupFiles: ["./test/setup.ts"],
   },
   plugins: [
-    tsConfigPaths(),
+    tsConfigPaths() as any,
     swc.vite({
       module: { type: "es6" },
-    }),
+    }) as any,
   ],
 });

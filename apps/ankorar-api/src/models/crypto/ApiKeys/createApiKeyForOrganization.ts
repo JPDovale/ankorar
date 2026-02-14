@@ -1,5 +1,5 @@
 import { Organization } from "../../organization/Organizations/Organization";
-import { ApiKey } from "../ApiKey";
+import { ApiKey } from "./ApiKey";
 import { createApiKey } from "./createApiKey";
 import { generateSecret } from "./fns/generateSecret";
 import { hashSecret } from "./fns/hashSecret";

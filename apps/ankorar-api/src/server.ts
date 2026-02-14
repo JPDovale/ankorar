@@ -45,7 +45,6 @@ export function createServerInstance(
       theme: "deepSpace",
       title: "Minha API Reference",
       hideClientButton: true,
-      showToolbar: "never",
       operationTitleSource: "path",
     },
   });
