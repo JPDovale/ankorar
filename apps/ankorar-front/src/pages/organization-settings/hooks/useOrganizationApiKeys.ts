@@ -12,6 +12,15 @@ export function mapApiKeyPreviewToOrganizationApiKey(
   const lastUsedAt = dayjs(apiKey.last_used_at);
   const isRevoked = apiKey.revoked_at !== null;
   const wasNeverUsed = createdAt.isSame(lastUsedAt, "second");
+  const hasExpiration = apiKey.expires_at != null && apiKey.expires_at !== "";
+  const expiresAt = hasExpiration ? apiKey.expires_at : null;
+  const expiresAtLabel = hasExpiration
+    ? `Expira em ${dayjs(apiKey.expires_at).format("DD/MM/YYYY")}`
+    : "Chave permanente";
+  const isExpired =
+    expiresAt !== null &&
+    (dayjs().isAfter(dayjs(expiresAt), "day") ||
+      dayjs().isSame(dayjs(expiresAt), "day"));
 
   const partialKey = `ak_org_${apiKey.env}_${apiKey.prefix}_****`;
 
@@ -26,23 +35,44 @@ export function mapApiKeyPreviewToOrganizationApiKey(
     lastUsedAtLabel: wasNeverUsed
       ? "Nao usado"
       : `Ultimo uso ${lastUsedAt.fromNow()}`,
+    expiresAt,
+    expiresAtLabel,
+    isExpired,
   };
 }
 
+export type CreateApiKeyExpiration = "permanent" | { expires_at: string };
+
 export function useOrganizationApiKeys() {
-  const { apiKeys: rawApiKeys, createApiKey, isCreatingApiKey } = useApiKeys();
+  const {
+    apiKeys: rawApiKeys,
+    createApiKey,
+    revokeApiKey,
+    deleteApiKey,
+    isCreatingApiKey,
+  } = useApiKeys();
   const [createdApiKeyText, setCreatedApiKeyText] = useState<string | null>(
     null,
   );
 
   const apiKeys = rawApiKeys.map(mapApiKeyPreviewToOrganizationApiKey);
 
-  async function handleCreateApiKey() {
-    const result = await createApiKey();
+  const [isCreateKeyDialogOpen, setCreateKeyDialogOpen] = useState(false);
+
+  async function handleCreateApiKey(expiration: CreateApiKeyExpiration) {
+    const payload =
+      expiration === "permanent"
+        ? { expires_at: null }
+        : { expires_at: expiration.expires_at };
+
+    const result = await createApiKey(payload);
 
     if (result.success && result.apiKeyText) {
+      setCreateKeyDialogOpen(false);
       setCreatedApiKeyText(result.apiKeyText);
     }
+
+    return result;
   }
 
   function handleDismissCreatedApiKey() {
@@ -56,10 +86,12 @@ export function useOrganizationApiKeys() {
     toast.success("Chave copiada para a area de transferencia.");
   }
 
-  function handleRevokeApiKey(apiKey: OrganizationApiKey) {
-    toast.info(
-      `Placeholder: revogar a chave "${apiKey.prefix}" ainda nao foi integrado.`,
-    );
+  async function handleRevokeApiKey(apiKey: OrganizationApiKey) {
+    await revokeApiKey(apiKey.id);
+  }
+
+  async function handleDeleteApiKey(apiKey: OrganizationApiKey) {
+    await deleteApiKey(apiKey.id);
   }
 
   return {
@@ -69,6 +101,9 @@ export function useOrganizationApiKeys() {
     handleCreateApiKey,
     handleDismissCreatedApiKey,
     handleRevokeApiKey,
+    handleDeleteApiKey,
+    isCreateKeyDialogOpen,
+    setCreateKeyDialogOpen,
     isCreatingApiKey,
   };
 }

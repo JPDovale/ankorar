@@ -11,6 +11,9 @@ import { acceptOrganizationInviteRoute } from "../controllers/organization/accep
 import { rejectOrganizationInviteRoute } from "../controllers/organization/rejectOrganizationInvite";
 import { removeMemberRoute } from "../controllers/organization/removeMember";
 import { listApiKeysRoute } from "../controllers/organization/listApiKeys";
+import { revokeApiKeyRoute } from "../controllers/organization/revokeApiKey";
+import { deleteApiKeyRoute } from "../controllers/organization/deleteApiKey";
+import { updateOrganizationNameRoute } from "../controllers/organization/updateOrganizationName";
 import { switchOrganizationContextRoute } from "../controllers/organization/switchOrganizationContext";
 
 const organizationController = Controller.create({
@@ -20,6 +23,8 @@ const organizationController = Controller.create({
 
 organizationController.appendRoute(createApiKeyRoute);
 organizationController.appendRoute(listApiKeysRoute);
+organizationController.appendRoute(revokeApiKeyRoute);
+organizationController.appendRoute(deleteApiKeyRoute);
 organizationController.appendRoute(listOrganizationMembersRoute);
 organizationController.appendRoute(removeMemberRoute);
 organizationController.appendRoute(cancelOrganizationInviteRoute);
@@ -29,6 +34,7 @@ organizationController.appendRoute(createOrganizationInviteRoute);
 organizationController.appendRoute(listOrganizationInvitesRoute);
 organizationController.appendRoute(acceptOrganizationInviteRoute);
 organizationController.appendRoute(rejectOrganizationInviteRoute);
+organizationController.appendRoute(updateOrganizationNameRoute);
 organizationController.appendRoute(switchOrganizationContextRoute);
 
 export { organizationController };

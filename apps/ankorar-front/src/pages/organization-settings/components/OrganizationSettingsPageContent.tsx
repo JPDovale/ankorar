@@ -14,6 +14,7 @@ export function OrganizationSettingsPageContent() {
     handleCloseInviteDialog,
     handleCopyCreatedApiKey,
     handleCreateApiKey,
+    handleDeleteApiKey,
     handleDismissCreatedApiKey,
     handleIdentitySubmit,
     handleInviteMember,
@@ -21,6 +22,7 @@ export function OrganizationSettingsPageContent() {
     handleRemoveMember,
     handleRevokeApiKey,
     inviteForm,
+    isCreateKeyDialogOpen,
     isCreatingApiKey,
     isCreatingInvite,
     isInviteDialogOpen,
@@ -28,6 +30,8 @@ export function OrganizationSettingsPageContent() {
     members,
     organizationNameErrorMessage,
     register,
+    formOrganizationName,
+    setCreateKeyDialogOpen,
   } = useOrganizationSettingsPage();
 
   return (
@@ -47,6 +51,7 @@ export function OrganizationSettingsPageContent() {
           handleIdentitySubmit={handleIdentitySubmit}
           isSubmittingIdentity={isSubmittingIdentity}
           register={register}
+          formOrganizationName={formOrganizationName}
         />
 
         <Separator />
@@ -55,6 +60,9 @@ export function OrganizationSettingsPageContent() {
           apiKeys={apiKeys}
           handleCreateApiKey={handleCreateApiKey}
           handleRevokeApiKey={handleRevokeApiKey}
+          handleDeleteApiKey={handleDeleteApiKey}
+          isCreateKeyDialogOpen={isCreateKeyDialogOpen}
+          setCreateKeyDialogOpen={setCreateKeyDialogOpen}
           isCreatingApiKey={isCreatingApiKey}
         />
 

@@ -7,6 +7,7 @@ import { generateUniquePrefix } from "./fns/generateUniquePrefix";
 
 type CreateApiKeyForOrganizationInput = {
   organization: Organization;
+  expires_at?: Date | null;
 };
 
 type CreateApiKeyForOrganizationResponse = {
@@ -16,6 +17,7 @@ type CreateApiKeyForOrganizationResponse = {
 
 export async function createApiKeyForOrganization({
   organization,
+  expires_at = null,
 }: CreateApiKeyForOrganizationInput): Promise<CreateApiKeyForOrganizationResponse> {
   const secret = generateSecret();
   const hashedSecret = hashSecret({ secret });
@@ -26,6 +28,7 @@ export async function createApiKeyForOrganization({
     prefix,
     secret: hashedSecret,
     features: ["create:user:other"],
+    expires_at: expires_at ?? null,
   });
 
   const text = apiKey.getCompleteApiKey(secret);

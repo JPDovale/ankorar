@@ -10,14 +10,25 @@ const ENV_LABELS: Record<OrganizationApiKey["env"], string> = {
 interface OrganizationSettingsApiKeyItemProps {
   apiKey: OrganizationApiKey;
   onRevoke: (apiKey: OrganizationApiKey) => void;
+  onDelete: (apiKey: OrganizationApiKey) => void;
 }
 
 export function OrganizationSettingsApiKeyItem({
   apiKey,
   onRevoke,
+  onDelete,
 }: OrganizationSettingsApiKeyItemProps) {
   const environmentLabel = ENV_LABELS[apiKey.env];
-  const statusLabel = apiKey.status === "active" ? "Ativa" : "Revogada";
+  const statusLabel = apiKey.isExpired
+    ? "Expirada"
+    : apiKey.status === "active"
+      ? "Ativa"
+      : "Revogada";
+  const statusKind = apiKey.isExpired
+    ? "expired"
+    : apiKey.status === "active"
+      ? "active"
+      : "revoked";
   const isActive = apiKey.status === "active";
 
   return (
@@ -28,9 +39,10 @@ export function OrganizationSettingsApiKeyItem({
             {apiKey.partialKey}
           </code>
 
-          <div className="mt-1 flex items-center gap-2">
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
             <p className="text-xs text-zinc-500">{apiKey.createdAtLabel}</p>
             <p className="text-xs text-zinc-500">{apiKey.lastUsedAtLabel}</p>
+            <p className="text-xs text-zinc-500">{apiKey.expiresAtLabel}</p>
           </div>
         </div>
       </td>
@@ -42,8 +54,8 @@ export function OrganizationSettingsApiKeyItem({
       <td className="px-4 py-3">
         <Badge
           variant="outline"
-          data-status={apiKey.status}
-          className="border-zinc-200 text-zinc-600 data-[status=active]:border-emerald-200 data-[status=active]:bg-emerald-50 data-[status=active]:text-emerald-700"
+          data-status={statusKind}
+          className="border-zinc-200 text-zinc-600 data-[status=active]:border-emerald-200 data-[status=active]:bg-emerald-50 data-[status=active]:text-emerald-700 data-[status=expired]:border-amber-200 data-[status=expired]:bg-amber-50 data-[status=expired]:text-amber-700"
         >
           {statusLabel}
         </Badge>
@@ -59,6 +71,17 @@ export function OrganizationSettingsApiKeyItem({
               aria-label="Revogar chave"
             >
               Revogar
+            </Button>
+          )}
+          {!isActive && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
+              onClick={() => onDelete(apiKey)}
+              aria-label="Excluir chave"
+            >
+              Excluir
             </Button>
           )}
         </div>

@@ -10,6 +10,11 @@ export interface OrganizationApiKey {
   status: OrganizationApiKeyStatus;
   createdAtLabel: string;
   lastUsedAtLabel: string;
+  /** ISO date string or null for permanent */
+  expiresAt: string | null;
+  expiresAtLabel: string;
+  /** true when expiresAt is set and in the past */
+  isExpired: boolean;
 }
 
 export type OrganizationMemberRole = "owner" | "admin" | "member";

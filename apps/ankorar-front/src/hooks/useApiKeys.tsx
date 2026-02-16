@@ -6,10 +6,12 @@ import {
 } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { createApiKeyRequest } from "@/services/organizations/createApiKeyRequest";
+import { deleteApiKeyRequest } from "@/services/organizations/deleteApiKeyRequest";
 import {
   listApiKeysRequest,
   type ApiKeyPreview,
 } from "@/services/organizations/listApiKeysRequest";
+import { revokeApiKeyRequest } from "@/services/organizations/revokeApiKeyRequest";
 
 export const apiKeysQueryKey = ["api-keys"] as const;
 
@@ -38,8 +40,14 @@ interface CreateApiKeyMutationResult {
   apiKeyText: string | null;
 }
 
-async function createApiKeyMutationFn(): Promise<CreateApiKeyMutationResult> {
-  const response = await createApiKeyRequest();
+interface CreateApiKeyMutationPayload {
+  expires_at?: string | null;
+}
+
+async function createApiKeyMutationFn(
+  payload?: CreateApiKeyMutationPayload,
+): Promise<CreateApiKeyMutationResult> {
+  const response = await createApiKeyRequest(payload);
 
   if (response.status !== 201) {
     toast.error(
@@ -91,9 +99,29 @@ export function useApiKeys() {
     },
   });
 
-  const createApiKey =
-    useCallback(async (): Promise<CreateApiKeyMutationResult> => {
-      return createApiKeyMutation.mutateAsync().catch((error) => {
+  const revokeApiKeyMutation = useMutation({
+    mutationFn: revokeApiKeyRequest,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: apiKeysQueryKey,
+      });
+    },
+  });
+
+  const deleteApiKeyMutation = useMutation({
+    mutationFn: deleteApiKeyRequest,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: apiKeysQueryKey,
+      });
+    },
+  });
+
+  const createApiKey = useCallback(
+    async (
+      payload?: CreateApiKeyMutationPayload,
+    ): Promise<CreateApiKeyMutationResult> => {
+      return createApiKeyMutation.mutateAsync(payload).catch((error) => {
         toast.error(extractUnexpectedErrorMessage(error));
 
         return {
@@ -101,12 +129,64 @@ export function useApiKeys() {
           apiKeyText: null,
         };
       });
-    }, [createApiKeyMutation]);
+    },
+    [createApiKeyMutation],
+  );
+
+  const revokeApiKey = useCallback(
+    async (apiKeyId: string): Promise<boolean> => {
+      try {
+        const response = await revokeApiKeyMutation.mutateAsync(apiKeyId);
+
+        if (response.status !== 200) {
+          toast.error(
+            (response as { error?: { message?: string } }).error?.message ??
+              "Não foi possível revogar a chave.",
+          );
+          return false;
+        }
+
+        toast.success("Chave revogada.");
+        return true;
+      } catch {
+        toast.error("Não foi possível revogar a chave.");
+        return false;
+      }
+    },
+    [revokeApiKeyMutation],
+  );
+
+  const deleteApiKey = useCallback(
+    async (apiKeyId: string): Promise<boolean> => {
+      try {
+        const response = await deleteApiKeyMutation.mutateAsync(apiKeyId);
+
+        if (response.status !== 200) {
+          toast.error(
+            (response as { error?: { message?: string } }).error?.message ??
+              "Não foi possível excluir a chave.",
+          );
+          return false;
+        }
+
+        toast.success("Chave excluída.");
+        return true;
+      } catch {
+        toast.error("Não foi possível excluir a chave.");
+        return false;
+      }
+    },
+    [deleteApiKeyMutation],
+  );
 
   return {
     apiKeys: apiKeysQuery.data.apiKeys ?? [],
     refetchApiKeys: apiKeysQuery.refetch,
     createApiKey,
+    revokeApiKey,
+    deleteApiKey,
     isCreatingApiKey: createApiKeyMutation.isPending,
+    isRevokingApiKey: revokeApiKeyMutation.isPending,
+    isDeletingApiKey: deleteApiKeyMutation.isPending,
   };
 }

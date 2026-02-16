@@ -5,6 +5,7 @@ import { createOrganizationForUser } from "./createOrganizationForUser";
 import { createOrganizationInvite } from "./createOrganizationInvite";
 import { listPendingOrganizationInvitesByUserId } from "./listPendingOrganizationInvitesByUserId";
 import { rejectOrganizationInvite } from "./rejectOrganizationInvite";
+import { updateOrganization } from "./updateOrganization";
 import { upsertOrganizationMember } from "./upsertOrganizationMember";
 import { findOrganizationByCreatorId } from "./fns/findOrganizationByCreatorId";
 import { findOrganizationById } from "./fns/findOrganizationById";
@@ -15,6 +16,7 @@ import { persistOrganization } from "./fns/persistOrganization";
 const Organizations = {
   create: createOrganization,
   createForUser: createOrganizationForUser,
+  update: updateOrganization,
   upsertMember: upsertOrganizationMember,
   createInvite: createOrganizationInvite,
   cancelInvite: cancelOrganizationInvite,

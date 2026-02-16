@@ -1,5 +1,9 @@
 import z from "zod";
 
+export const createApiKeyBody = z.object({
+  expires_at: z.string().optional().nullable(),
+});
+
 export const createApiKeyResponses = {
   201: z.object({
     status: z.number().min(201).max(201),

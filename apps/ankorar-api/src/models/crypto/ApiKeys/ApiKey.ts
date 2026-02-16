@@ -102,4 +102,14 @@ export class ApiKey extends Entity<ApiKeyProps> {
     this.props.updated_at = dateModule.Date.nowUtcDate();
     this.update();
   }
+
+  markAsRevoked() {
+    this.props.revoked_at = dateModule.Date.nowUtcDate();
+    this.touch();
+  }
+
+  markAsDeleted() {
+    this.props.deleted_at = dateModule.Date.nowUtcDate();
+    this.touch();
+  }
 }

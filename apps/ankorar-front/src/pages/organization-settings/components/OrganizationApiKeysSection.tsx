@@ -1,11 +1,16 @@
 import { Button } from "@/components/ui/button";
+import { CreateApiKeyDialog } from "./CreateApiKeyDialog";
 import { OrganizationSettingsApiKeyItem } from "./OrganizationSettingsApiKeyItem";
+import type { CreateApiKeyExpiration } from "../hooks/useOrganizationApiKeys";
 import type { OrganizationApiKey } from "../hooks/useOrganizationSettingsPage";
 
 interface OrganizationApiKeysSectionProps {
   apiKeys: OrganizationApiKey[];
-  handleCreateApiKey: () => void;
+  handleCreateApiKey: (expiration: CreateApiKeyExpiration) => Promise<unknown>;
   handleRevokeApiKey: (apiKey: OrganizationApiKey) => void;
+  handleDeleteApiKey: (apiKey: OrganizationApiKey) => void;
+  isCreateKeyDialogOpen: boolean;
+  setCreateKeyDialogOpen: (open: boolean) => void;
   isCreatingApiKey: boolean;
 }
 
@@ -13,6 +18,9 @@ export function OrganizationApiKeysSection({
   apiKeys,
   handleCreateApiKey,
   handleRevokeApiKey,
+  handleDeleteApiKey,
+  isCreateKeyDialogOpen,
+  setCreateKeyDialogOpen,
   isCreatingApiKey,
 }: OrganizationApiKeysSectionProps) {
   const hasApiKeys = apiKeys.length > 0;
@@ -39,11 +47,18 @@ export function OrganizationApiKeysSection({
           variant="outline"
           size="sm"
           disabled={isCreatingApiKey}
-          onClick={handleCreateApiKey}
+          onClick={() => setCreateKeyDialogOpen(true)}
         >
           {isCreatingApiKey ? "Gerando..." : "Gerar chave"}
         </Button>
       </div>
+
+      <CreateApiKeyDialog
+        open={isCreateKeyDialogOpen}
+        onOpenChange={setCreateKeyDialogOpen}
+        onSubmit={handleCreateApiKey}
+        isCreating={isCreatingApiKey}
+      />
 
       <div className="mt-4">
         {hasApiKeys && (
@@ -71,6 +86,7 @@ export function OrganizationApiKeysSection({
                     key={apiKey.id}
                     apiKey={apiKey}
                     onRevoke={handleRevokeApiKey}
+                    onDelete={handleDeleteApiKey}
                   />
                 ))}
               </tbody>

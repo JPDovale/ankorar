@@ -11,6 +11,8 @@ interface OrganizationIdentitySectionProps {
   handleIdentitySubmit: (e: React.FormEvent) => void;
   isSubmittingIdentity: boolean;
   register: UseFormRegister<OrganizationIdentityFormData>;
+  /** Valor atual do campo (controlado) para refletir reset ao trocar de organização */
+  formOrganizationName: string;
 }
 
 export function OrganizationIdentitySection({
@@ -18,6 +20,7 @@ export function OrganizationIdentitySection({
   handleIdentitySubmit,
   isSubmittingIdentity,
   register,
+  formOrganizationName,
 }: OrganizationIdentitySectionProps) {
   return (
     <section
@@ -61,6 +64,7 @@ export function OrganizationIdentitySection({
               type="text"
               placeholder="Digite o nome da organizacao"
               disabled={isSubmittingIdentity}
+              value={formOrganizationName}
               {...register("organizationName")}
             />
           </InputBox>
