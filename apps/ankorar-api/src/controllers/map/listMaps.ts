@@ -13,7 +13,7 @@ export const listMapsRoute = Route.create({
     const { Maps } = modules.map;
     const member = request.context.member;
 
-    const { maps } = await Maps.fns.findByMemberId({
+    const { maps } = await Maps.fns.findPreviewsByMemberId({
       memberId: member.id,
     });
 
@@ -25,6 +25,7 @@ export const listMapsRoute = Route.create({
           title: map.title,
           created_at: map.created_at,
           updated_at: map.updated_at,
+          likes_count: map.likes_count,
         })),
       },
     });

@@ -38,6 +38,8 @@ export function HomeMapCard({
       map={map}
       href={`/maps/${map.id}`}
       actionLabel="Abrir"
+      showLike={false}
+      likesCount={map.likes_count}
       headerAction={
         <Popover>
           <PopoverTrigger asChild>

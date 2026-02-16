@@ -5,6 +5,7 @@ export interface MapPreview {
   title: string;
   created_at: string;
   updated_at: string | null;
+  likes_count: number;
 }
 
 interface ListMapsRequestData {

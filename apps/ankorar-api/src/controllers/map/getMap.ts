@@ -15,9 +15,10 @@ export const getMapRoute = Route.create({
     const organization = request.context.organization;
     const member = request.context.member;
 
-    const { map } = await Maps.fns.findByIdAndOrganizationId({
+    const { map } = await Maps.fns.findDetailsByIdAndOrganizationId({
       id: request.params.map_id,
       organizationId: organization.id,
+      memberId: member.id,
     });
 
     return reply.status(200).send({
@@ -29,7 +30,9 @@ export const getMapRoute = Route.create({
           content: map.content,
           created_at: map.created_at,
           updated_at: map.updated_at,
-          can_edit: map.member_id === member.id,
+          can_edit: map.can_edit,
+          likes_count: map.likes_count,
+          liked_by_me: map.liked_by_me,
         },
       },
     });

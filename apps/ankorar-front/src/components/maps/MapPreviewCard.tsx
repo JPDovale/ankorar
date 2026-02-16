@@ -1,5 +1,6 @@
+import { MapLikeButton } from "@/components/maps/MapLikeButton";
 import { buildMapLastActivityLabel } from "@/utils/buildMapLastActivityLabel";
-import { ArrowUpRight, CalendarClock, Map, Sparkles } from "lucide-react";
+import { ArrowUpRight, CalendarClock, Heart, Map, Sparkles } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 
@@ -20,6 +21,9 @@ interface MapPreviewCardProps {
   variant?: MapPreviewCardVariant;
   density?: MapPreviewCardDensity;
   headerAction?: ReactNode;
+  showLike?: boolean;
+  likesCount?: number;
+  likedByMe?: boolean;
 }
 
 export function MapPreviewCard({
@@ -29,8 +33,17 @@ export function MapPreviewCard({
   variant = "default",
   density = "regular",
   headerAction,
+  showLike = false,
+  likesCount = 0,
+  likedByMe = false,
 }: MapPreviewCardProps) {
   const mapLastActivityLabel = buildMapLastActivityLabel(map);
+  const canShowLike =
+    showLike &&
+    typeof likesCount === "number" &&
+    typeof likedByMe === "boolean";
+  const showLikesCountOnly =
+    !canShowLike && typeof likesCount === "number";
 
   return (
     <article
@@ -69,6 +82,23 @@ export function MapPreviewCard({
           </span>
 
           <div className="flex items-center gap-1.5">
+            {canShowLike && (
+              <MapLikeButton
+                mapId={map.id}
+                likesCount={likesCount}
+                likedByMe={likedByMe}
+                aria-label={likedByMe ? "Desmarcar gostei" : "Marcar como gostei"}
+              />
+            )}
+            {showLikesCountOnly && (
+              <span
+                className="inline-flex items-center gap-1.5 text-xs text-zinc-500"
+                aria-label={`${likesCount} like${likesCount === 1 ? "" : "s"}`}
+              >
+                <Heart className="size-4 shrink-0" fill="none" aria-hidden />
+                <span className="tabular-nums">{likesCount}</span>
+              </span>
+            )}
             <Link
               to={href}
               className="inline-flex items-center gap-1 rounded-md border border-zinc-200 px-2 py-1 text-[11px] font-medium text-zinc-700 transition-colors hover:border-zinc-300 hover:text-zinc-900"

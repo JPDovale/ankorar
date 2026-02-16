@@ -7,6 +7,8 @@ export interface MapDetails {
   created_at: string;
   updated_at: string | null;
   can_edit: boolean;
+  likes_count: number;
+  liked_by_me: boolean;
 }
 
 interface GetMapRequestData {

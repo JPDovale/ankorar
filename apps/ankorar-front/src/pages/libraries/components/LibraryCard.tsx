@@ -16,9 +16,10 @@ import {
 
 interface LibraryCardProps {
   library: LibraryPreview;
+  ownMapIds?: Set<string>;
 }
 
-export function LibraryCard({ library }: LibraryCardProps) {
+export function LibraryCard({ library, ownMapIds }: LibraryCardProps) {
   const libraryLastActivityLabel = buildLibraryLastActivityLabel(library);
   const cardActionsLabel = `Abrir ações da biblioteca ${library.name}`;
   const linkedMaps = library.maps ?? [];
@@ -84,6 +85,9 @@ export function LibraryCard({ library }: LibraryCardProps) {
         emptyText="Nenhum mapa vinculado nesta biblioteca."
         getMapActionLabel={() => "Visualizar"}
         getMapHref={(map) => `/maps/${map.id}?mode=view`}
+        getCanShowLike={
+          ownMapIds ? (map) => !ownMapIds.has(map.id) : undefined
+        }
         variant="embedded"
       />
     </article>

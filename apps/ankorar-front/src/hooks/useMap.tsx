@@ -40,7 +40,7 @@ type SanitizedNode = {
   isVisible: boolean;
 };
 
-const mapQueryKey = (id: string) => ["map", id] as const;
+export const mapQueryKey = (id: string) => ["map", id] as const;
 
 function extractUnexpectedErrorMessage(error: unknown): string {
   if (error instanceof Error) {

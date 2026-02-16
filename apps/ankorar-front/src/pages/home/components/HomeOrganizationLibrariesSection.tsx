@@ -90,6 +90,7 @@ export function HomeOrganizationLibrariesSection() {
                         ? `/maps/${map.id}`
                         : `/maps/${map.id}?mode=view`
                     }
+                    getCanShowLike={(map) => !ownMapIds.has(map.id)}
                     variant="embedded"
                   />
                 </article>

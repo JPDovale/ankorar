@@ -1,29 +1,27 @@
 import { db } from "@/src/infra/database/pool";
 import { Library } from "../Library";
 
-type FindLibrariesByOrganizationIdWithMapsInput = {
+type FindLibraryPreviewsDataByOrganizationIdInput = {
   organizationId: string;
 };
 
-type LibraryMapPreview = {
+type LibraryPreviewMapItemData = {
   id: string;
   title: string;
   created_at: Date;
   updated_at: Date | null;
 };
 
-type LibraryWithMapsPreview = {
-  library: Library;
-  maps: LibraryMapPreview[];
+type FindLibraryPreviewsDataByOrganizationIdResponse = {
+  libraries: Array<{
+    library: Library;
+    maps: LibraryPreviewMapItemData[];
+  }>;
 };
 
-type FindLibrariesByOrganizationIdWithMapsResponse = {
-  libraries: LibraryWithMapsPreview[];
-};
-
-export async function findLibrariesByOrganizationIdWithMaps({
+export async function findLibraryPreviewsDataByOrganizationId({
   organizationId,
-}: FindLibrariesByOrganizationIdWithMapsInput): Promise<FindLibrariesByOrganizationIdWithMapsResponse> {
+}: FindLibraryPreviewsDataByOrganizationIdInput): Promise<FindLibraryPreviewsDataByOrganizationIdResponse> {
   const librariesOnDb = await db.library.findMany({
     where: {
       organization_id: organizationId,

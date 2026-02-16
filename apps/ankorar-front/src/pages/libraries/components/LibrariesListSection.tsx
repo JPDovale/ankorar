@@ -7,11 +7,13 @@ import { LibraryBig, Plus } from "lucide-react";
 interface LibrariesListSectionProps {
   libraries: LibraryPreview[];
   onCreateLibrary: () => void;
+  ownMapIds?: Set<string>;
 }
 
 export function LibrariesListSection({
   libraries,
   onCreateLibrary,
+  ownMapIds,
 }: LibrariesListSectionProps) {
   const isEmptyState = libraries.length === 0;
 
@@ -44,7 +46,11 @@ export function LibrariesListSection({
       {!isEmptyState && (
         <div className="space-y-3">
           {libraries.map((library) => (
-            <LibraryCard key={library.id} library={library} />
+            <LibraryCard
+              key={library.id}
+              library={library}
+              ownMapIds={ownMapIds}
+            />
           ))}
         </div>
       )}

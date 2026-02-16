@@ -12,6 +12,7 @@ export function LibrariesPageContent() {
     libraries,
     librariesSummaryText,
     libraryName,
+    ownMapIds,
   } = useLibrariesPage();
 
   return (
@@ -29,6 +30,7 @@ export function LibrariesPageContent() {
       <LibrariesListSection
         libraries={libraries}
         onCreateLibrary={() => handleCreatePopoverOpenChange(true)}
+        ownMapIds={ownMapIds}
       />
     </section>
   );

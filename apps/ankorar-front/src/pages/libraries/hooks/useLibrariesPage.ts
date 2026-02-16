@@ -1,10 +1,13 @@
 import { useLibraries, useSuspenseLibraries } from "@/hooks/useLibraries";
+import { useSuspenseMaps } from "@/hooks/useMaps";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export function useLibrariesPage() {
   const { data: libraries } = useSuspenseLibraries();
+  const { data: maps } = useSuspenseMaps();
   const { createLibrary, isCreatingLibrary } = useLibraries();
+  const ownMapIds = new Set(maps.map((map) => map.id));
   const [isCreatePopoverOpen, setIsCreatePopoverOpen] = useState(false);
   const [libraryName, setLibraryName] = useState("");
   const librariesSummaryText = `Você tem ${libraries.length} biblioteca${libraries.length === 1 ? "" : "s"} na organização atual.`;
@@ -51,5 +54,6 @@ export function useLibrariesPage() {
     libraries,
     librariesSummaryText,
     libraryName,
+    ownMapIds,
   };
 }

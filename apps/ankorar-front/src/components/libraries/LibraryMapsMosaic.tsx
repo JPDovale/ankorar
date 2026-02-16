@@ -10,6 +10,7 @@ interface LibraryMapsMosaicProps {
   getMapHref: (map: LibraryMapPreview) => string;
   getMapActionLabel: (map: LibraryMapPreview) => string;
   variant?: LibraryMapsMosaicVariant;
+  getCanShowLike?: (map: LibraryMapPreview) => boolean;
 }
 
 export function LibraryMapsMosaic({
@@ -18,6 +19,7 @@ export function LibraryMapsMosaic({
   getMapHref,
   getMapActionLabel,
   variant = "default",
+  getCanShowLike,
 }: LibraryMapsMosaicProps) {
   const hasMaps = maps.length > 0;
   const isEmbedded = variant === "embedded";
@@ -44,6 +46,9 @@ export function LibraryMapsMosaic({
               actionLabel={getMapActionLabel(map)}
               variant={variant}
               density="compact"
+              showLike={getCanShowLike?.(map) ?? false}
+              likesCount={map.likes_count}
+              likedByMe={map.liked_by_me}
             />
           ))}
         </div>

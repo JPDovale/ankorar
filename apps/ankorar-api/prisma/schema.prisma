@@ -90,6 +90,7 @@ model Member {
   org     Organization @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   org_id  String
   maps    Map[]
+  map_likes MapLike[]
 
   @@unique([org_id, user_id])
   @@map("members")
@@ -106,8 +107,21 @@ model Map {
   member    Member       @relation(fields: [member_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   member_id String
   libraries MapLibrary[]
+  likes     MapLike[]
 
   @@map("maps")
+}
+
+model MapLike {
+  id         String   @id @unique
+  map        Map      @relation(fields: [map_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  map_id     String
+  member     Member   @relation(fields: [member_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  member_id  String
+  created_at DateTime
+
+  @@unique([map_id, member_id])
+  @@map("map_likes")
 }
 
 model Library {

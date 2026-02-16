@@ -12,24 +12,29 @@ export const listLibrariesRoute = Route.create({
   handler: async (request, reply, { modules }) => {
     const { Libraries } = modules.library;
     const organization = request.context.organization;
+    const member = request.context.member;
 
-    const { libraries } = await Libraries.fns.findByOrganizationIdWithMaps({
-      organizationId: organization.id,
-    });
+    const { libraries } =
+      await Libraries.fns.findPreviewsByOrganizationId({
+        organizationId: organization.id,
+        memberId: member.id,
+      });
 
     return reply.status(200).send({
       status: 200,
       data: {
-        libraries: libraries.map(({ library, maps }) => ({
-          id: library.id,
-          name: library.name,
-          created_at: library.created_at,
-          updated_at: library.updated_at,
-          maps: maps.map((map) => ({
+        libraries: libraries.map((lib) => ({
+          id: lib.id,
+          name: lib.name,
+          created_at: lib.created_at,
+          updated_at: lib.updated_at,
+          maps: lib.maps.map((map) => ({
             id: map.id,
             title: map.title,
             created_at: map.created_at,
             updated_at: map.updated_at,
+            likes_count: map.likes_count,
+            liked_by_me: map.liked_by_me,
           })),
         })),
       },

@@ -11,6 +11,8 @@ export const getMapResponses = {
         created_at: z.date(),
         updated_at: z.date().nullable(),
         can_edit: z.boolean(),
+        likes_count: z.number().int().min(0),
+        liked_by_me: z.boolean(),
       }),
     }),
   }),

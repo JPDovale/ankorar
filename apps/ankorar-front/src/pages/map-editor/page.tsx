@@ -1,3 +1,4 @@
+import { MapLikeButton } from "@/components/maps/MapLikeButton";
 import { SideBar } from "@/components/SideBar";
 import { useMapEditorPage } from "@/pages/map-editor/hooks/useMapEditorPage";
 import {
@@ -16,16 +17,6 @@ export function MapEditorPage() {
   const showLoadingState = isLoadingMap;
   const showNotFoundState = !isLoadingMap && !hasMap;
   const showEditor = !isLoadingMap && hasMap;
-  let mapTitle = "";
-
-  if (map) {
-    mapTitle = map.title;
-
-    if (isReadOnly) {
-      mapTitle = `${mapTitle} (visualização)`;
-    }
-  }
-
   return (
     <div className="h-dvh overflow-hidden bg-zinc-100/80 p-2">
       <div className="flex h-full gap-2">
@@ -50,11 +41,32 @@ export function MapEditorPage() {
 
             {showEditor && map && (
               <Nodex readOnly={isReadOnly}>
-                <MindMapHeader
-                  title={mapTitle}
-                  className="h-16"
-                  saveStatus={saveStatus}
-                />
+                <div className="flex h-16 shrink-0 items-center justify-between gap-3 border-b border-slate-200 bg-white pr-3">
+                  <div className="min-w-0 flex-1">
+                    <MindMapHeader
+                      title={map.title}
+                      className="h-16"
+                      saveStatus={saveStatus}
+                    />
+                  </div>
+                  {isReadOnly && (
+                    <div className="flex shrink-0 items-center gap-2">
+                      <span className="text-xs text-zinc-500">
+                        (visualização)
+                      </span>
+                      <MapLikeButton
+                        mapId={map.id}
+                        likesCount={map.likes_count}
+                        likedByMe={map.liked_by_me}
+                        aria-label={
+                          map.liked_by_me
+                            ? "Desmarcar gostei do mapa"
+                            : "Marcar como gostei do mapa"
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
                 <Board>
                   <Background />
                   <MineMap />
