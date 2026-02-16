@@ -5,7 +5,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
-import { OrganizationSwitcherInviteForm } from "./OrganizationSwitcherInviteForm";
 import { OrganizationSwitcherOrganizationsList } from "./OrganizationSwitcherOrganizationsList";
 import { OrganizationSwitcherPendingInvites } from "./OrganizationSwitcherPendingInvites";
 import { OrganizationSwitcherTrigger } from "./OrganizationSwitcherTrigger";
@@ -17,7 +16,6 @@ export function OrganizationSwitcher() {
     selectedOrgId,
     selectedOrganization,
     invites,
-    form,
     handlingInviteId,
     showLoadingOrganizations,
     showOrganizationSwitcher,
@@ -25,11 +23,9 @@ export function OrganizationSwitcher() {
     shouldShowPendingInvites,
     isLoadingInvites,
     isSwitchingOrganization,
-    isCreatingInvite,
     isAcceptingInvite,
     isRejectingInvite,
     handleSelectOrganization,
-    handleCreateInvite,
     handleAcceptInvite,
     handleRejectInvite,
   } = useOrganizationSwitcher();
@@ -72,12 +68,6 @@ export function OrganizationSwitcher() {
               selectedOrgId={selectedOrgId}
               isSwitchingOrganization={isSwitchingOrganization}
               onSelectOrganization={handleSelectOrganization}
-            />
-
-            <OrganizationSwitcherInviteForm
-              form={form}
-              isCreatingInvite={isCreatingInvite}
-              onSubmit={handleCreateInvite}
             />
 
             {isLoadingInvites && (

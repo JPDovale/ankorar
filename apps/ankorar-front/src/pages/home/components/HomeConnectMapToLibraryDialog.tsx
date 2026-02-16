@@ -111,7 +111,7 @@ export function HomeConnectMapToLibraryDialog({
             Cancelar
           </Button>
           <Button
-            className="h-8 gap-2 bg-zinc-900 px-4 text-xs text-white hover:bg-zinc-800"
+            className="h-8 gap-2 px-4 text-xs"
             onClick={onConfirm}
             disabled={isConnectingMapToLibrary || !selectedLibraryId}
           >

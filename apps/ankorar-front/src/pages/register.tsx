@@ -97,7 +97,7 @@ export function RegisterPage() {
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(nameErrorMessage)}
-            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-600 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
+            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
           >
             <Input
               id={nameFieldId}
@@ -120,7 +120,7 @@ export function RegisterPage() {
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(emailErrorMessage)}
-            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-600 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
+            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
           >
             <Input
               id={emailFieldId}
@@ -143,7 +143,7 @@ export function RegisterPage() {
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(passwordErrorMessage)}
-            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-600 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
+            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
           >
             <Input
               id={passwordFieldId}
@@ -166,7 +166,7 @@ export function RegisterPage() {
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(confirmPasswordErrorMessage)}
-            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-600 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
+            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
           >
             <Input
               id={confirmPasswordFieldId}
@@ -182,14 +182,14 @@ export function RegisterPage() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="mt-2 h-11 w-full bg-violet-700 text-zinc-50 hover:bg-violet-800 dark:bg-violet-600 dark:hover:bg-violet-500"
+          className="mt-2 h-11 w-full bg-violet-400 text-white hover:bg-violet-500 dark:bg-violet-400 dark:hover:bg-violet-500"
         >
           {isSubmitting && <LoaderCircle className="size-4 animate-spin" />}
           {submitLabel}
         </Button>
         <p className="text-center text-sm text-zinc-600 dark:text-zinc-300">
           Já possui conta?{" "}
-          <Link to="/" className="font-semibold text-violet-700 underline-offset-4 hover:underline dark:text-violet-300">
+          <Link to="/" className="font-semibold text-violet-400 underline-offset-4 hover:underline dark:text-violet-300">
             Fazer login
           </Link>
         </p>

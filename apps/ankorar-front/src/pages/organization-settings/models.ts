@@ -1,11 +1,12 @@
-export type OrganizationApiKeyEnvironment = "development" | "production";
+export type OrganizationApiKeyEnvironment = "live" | "test";
 export type OrganizationApiKeyStatus = "active" | "revoked";
 
 export interface OrganizationApiKey {
   id: string;
-  name: string;
   prefix: string;
-  environment: OrganizationApiKeyEnvironment;
+  partialKey: string;
+  env: OrganizationApiKeyEnvironment;
+  features: string[];
   status: OrganizationApiKeyStatus;
   createdAtLabel: string;
   lastUsedAtLabel: string;
@@ -13,9 +14,11 @@ export interface OrganizationApiKey {
 
 export type OrganizationMemberRole = "owner" | "admin" | "member";
 export type OrganizationMemberStatus = "active" | "invited";
+export type OrganizationMemberType = "member" | "invite";
 
 export interface OrganizationMember {
   id: string;
+  type: OrganizationMemberType;
   name: string;
   email: string;
   role: OrganizationMemberRole;

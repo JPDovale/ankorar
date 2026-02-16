@@ -1,20 +1,22 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { OrganizationApiKey } from "../types";
+import type { OrganizationApiKey } from "../hooks/useOrganizationSettingsPage";
+
+const ENV_LABELS: Record<OrganizationApiKey["env"], string> = {
+  live: "Producao",
+  test: "Teste",
+};
 
 interface OrganizationSettingsApiKeyItemProps {
   apiKey: OrganizationApiKey;
-  onCopyPrefix: (apiKey: OrganizationApiKey) => void;
   onRevoke: (apiKey: OrganizationApiKey) => void;
 }
 
 export function OrganizationSettingsApiKeyItem({
   apiKey,
-  onCopyPrefix,
   onRevoke,
 }: OrganizationSettingsApiKeyItemProps) {
-  const environmentLabel =
-    apiKey.environment === "production" ? "Producao" : "Dev";
+  const environmentLabel = ENV_LABELS[apiKey.env];
   const statusLabel = apiKey.status === "active" ? "Ativa" : "Revogada";
   const isActive = apiKey.status === "active";
 
@@ -22,16 +24,15 @@ export function OrganizationSettingsApiKeyItem({
     <tr className="bg-white transition-colors hover:bg-zinc-50/60">
       <td className="px-4 py-3">
         <div>
-          <p className="font-medium text-zinc-900">{apiKey.name}</p>
-          <p className="mt-0.5 text-xs text-zinc-500">
-            {apiKey.createdAtLabel}
-          </p>
+          <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs text-zinc-600">
+            {apiKey.partialKey}
+          </code>
+
+          <div className="mt-1 flex items-center gap-2">
+            <p className="text-xs text-zinc-500">{apiKey.createdAtLabel}</p>
+            <p className="text-xs text-zinc-500">{apiKey.lastUsedAtLabel}</p>
+          </div>
         </div>
-      </td>
-      <td className="hidden px-4 py-3 sm:table-cell">
-        <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs text-zinc-600">
-          {apiKey.prefix}
-        </code>
       </td>
       <td className="hidden px-4 py-3 md:table-cell">
         <Badge variant="outline" className="border-zinc-200 text-zinc-600">
@@ -49,20 +50,13 @@ export function OrganizationSettingsApiKeyItem({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center justify-end gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 px-2 text-xs text-zinc-600"
-            onClick={() => onCopyPrefix(apiKey)}
-          >
-            Copiar
-          </Button>
           {isActive && (
             <Button
               variant="ghost"
               size="sm"
               className="h-7 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
               onClick={() => onRevoke(apiKey)}
+              aria-label="Revogar chave"
             >
               Revogar
             </Button>

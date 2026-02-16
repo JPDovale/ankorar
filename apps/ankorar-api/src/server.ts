@@ -52,8 +52,8 @@ export function createServerInstance(
   server.appendController(mapController);
   server.appendController(libraryController);
 
-  server.addOnRequestHook((request) =>
-    Controller.injectAnonymousOrUser({ request }),
+  server.addOnRequestHook((request, reply) =>
+    Controller.injectAnonymousOrUser({ request, reply }),
   );
 
   return server;

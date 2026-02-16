@@ -64,6 +64,11 @@ export class Member extends Entity<MemberProps> {
     this.touch();
   }
 
+  markAsNotDeleted() {
+    this.props.deleted_at = null;
+    this.touch();
+  }
+
   touch() {
     this.props.updated_at = dateModule.Date.nowUtcDate();
     this.update();

@@ -1,5 +1,6 @@
 import { db } from "@/src/infra/database/pool";
 import { Member } from "../Member";
+import { MemberNotFound } from "@/src/infra/errors/MemberNotFound";
 
 type FindMemberByIdInput = {
   id: string;
@@ -20,7 +21,7 @@ export async function findMemberById({
   });
 
   if (!memberOnDb) {
-    throw new Error("Member not found");
+    throw new MemberNotFound();
   }
 
   const member = Member.create(

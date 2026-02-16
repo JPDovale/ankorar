@@ -29,7 +29,7 @@ export function CreationActionButton({
     <Button
       disabled={isDisabled}
       className={cn(
-        "rounded-lg bg-zinc-900 px-5 text-white shadow-[0_1px_2px_rgba(16,24,40,0.12)] hover:bg-zinc-800",
+        "rounded-lg px-5 shadow-[0_1px_2px_rgba(16,24,40,0.12)]",
         className,
       )}
       {...buttonProps}

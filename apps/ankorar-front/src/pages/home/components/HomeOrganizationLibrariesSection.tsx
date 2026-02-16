@@ -45,7 +45,7 @@ export function HomeOrganizationLibrariesSection() {
             </div>
             <Link
               to="/libraries"
-              className="inline-flex h-9 min-w-56 items-center justify-center gap-2 rounded-lg bg-zinc-900 px-5 text-sm font-medium text-white shadow-[0_1px_2px_rgba(16,24,40,0.12)] transition-colors hover:bg-zinc-800"
+              className="inline-flex h-9 min-w-56 items-center justify-center gap-2 rounded-lg bg-violet-400 px-5 text-sm font-medium text-white shadow-[0_1px_2px_rgba(16,24,40,0.12)] transition-colors hover:bg-violet-500"
             >
               <LibraryBig className="size-4" />
               Ir para bibliotecas

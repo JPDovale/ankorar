@@ -55,7 +55,7 @@ export function OrganizationSwitcherPendingInvites({
                 <Button
                   type="button"
                   size="sm"
-                  className="h-7 gap-1 bg-zinc-900 px-2 text-[11px] text-white hover:bg-zinc-800"
+                  className="h-7 gap-1 px-2 text-[11px]"
                   onClick={() => onAcceptInvite(invite)}
                   disabled={isInviteActionDisabled}
                 >

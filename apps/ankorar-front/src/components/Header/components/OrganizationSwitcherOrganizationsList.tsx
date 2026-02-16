@@ -27,19 +27,19 @@ export function OrganizationSwitcherOrganizationsList({
             data-selected={isSelected}
             onClick={() => onSelectOrganization(organization.id)}
             disabled={isSwitchingOrganization}
-            className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-zinc-900 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60 data-[selected=true]:bg-zinc-900 data-[selected=true]:text-zinc-50"
+            className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-zinc-900 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60 data-[selected=true]:bg-violet-400 data-[selected=true]:text-white"
           >
             <span className="flex items-center gap-2.5">
               <span
                 data-selected={isSelected}
-                className="flex size-7 items-center justify-center rounded-md bg-zinc-200 text-[11px] font-semibold text-zinc-700 data-[selected=true]:bg-zinc-700 data-[selected=true]:text-zinc-50"
+                className="flex size-7 items-center justify-center rounded-md bg-zinc-200 text-[11px] font-semibold text-zinc-700 data-[selected=true]:bg-violet-500 data-[selected=true]:text-white"
               >
                 {organization.slug.slice(0, 2).toUpperCase()}
               </span>
               <span className="min-w-0 flex flex-col">
                 <span
                   data-selected={isSelected}
-                  className="truncate text-sm font-medium leading-tight text-zinc-900 data-[selected=true]:text-zinc-50"
+                  className="truncate text-sm font-medium leading-tight text-zinc-900 data-[selected=true]:text-white"
                 >
                   {organization.name}
                 </span>

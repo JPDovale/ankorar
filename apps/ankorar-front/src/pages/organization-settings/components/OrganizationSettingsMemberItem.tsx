@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { OrganizationMember } from "../types";
+import type { OrganizationMember } from "../hooks/useOrganizationSettingsPage";
 
 const ROLE_LABELS: Record<OrganizationMember["role"], string> = {
   owner: "Owner",
@@ -51,22 +51,28 @@ export function OrganizationSettingsMemberItem({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center justify-end gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 px-2 text-xs text-zinc-600"
-            onClick={() => onChangeRole(member)}
-          >
-            Alterar perfil
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
-            onClick={() => onRemove(member)}
-          >
-            Remover
-          </Button>
+          {member.status === "active" && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 px-2 text-xs text-zinc-600"
+              onClick={() => onChangeRole(member)}
+              aria-label={`Alterar perfil de ${member.name}`}
+            >
+              Alterar perfil
+            </Button>
+          )}
+          {member.role !== "owner" && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
+              onClick={() => onRemove(member)}
+              aria-label={`Remover ${member.name}`}
+            >
+              {member.status === "invited" ? "Cancelar convite" : "Remover"}
+            </Button>
+          )}
         </div>
       </td>
     </tr>

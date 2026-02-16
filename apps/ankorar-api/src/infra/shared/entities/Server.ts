@@ -134,8 +134,15 @@ export class Server {
     this.app.setErrorHandler(handler);
   }
 
-  addOnRequestHook(handler: (request: FastifyRequest) => Promise<void> | void) {
-    this.app.addHook("onRequest", async (request) => handler(request));
+  addOnRequestHook(
+    handler: (
+      request: FastifyRequest,
+      reply: import("fastify").FastifyReply,
+    ) => Promise<void> | void,
+  ) {
+    this.app.addHook("onRequest", async (request, reply) =>
+      handler(request, reply),
+    );
   }
 
   setOrigin(origin: string) {

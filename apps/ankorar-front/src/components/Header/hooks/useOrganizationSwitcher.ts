@@ -1,23 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useOrganizations } from "@/hooks/useOrganizations";
 import type { OrganizationInvitePreview } from "@/services/organizations/listOrganizationInvitesRequest";
 import type { OrganizationOption } from "@/types/auth";
 import { getOrganizationSlug } from "@/utils/getOrganizationSlug";
-import { useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { z } from "zod";
-
-const organizationInviteSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, "Informe um e-mail para enviar o convite.")
-    .email("Informe um e-mail válido.")
-    .max(256, "Use no máximo 256 caracteres."),
-});
-
-type OrganizationInviteFormValues = z.input<typeof organizationInviteSchema>;
 
 export function useOrganizationSwitcher() {
   const {
@@ -25,23 +11,14 @@ export function useOrganizationSwitcher() {
     organizationInvites,
     isLoadingOrganizations,
     isLoadingOrganizationInvites,
-    createOrganizationInvite,
     acceptOrganizationInvite,
     rejectOrganizationInvite,
     switchOrganizationContext,
-    isCreatingOrganizationInvite,
     isAcceptingOrganizationInvite,
     isRejectingOrganizationInvite,
     isSwitchingOrganizationContext,
   } = useOrganizations();
   const [handlingInviteId, setHandlingInviteId] = useState<string | null>(null);
-  const form = useForm<OrganizationInviteFormValues>({
-    resolver: zodResolver(organizationInviteSchema),
-    mode: "onSubmit",
-    defaultValues: {
-      email: "",
-    },
-  });
 
   const organizations = useMemo<OrganizationOption[]>(() => {
     return organizationsPreview.map((organization) => ({
@@ -114,36 +91,11 @@ export function useOrganizationSwitcher() {
     });
   }
 
-  const handleCreateInvite = form.handleSubmit(
-    async (values) => {
-      const normalizedEmail = values.email.trim().toLowerCase();
-      const { success } = await createOrganizationInvite({
-        email: normalizedEmail,
-      });
-
-      if (!success) {
-        return;
-      }
-
-      toast.success(`Convite enviado para ${normalizedEmail}.`);
-      form.reset();
-    },
-    () => {
-      const firstError = Object.values(form.formState.errors)[0];
-      toast.error(
-        typeof firstError?.message === "string"
-          ? firstError.message
-          : "Verifique os dados do formulário.",
-      );
-    },
-  );
-
   return {
     organizations,
     selectedOrgId,
     selectedOrganization,
     invites: organizationInvites,
-    form,
     handlingInviteId,
     showLoadingOrganizations,
     showOrganizationSwitcher,
@@ -151,11 +103,9 @@ export function useOrganizationSwitcher() {
     shouldShowPendingInvites,
     isLoadingInvites: isLoadingOrganizationInvites,
     isSwitchingOrganization: isSwitchingOrganizationContext,
-    isCreatingInvite: isCreatingOrganizationInvite,
     isAcceptingInvite: isAcceptingOrganizationInvite,
     isRejectingInvite: isRejectingOrganizationInvite,
     handleSelectOrganization,
-    handleCreateInvite,
     handleAcceptInvite: (invite: OrganizationInvitePreview) => {
       void handleInviteAction(invite, acceptOrganizationInvite, "aceito");
     },

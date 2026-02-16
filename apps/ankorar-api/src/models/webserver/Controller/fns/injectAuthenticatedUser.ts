@@ -1,21 +1,26 @@
 import { PermissionDenied } from "@/src/infra/errors/PermissionDenied";
 import { UserNotFound } from "@/src/infra/errors/UserNotFound";
 import { parse as parseCookie } from "cookie";
-import { FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { authModule } from "../../../auth/AuthModule";
 import { cryptoModule } from "../../../crypto/CryptoModule";
 import { organizationModule } from "../../../organization/OrganizationModule";
 import { userModule } from "../../../user/UserModule";
+import { setSessionCookies } from "../setSessionCookies";
 import { injectAnonymousUser } from "./injectAnonymousUser";
+import { OrganizationNotFound } from "@/src/infra/errors/OrganizationNotFound";
+import { MemberNotFound } from "@/src/infra/errors/MemberNotFound";
 
 type InjectAuthenticatedUserInput = {
   request: FastifyRequest;
+  reply: FastifyReply;
 };
 
 type InjectAuthenticatedUserResponse = Promise<void>;
 
 export async function injectAuthenticatedUser({
   request,
+  reply,
 }: InjectAuthenticatedUserInput): InjectAuthenticatedUserResponse {
   const { Auth } = authModule;
   const { Crypto } = cryptoModule;
@@ -76,6 +81,43 @@ export async function injectAuthenticatedUser({
   } catch (error) {
     if (error instanceof UserNotFound) {
       injectAnonymousUser({ request });
+      return;
+    }
+
+    if (
+      error instanceof OrganizationNotFound ||
+      error instanceof MemberNotFound
+    ) {
+      const { user } = await Users.fns.findById({
+        id: payload.sub,
+      });
+
+      const { organization } = await Organizations.fns.findByCreatorId({
+        id: user.id,
+      });
+
+      const { member } = await Members.fns.findByUserIdAndOrgId({
+        orgId: organization.id,
+        userId: user.id,
+      });
+
+      setSessionCookies({
+        refreshToken: parsedCookies.refresh_token,
+        accessToken: parsedCookies.access_token,
+        orgId: organization.id,
+        memberId: member.id,
+        reply,
+      });
+
+      request.context = {
+        ...request.context,
+        user,
+        member: member,
+        organization: organization,
+        refresh_token: parsedCookies.refresh_token,
+        access_token: parsedCookies.access_token,
+      };
+
       return;
     }
 
