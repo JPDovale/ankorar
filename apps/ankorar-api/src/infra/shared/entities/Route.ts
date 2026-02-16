@@ -1,7 +1,7 @@
 import type {
   FastifyReply,
   FastifyRequest,
-  preHandlerHookHandler,
+  preHandlerAsyncHookHandler,
 } from "fastify";
 import { FastifyTypedInstance } from "../../http/types/fastify";
 import z from "zod";
@@ -143,9 +143,9 @@ export class Route<
   ) {
     const wrapPreHandler = (
       preHandler: PreHandler<any, any, any>,
-    ): preHandlerHookHandler =>
-      (request, reply) =>
-        preHandler(request as any, reply as any, {
+    ): preHandlerAsyncHookHandler =>
+      async (request, reply) =>
+        await preHandler(request as any, reply as any, {
           modules: opts.modules,
         });
 

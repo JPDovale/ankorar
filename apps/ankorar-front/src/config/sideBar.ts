@@ -1,4 +1,4 @@
-import { House, LibraryBig, type LucideIcon } from "lucide-react";
+import { Building2, House, LibraryBig, type LucideIcon } from "lucide-react";
 
 export interface SideBarLink {
   label: string;
@@ -16,5 +16,10 @@ export const sideBarLinks: SideBarLink[] = [
     label: "Bibliotecas",
     to: "/libraries",
     icon: LibraryBig,
+  },
+  {
+    label: "Organizacao",
+    to: "/organizations/settings",
+    icon: Building2,
   },
 ];

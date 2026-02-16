@@ -3,6 +3,7 @@ import { DefaultLayout } from "@/layouts/default";
 import { LibrariesPage } from "@/pages/libraries/page";
 import { MapEditorPage } from "@/pages/map-editor/page";
 import { LoginPage } from "@/pages/login";
+import { OrganizationSettingsPage } from "@/pages/organization-settings/page";
 import { RegisterPage } from "@/pages/register";
 import { ProtectedRoute, PublicOnlyRoute } from "@/routes/guards";
 import { createBrowserRouter, RouterProvider } from "react-router";
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
               {
                 path: "/libraries",
                 Component: LibrariesPage,
+              },
+              {
+                path: "/organizations/settings",
+                Component: OrganizationSettingsPage,
               },
             ],
           },
