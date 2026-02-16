@@ -7,6 +7,7 @@ import { generateSecret } from "./fns/generateSecret";
 import { generateUniquePrefix } from "./fns/generateUniquePrefix";
 import { hashSecret } from "./fns/hashSecret";
 import { persistApiKey } from "./fns/persistApiKey";
+import { findApiKeysByOrganizationId } from "./fns/findApiKeysByOrganizationId";
 import { safeEqualText } from "./fns/safeEqualText";
 
 const ApiKeys = {
@@ -16,6 +17,7 @@ const ApiKeys = {
   fns: {
     persist: persistApiKey,
     findByPrefix: findApiKeyByPrefix,
+    findByOrganizationId: findApiKeysByOrganizationId,
     generateUniquePrefix,
     generateSecret,
     hashSecret,
@@ -25,3 +27,4 @@ const ApiKeys = {
 };
 
 export { ApiKeys };
+

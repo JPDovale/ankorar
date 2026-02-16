@@ -7,6 +7,7 @@ import { createOrganizationInviteRoute } from "../controllers/organization/creat
 import { listOrganizationInvitesRoute } from "../controllers/organization/listOrganizationInvites";
 import { acceptOrganizationInviteRoute } from "../controllers/organization/acceptOrganizationInvite";
 import { rejectOrganizationInviteRoute } from "../controllers/organization/rejectOrganizationInvite";
+import { listApiKeysRoute } from "../controllers/organization/listApiKeys";
 import { switchOrganizationContextRoute } from "../controllers/organization/switchOrganizationContext";
 
 const organizationController = Controller.create({
@@ -15,6 +16,7 @@ const organizationController = Controller.create({
 });
 
 organizationController.appendRoute(createApiKeyRoute);
+organizationController.appendRoute(listApiKeysRoute);
 organizationController.appendRoute(upsertMemberRoute);
 organizationController.appendRoute(listUserOrganizationsRoute);
 organizationController.appendRoute(createOrganizationInviteRoute);
