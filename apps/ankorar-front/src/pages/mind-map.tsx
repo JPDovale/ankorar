@@ -9,7 +9,7 @@ import {
 } from "@ankorar/nodex";
 
 export function MindMapPage() {
-  useMindMapDebounce(() => undefined, {
+  useMindMapDebounce((_nodes, _previewDataUrl) => undefined, {
     delayMs: 3000,
   });
 

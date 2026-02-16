@@ -12,7 +12,7 @@ type Point = {
   y: number;
 };
 
-type SegmentLine = {
+export type SegmentLine = {
   key: string;
   start: Point;
   end: Point;
@@ -23,7 +23,7 @@ type SegmentLine = {
 
 const TOGGLE_EDGE_OUTSIDE_OFFSET = 6;
 
-function getNodeWrapper(node: MindMapNode) {
+export function getNodeWrapper(node: MindMapNode) {
   const wrapperPadding = node.style.wrapperPadding;
 
   return {
@@ -201,20 +201,53 @@ function collectVisibleEdges(
   }
 }
 
+export function getSegmentLines(nodes: MindMapNode[]): SegmentLine[] {
+  const edges: Array<{ from: MindMapNode; to: MindMapNode }> = [];
+  const centralNode = findCentralNode(nodes);
+  const centralCenterX = centralNode ? getNodeCenter(centralNode).x : null;
+
+  for (const node of nodes) {
+    collectVisibleEdges(node, edges);
+  }
+
+  return edges
+    .map(({ from, to }) => buildSegmentLine(from, to, centralCenterX))
+    .filter((segment): segment is SegmentLine => Boolean(segment));
+}
+
+export function getNodesBounds(nodes: MindMapNode[]): {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+} | null {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  let hasVisible = false;
+
+  const walk = (node: MindMapNode) => {
+    if (!node.isVisible) return;
+    hasVisible = true;
+    const w = getNodeWrapper(node);
+    minX = Math.min(minX, w.left);
+    minY = Math.min(minY, w.top);
+    maxX = Math.max(maxX, w.left + w.width);
+    maxY = Math.max(maxY, w.top + w.height);
+    node.childrens.forEach(walk);
+  };
+  nodes.forEach(walk);
+
+  if (!hasVisible) return null;
+  return { minX, minY, maxX, maxY };
+}
+
 export function Segments({ nodes, className }: SegmentsProps) {
-  const segmentLines = useMemo(() => {
-    const edges: Array<{ from: MindMapNode; to: MindMapNode }> = [];
-    const centralNode = findCentralNode(nodes);
-    const centralCenterX = centralNode ? getNodeCenter(centralNode).x : null;
-
-    for (const node of nodes) {
-      collectVisibleEdges(node, edges);
-    }
-
-    return edges
-      .map(({ from, to }) => buildSegmentLine(from, to, centralCenterX))
-      .filter((segment): segment is SegmentLine => Boolean(segment));
-  }, [nodes]);
+  const segmentLines = useMemo(
+    () => getSegmentLines(nodes),
+    [nodes],
+  );
 
   return (
     <svg

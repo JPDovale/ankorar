@@ -81,7 +81,7 @@ export function useMapEditorPage() {
       : null;
 
   useMindMapDebounce(
-    async (nextNodes) => {
+    async (nextNodes, previewDataUrl) => {
       if (!mapId || !map || isReadOnly) {
         return;
       }
@@ -92,7 +92,9 @@ export function useMapEditorPage() {
         return;
       }
 
-      const result = await updateMapContent(nextNodes);
+      const result = await updateMapContent(nextNodes, {
+        ...(previewDataUrl != null && { preview: previewDataUrl }),
+      });
 
       if (result.success) {
         setLastPersistedSnapshot({

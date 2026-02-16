@@ -3,6 +3,7 @@ import { connection } from "@/services/ankorarApi/axios";
 export interface UpdateMapContentRequestBody {
   mapId: string;
   content: unknown[];
+  preview?: string | null;
 }
 
 export async function updateMapContentRequest(
@@ -10,5 +11,6 @@ export async function updateMapContentRequest(
 ) {
   return connection.put<null>(`/v1/maps/${payload.mapId}/content`, {
     content: payload.content,
+    ...(payload.preview != null && { preview: payload.preview }),
   });
 }

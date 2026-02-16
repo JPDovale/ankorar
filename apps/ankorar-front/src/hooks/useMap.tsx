@@ -284,6 +284,9 @@ export function useMap({ id }: UseMapProps) {
               ...map,
               title: nextTitle ?? map.title,
               updated_at: now,
+              ...(variables.preview !== undefined && {
+                preview: variables.preview,
+              }),
             };
           });
         },
@@ -296,7 +299,10 @@ export function useMap({ id }: UseMapProps) {
   });
 
   const updateMapContent = useCallback(
-    async (content: unknown[]): Promise<UpdateMapContentMutationResult> => {
+    async (
+      content: unknown[],
+      options?: { preview?: string | null },
+    ): Promise<UpdateMapContentMutationResult> => {
       if (!id) {
         return {
           success: false,
@@ -315,6 +321,7 @@ export function useMap({ id }: UseMapProps) {
         .mutateAsync({
           mapId: id,
           content: sanitizedContent,
+          ...(options?.preview !== undefined && { preview: options.preview }),
         })
         .catch((error) => {
           console.error(extractUnexpectedErrorMessage(error));

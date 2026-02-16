@@ -34,6 +34,7 @@ export async function findMapPreviewsByMemberId({
       created_at: map.created_at,
       updated_at: map.updated_at,
       likes_count: info.likes_count,
+      preview: map.preview,
     });
   });
 

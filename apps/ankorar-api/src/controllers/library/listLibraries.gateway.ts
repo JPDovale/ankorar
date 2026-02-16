@@ -18,6 +18,7 @@ export const listLibrariesResponses = {
               updated_at: z.date().nullable(),
               likes_count: z.number().int().min(0),
               liked_by_me: z.boolean(),
+              preview: z.string().nullable(),
             }),
           ),
         }),

@@ -37,7 +37,7 @@ export function LibraryMapsMosaic({
       )}
 
       {hasMaps && (
-        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-2 sm:grid-cols-3 xl:grid-cols-4">
           {maps.map((map) => (
             <MapPreviewCard
               key={map.id}

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import { useMindMapState } from "../../state/mindMap";
+import { getMindMapPreviewDataUrl } from "../../utils/getMindMapPreviewDataUrl";
 
 type UseMindMapDebouncedChangeOptions = {
   delayMs?: number;
@@ -9,6 +10,7 @@ type UseMindMapDebouncedChangeOptions = {
 export function useMindMapDebounce(
   onChange: (
     nodes: ReturnType<typeof useMindMapState.getState>["nodes"],
+    previewDataUrl: string | null,
   ) => void | Promise<void>,
   options: UseMindMapDebouncedChangeOptions = {},
 ) {
@@ -28,7 +30,9 @@ export function useMindMapDebounce(
       window.clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = window.setTimeout(() => {
-      callbackRef.current(latestNodesRef.current);
+      const nextNodes = latestNodesRef.current;
+      const previewDataUrl = getMindMapPreviewDataUrl(nextNodes);
+      callbackRef.current(nextNodes, previewDataUrl);
     }, delayMs);
 
     return () => {

@@ -37,6 +37,7 @@ export async function findMapByIdAndOrganizationId({
       member_id: mapOnDb.member_id,
       title: mapOnDb.title,
       content: mapOnDb.content as JsonValue[],
+      preview: mapOnDb.preview,
       created_at: mapOnDb.created_at,
       updated_at: mapOnDb.updated_at,
       deleted_at: mapOnDb.deleted_at,

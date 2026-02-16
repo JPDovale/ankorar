@@ -7,6 +7,7 @@ type UpdateMapNodeContentInput = {
   id: string;
   memberId: string;
   content: JsonValue[];
+  preview?: string | null;
 };
 
 type UpdateMapNodeContentResponse = {
@@ -17,6 +18,7 @@ export async function updateMapNodeContent({
   id,
   memberId,
   content,
+  preview,
 }: UpdateMapNodeContentInput): Promise<UpdateMapNodeContentResponse> {
   const { map } = await findMapByIdAndMemberId({
     id,
@@ -24,6 +26,9 @@ export async function updateMapNodeContent({
   });
 
   map.content = content;
+  if (preview !== undefined) {
+    map.preview = preview;
+  }
   const centralNodeTitle = extractCentralNodeTitle(content);
 
   if (centralNodeTitle) {

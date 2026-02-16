@@ -10,6 +10,7 @@ type LibraryPreviewMapItemData = {
   title: string;
   created_at: Date;
   updated_at: Date | null;
+  preview: string | null;
 };
 
 type FindLibraryPreviewsDataByOrganizationIdResponse = {
@@ -40,6 +41,7 @@ export async function findLibraryPreviewsDataByOrganizationId({
               created_at: true,
               updated_at: true,
               deleted_at: true,
+              preview: true,
             },
           },
         },
@@ -68,6 +70,7 @@ export async function findLibraryPreviewsDataByOrganizationId({
         title: mapOnDb.title,
         created_at: mapOnDb.created_at,
         updated_at: mapOnDb.updated_at,
+        preview: mapOnDb.preview,
       }));
 
     return {

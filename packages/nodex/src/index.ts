@@ -5,6 +5,7 @@ export {
   clearMindMapHistory,
 } from "./state/mindMapHistory";
 export { useMindMapDebounce } from "./hooks/mindMap/useMindMapDebounce";
+export { getMindMapPreviewDataUrl } from "./utils/getMindMapPreviewDataUrl";
 export { useMindMapHistoryDebounce } from "./hooks/mindMap/useMindMapHistoryDebounce";
 
 export { Background } from "./components/mindMap/Background";

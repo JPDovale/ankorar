@@ -11,6 +11,7 @@ export const listMapsResponses = {
           created_at: z.date(),
           updated_at: z.date().nullable(),
           likes_count: z.number().int().min(0),
+          preview: z.string().nullable(),
         }),
       ),
     }),

@@ -12,6 +12,7 @@ interface MapPreviewCardMap {
   title: string;
   created_at: string;
   updated_at: string | null;
+  preview?: string | null;
 }
 
 interface MapPreviewCardProps {
@@ -65,8 +66,9 @@ export function MapPreviewCard({
       className="group relative cursor-pointer overflow-hidden rounded-2xl bg-white text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/60 transition-all duration-200 hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] hover:ring-zinc-200/80 data-[variant=embedded]:rounded-xl data-[variant=embedded]:bg-zinc-50/80 data-[variant=embedded]:shadow-none data-[variant=embedded]:ring-0 data-[variant=embedded]:hover:bg-zinc-100/80"
       aria-label={`${map.title}, ${actionLabel}`}
     >
-      {/* Preview area — abstract mind-map style */}
+      {/* Preview area — snapshot do mapa sobre o fundo antigo, ou só o fundo */}
       <div className="relative h-24 overflow-hidden group-data-[density=compact]:h-20">
+        {/* Fundo antigo (sempre): gradiente + pontos */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-50/90 via-zinc-50 to-amber-50/70" />
         <div
           className="absolute inset-0 opacity-[0.35]"
@@ -75,6 +77,13 @@ export function MapPreviewCard({
             backgroundSize: "12px 12px",
           }}
         />
+        {map.preview && (
+          <img
+            src={map.preview}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        )}
         <div className="absolute left-4 top-4 flex gap-1.5 group-data-[density=compact]:left-3 group-data-[density=compact]:top-3">
           <span className="size-2 rounded-full bg-violet-400/80 shadow-sm" />
           <span className="size-2 rounded-full bg-amber-400/80 shadow-sm" />
@@ -83,18 +92,6 @@ export function MapPreviewCard({
         <div className="absolute right-3 top-3 inline-flex size-7 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-zinc-200/50">
           <Sparkles className="size-3.5 text-zinc-500" />
         </div>
-        {/* Subtle branch lines */}
-        <svg
-          className="absolute bottom-3 left-4 h-8 w-16 text-zinc-300/60 group-data-[density=compact]:bottom-2 group-data-[density=compact]:left-3"
-          viewBox="0 0 64 32"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          aria-hidden
-        >
-          <path d="M0 28h20M20 28v-12M20 16h24M20 16l-4-6M20 16l4-6" />
-        </svg>
       </div>
 
       <div className="flex flex-col gap-3 p-3.5 group-data-[density=compact]:gap-2.5 group-data-[density=compact]:p-3">

@@ -21,11 +21,13 @@ export const updateMapContentRoute = Route.create({
     const { Maps } = modules.map;
     const member = request.context.member;
     const sanitizedContent = request.body.content as JsonValue[];
+    const preview = request.body.preview as string | undefined;
 
     await Maps.updateNodeContent({
       id: request.params.map_id,
       memberId: member.id,
       content: sanitizedContent,
+      preview,
     });
 
     return reply.status(200).send({

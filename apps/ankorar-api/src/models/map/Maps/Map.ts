@@ -10,6 +10,7 @@ interface MapProps {
   member_id: string;
   title: string;
   content: JsonValue[];
+  preview: string | null;
   created_at: Date;
   updated_at: Date | null;
   deleted_at: Date | null;
@@ -17,7 +18,7 @@ interface MapProps {
 
 export type CreateMapProps = Optional<
   MapProps,
-  "content" | "created_at" | "updated_at" | "deleted_at"
+  "content" | "preview" | "created_at" | "updated_at" | "deleted_at"
 >;
 
 export class Map extends Entity<MapProps> {
@@ -26,6 +27,7 @@ export class Map extends Entity<MapProps> {
       ...props,
       title: props.title.trim(),
       content: props.content ?? [],
+      preview: props.preview ?? null,
       created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       deleted_at: props.deleted_at ?? null,
@@ -55,6 +57,15 @@ export class Map extends Entity<MapProps> {
 
   set content(content: JsonValue[]) {
     this.props.content = content;
+    this.touch();
+  }
+
+  get preview() {
+    return this.props.preview;
+  }
+
+  set preview(preview: string | null) {
+    this.props.preview = preview;
     this.touch();
   }
 

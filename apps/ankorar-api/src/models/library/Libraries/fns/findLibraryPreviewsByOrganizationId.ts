@@ -39,6 +39,7 @@ export async function findLibraryPreviewsByOrganizationId({
         updated_at: map.updated_at,
         likes_count: info.likes_count,
         liked_by_me: info.liked_by_me,
+        preview: map.preview,
       };
     });
     return LibraryPreview.create({

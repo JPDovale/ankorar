@@ -11,7 +11,7 @@ export function AuthenticatedLayout() {
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.06)]">
           <Header />
 
-          <main className="min-h-0 flex-1 overflow-y-auto bg-zinc-50/50 p-4 sm:p-6 lg:p-7">
+          <main className="scrollbar min-h-0 flex-1 overflow-y-auto bg-zinc-50/50 p-4 sm:p-6 lg:p-7">
             <div className="mx-auto flex w-full max-w-7xl flex-col">
               <Outlet />
             </div>

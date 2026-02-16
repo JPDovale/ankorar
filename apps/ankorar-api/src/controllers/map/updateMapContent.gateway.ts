@@ -159,4 +159,5 @@ export const updateMapContentBody = z.object({
   content: z
     .array(z.unknown())
     .transform((content) => sanitizeMapContent(content)),
+  preview: z.string().max(2 * 1024 * 1024).optional(), // ~2MB base64
 });

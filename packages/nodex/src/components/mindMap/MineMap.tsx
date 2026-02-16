@@ -4,9 +4,13 @@ import { useMindMapState } from "../../state/mindMap";
 import { useShallow } from "zustand/react/shallow";
 import { cn } from "../../lib/utils";
 
-const MAP_WIDTH = 200;
-const MAP_HEIGHT = 120;
-const MAP_PADDING = 8;
+export const MINE_MAP_WIDTH = 200;
+export const MINE_MAP_HEIGHT = 120;
+export const MINE_MAP_PADDING = 8;
+
+const MAP_WIDTH = MINE_MAP_WIDTH;
+const MAP_HEIGHT = MINE_MAP_HEIGHT;
+const MAP_PADDING = MINE_MAP_PADDING;
 
 const collectVisibleNodes = (nodes: MindMapNode[]) => {
   const list: MindMapNode[] = [];
@@ -24,6 +28,102 @@ const collectVisibleNodes = (nodes: MindMapNode[]) => {
   walk(nodes);
   return list;
 };
+
+export type MineMapNodeToRender = {
+  id: string;
+  x: number;
+  y: number;
+  r: number;
+  color: string;
+};
+
+export type MineMapViewportRect = {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+};
+
+export type MineMapProjectionResult = {
+  nodesToRender: MineMapNodeToRender[];
+  viewportRect: MineMapViewportRect | null;
+};
+
+export function getMineMapProjection(
+  nodes: MindMapNode[],
+  offset: { x: number; y: number },
+  scale: number,
+  rootSize: { w: number; h: number },
+): MineMapProjectionResult {
+  const visibleNodes = collectVisibleNodes(nodes);
+  if (visibleNodes.length === 0) {
+    return { nodesToRender: [], viewportRect: null };
+  }
+
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const node of visibleNodes) {
+    const wrapper = node.style.wrapperPadding * 2;
+    const width = node.style.w + wrapper;
+    const height = node.style.h + wrapper;
+    minX = Math.min(minX, node.pos.x);
+    minY = Math.min(minY, node.pos.y);
+    maxX = Math.max(maxX, node.pos.x + width);
+    maxY = Math.max(maxY, node.pos.y + height);
+  }
+  const boundsWidth = Math.max(1, maxX - minX);
+  const boundsHeight = Math.max(1, maxY - minY);
+  const scaleX = (MAP_WIDTH - MAP_PADDING * 2) / boundsWidth;
+  const scaleY = (MAP_HEIGHT - MAP_PADDING * 2) / boundsHeight;
+  const mapScale = Math.min(scaleX, scaleY) * 0.7;
+  const centralNode = visibleNodes.find((node) => node.type === "central");
+  const centralCenter = centralNode
+    ? (() => {
+        const wrapper = centralNode.style.wrapperPadding * 1.5;
+        const width = centralNode.style.w + wrapper;
+        const height = centralNode.style.h + wrapper;
+        return {
+          x: centralNode.pos.x + width / 2.5,
+          y: centralNode.pos.y + height / 2.5,
+        };
+      })()
+    : null;
+  const originX = centralCenter
+    ? centralCenter.x - (MAP_WIDTH / 2 - MAP_PADDING) / mapScale
+    : minX;
+  const originY = centralCenter
+    ? centralCenter.y - (MAP_HEIGHT / 2 - MAP_PADDING) / mapScale
+    : minY;
+
+  const nodesToRender: MineMapNodeToRender[] = visibleNodes.map((node) => {
+    const wrapper = node.style.wrapperPadding * 1.5;
+    const width = node.style.w + wrapper;
+    const height = node.style.h + wrapper;
+    const centerX = node.pos.x + width / 2.5;
+    const centerY = node.pos.y + height / 2.5;
+    return {
+      id: node.id,
+      x: (centerX - originX) * mapScale + MAP_PADDING,
+      y: (centerY - originY) * mapScale + MAP_PADDING,
+      r: node.type === "central" ? 3.5 : 2.5,
+      color: node.style.color,
+    };
+  });
+
+  const viewportRect: MineMapViewportRect | null =
+    rootSize.w && rootSize.h
+      ? {
+          x: (-offset.x / scale - originX) * mapScale + MAP_PADDING,
+          y: (-offset.y / scale - originY) * mapScale + MAP_PADDING,
+          w: (rootSize.w / scale) * mapScale,
+          h: (rootSize.h / scale) * mapScale,
+        }
+      : null;
+
+  return { nodesToRender, viewportRect };
+}
 
 interface MineMapProps {
   className?: string;
@@ -59,95 +159,10 @@ export function MineMap({ className }: MineMapProps = {}) {
     };
   }, []);
 
-  const { nodesToRender, viewportRect } = useMemo(() => {
-    const visibleNodes = collectVisibleNodes(nodes);
-    if (visibleNodes.length === 0) {
-      return {
-        viewBox: { minX: 0, minY: 0, maxX: 1, maxY: 1 },
-        nodesToRender: [] as Array<{
-          id: string;
-          x: number;
-          y: number;
-          r: number;
-          color: string;
-        }>,
-        viewportRect: null as null | {
-          x: number;
-          y: number;
-          w: number;
-          h: number;
-        },
-      };
-    }
-
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
-    for (const node of visibleNodes) {
-      const wrapper = node.style.wrapperPadding * 2;
-      const width = node.style.w + wrapper;
-      const height = node.style.h + wrapper;
-      minX = Math.min(minX, node.pos.x);
-      minY = Math.min(minY, node.pos.y);
-      maxX = Math.max(maxX, node.pos.x + width);
-      maxY = Math.max(maxY, node.pos.y + height);
-    }
-    const boundsWidth = Math.max(1, maxX - minX);
-    const boundsHeight = Math.max(1, maxY - minY);
-    const scaleX = (MAP_WIDTH - MAP_PADDING * 2) / boundsWidth;
-    const scaleY = (MAP_HEIGHT - MAP_PADDING * 2) / boundsHeight;
-    const mapScale = Math.min(scaleX, scaleY) * 0.7;
-    const centralNode = visibleNodes.find((node) => node.type === "central");
-    const centralCenter = centralNode
-      ? (() => {
-          const wrapper = centralNode.style.wrapperPadding * 1.5;
-          const width = centralNode.style.w + wrapper;
-          const height = centralNode.style.h + wrapper;
-          return {
-            x: centralNode.pos.x + width / 2.5,
-            y: centralNode.pos.y + height / 2.5,
-          };
-        })()
-      : null;
-    const originX = centralCenter
-      ? centralCenter.x - (MAP_WIDTH / 2 - MAP_PADDING) / mapScale
-      : minX;
-    const originY = centralCenter
-      ? centralCenter.y - (MAP_HEIGHT / 2 - MAP_PADDING) / mapScale
-      : minY;
-
-    const nodesToRender = visibleNodes.map((node) => {
-      const wrapper = node.style.wrapperPadding * 1.5;
-      const width = node.style.w + wrapper;
-      const height = node.style.h + wrapper;
-      const centerX = node.pos.x + width / 2.5;
-      const centerY = node.pos.y + height / 2.5;
-      return {
-        id: node.id,
-        x: (centerX - originX) * mapScale + MAP_PADDING,
-        y: (centerY - originY) * mapScale + MAP_PADDING,
-        r: node.type === "central" ? 3.5 : 2.5,
-        color: node.style.color,
-      };
-    });
-
-    const viewportRect =
-      rootSize.w && rootSize.h
-        ? {
-            x: (-offset.x / scale - originX) * mapScale + MAP_PADDING,
-            y: (-offset.y / scale - originY) * mapScale + MAP_PADDING,
-            w: (rootSize.w / scale) * mapScale,
-            h: (rootSize.h / scale) * mapScale,
-          }
-        : null;
-
-    return {
-      viewBox: { minX, minY, maxX, maxY },
-      nodesToRender,
-      viewportRect,
-    };
-  }, [nodes, offset, scale, rootSize.h, rootSize.w]);
+  const { nodesToRender, viewportRect } = useMemo(
+    () => getMineMapProjection(nodes, offset, scale, rootSize),
+    [nodes, offset, scale, rootSize.h, rootSize.w],
+  );
 
   return (
     <div

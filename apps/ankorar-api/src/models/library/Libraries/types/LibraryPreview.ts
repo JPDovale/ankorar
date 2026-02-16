@@ -7,6 +7,7 @@ export type LibraryPreviewMapItem = {
   updated_at: Date | null;
   likes_count: number;
   liked_by_me: boolean;
+  preview: string | null;
 };
 
 export type LibraryPreviewProps = {

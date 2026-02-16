@@ -18,6 +18,7 @@ export async function persistMap({
     member_id: map.member_id,
     title: map.title,
     content: map.content as Prisma.InputJsonValue,
+    preview: map.preview,
     created_at: map.created_at,
     updated_at: map.updated_at,
     deleted_at: map.deleted_at,
