@@ -12,6 +12,10 @@ export function HomeOrganizationLibrariesSection() {
     ownMapIds,
   } = useHomeOrganizationLibrariesSection();
   const hasLibraries = organizationLibraries.length > 0;
+  const librariesWithMaps = organizationLibraries.filter(
+    (library) => library.maps.length > 0,
+  );
+  const hasLibrariesWithMaps = librariesWithMaps.length > 0;
 
   return (
     <section className="space-y-3">
@@ -54,22 +58,29 @@ export function HomeOrganizationLibrariesSection() {
         </div>
       )}
 
-      {hasLibraries && (
+      {hasLibraries && !hasLibrariesWithMaps && (
+        <div className="rounded-xl border border-dashed border-zinc-300/80 bg-zinc-50/60 px-4 py-8">
+          <p className="text-center text-sm text-zinc-500">
+            Nenhuma biblioteca com mapas vinculados no momento.
+          </p>
+        </div>
+      )}
+
+      {hasLibrariesWithMaps && (
         <div className="space-y-3">
           <p className="text-xs text-zinc-500">
             {organizationLibrariesText} • {linkedMapsText}
           </p>
 
           <div className="space-y-3">
-            {organizationLibraries.map((library) => {
+            {librariesWithMaps.map((library) => {
+              const likedMaps = library.maps.filter((map) => map.liked_by_me);
+              const hasLikedMaps = likedMaps.length > 0;
               const libraryLinkedMapsCount = library.maps.length;
               const libraryLinkedMapsText = `${libraryLinkedMapsCount} mapa${libraryLinkedMapsCount === 1 ? "" : "s"} vinculados`;
 
               return (
-                <article
-                  key={library.id}
-                  className="space-y-2 rounded-lg border border-zinc-200/80 bg-zinc-50/50 px-3.5 py-3 transition-colors hover:border-zinc-300/80"
-                >
+                <article key={library.id} className="space-y-2">
                   <div className="flex items-center justify-between gap-3">
                     <p className="truncate text-sm font-semibold text-zinc-900">
                       {library.name}
@@ -79,20 +90,49 @@ export function HomeOrganizationLibrariesSection() {
                     </span>
                   </div>
 
-                  <LibraryMapsMosaic
-                    maps={library.maps}
-                    emptyText="Nenhum mapa vinculado nesta biblioteca."
-                    getMapActionLabel={(map) =>
-                      ownMapIds.has(map.id) ? "Abrir" : "Visualizar"
-                    }
-                    getMapHref={(map) =>
-                      ownMapIds.has(map.id)
-                        ? `/maps/${map.id}`
-                        : `/maps/${map.id}?mode=view`
-                    }
-                    getCanShowLike={(map) => !ownMapIds.has(map.id)}
-                    variant="embedded"
-                  />
+                  <div className="space-y-4">
+                    {hasLikedMaps && (
+                      <div className="space-y-2">
+                        <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                          Mapas curtidos
+                        </h3>
+                        <LibraryMapsMosaic
+                          maps={likedMaps}
+                          emptyText=""
+                          getMapActionLabel={(map) =>
+                            ownMapIds.has(map.id) ? "Abrir" : "Visualizar"
+                          }
+                          getMapHref={(map) =>
+                            ownMapIds.has(map.id)
+                              ? `/maps/${map.id}`
+                              : `/maps/${map.id}?mode=view`
+                          }
+                          getCanShowLike={(map) => !ownMapIds.has(map.id)}
+                          variant="default"
+                        />
+                      </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                        Todos os mapas
+                      </h3>
+                      <LibraryMapsMosaic
+                        maps={library.maps}
+                        emptyText=""
+                        getMapActionLabel={(map) =>
+                          ownMapIds.has(map.id) ? "Abrir" : "Visualizar"
+                        }
+                        getMapHref={(map) =>
+                          ownMapIds.has(map.id)
+                            ? `/maps/${map.id}`
+                            : `/maps/${map.id}?mode=view`
+                        }
+                        getCanShowLike={(map) => !ownMapIds.has(map.id)}
+                        variant="default"
+                      />
+                    </div>
+                  </div>
                 </article>
               );
             })}

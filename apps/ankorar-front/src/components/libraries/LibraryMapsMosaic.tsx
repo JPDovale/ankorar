@@ -45,7 +45,7 @@ export function LibraryMapsMosaic({
               href={getMapHref(map)}
               actionLabel={getMapActionLabel(map)}
               variant={variant}
-              density="compact"
+              density={variant === "embedded" ? "compact" : "regular"}
               showLike={getCanShowLike?.(map) ?? false}
               likesCount={map.likes_count}
               likedByMe={map.liked_by_me}
