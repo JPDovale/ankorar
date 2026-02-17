@@ -4,6 +4,7 @@ import { User } from "@/src/models/user/Users/User";
 
 declare module "fastify" {
   interface FastifyRequest {
+    rawBody?: Buffer;
     context: {
       user: User;
       member: Member;

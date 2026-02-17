@@ -7,7 +7,9 @@ import { validateUserUniqueEmail } from "./validateUserUniqueEmail";
 import { findUserByEmail } from "./fns/findUserByEmail";
 import { findUserByExtId } from "./fns/findUserByExtId";
 import { findUserById } from "./fns/findUserById";
+import { findUserByStripeCustomerId } from "./fns/findUserByStripeCustomerId";
 import { persistUser } from "./fns/persistUser";
+import { updateUserSubscriptionFields } from "./fns/updateUserSubscriptionFields";
 
 const Users = {
   create: createUser,
@@ -20,7 +22,9 @@ const Users = {
     findByEmail: findUserByEmail,
     findById: findUserById,
     findByExtId: findUserByExtId,
+    findByStripeCustomerId: findUserByStripeCustomerId,
     persist: persistUser,
+    updateSubscriptionFields: updateUserSubscriptionFields,
   },
 };
 

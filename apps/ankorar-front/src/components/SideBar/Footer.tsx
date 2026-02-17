@@ -4,16 +4,40 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useCurrentSubscription } from "@/hooks/useSubscription";
 import { useUser } from "@/hooks/useUser";
 import { getUserInitials } from "@/utils/getUserInitials";
-import { LoaderCircle, LogOut } from "lucide-react";
+import {
+  CreditCard,
+  LoaderCircle,
+  LogOut,
+  Settings,
+  Sparkles,
+} from "lucide-react";
+import { Link } from "react-router";
 import { toast } from "sonner";
+
+const SUBSCRIPTION_STATUS_LABEL: Record<string, string> = {
+  active: "Ativa",
+  trialing: "Teste",
+  past_due: "Pendente",
+  canceled: "Cancelada",
+};
 
 export function SideBarFooter() {
   const { user, logout, isLoggingOut } = useUser();
+  const { data: subscription, isLoading: isLoadingSubscription } =
+    useCurrentSubscription();
   const userName = user?.name || "Usuário";
   const userEmail = user?.email || "sem-email";
   const initials = getUserInitials(userName);
+
+  const hasPaidPlan =
+    subscription?.stripe_price_id && subscription?.subscription_status;
+  const subscriptionStatus = subscription?.subscription_status
+    ? SUBSCRIPTION_STATUS_LABEL[subscription.subscription_status] ??
+      subscription.subscription_status
+    : null;
 
   async function handleLogout() {
     const { success } = await logout();
@@ -49,20 +73,66 @@ export function SideBarFooter() {
           side="right"
           align="start"
           sideOffset={8}
-          className="w-36 p-1"
+          className="w-56 p-0"
         >
-          <Button
-            variant="ghost"
-            className="h-7 w-full justify-start gap-1.5 rounded-md px-1.5 text-[11px] text-red-600 hover:bg-red-50 hover:text-red-700"
-            onClick={handleLogout}
-            disabled={isLoggingOut}
-          >
-            {isLoggingOut && (
-              <LoaderCircle className="size-3 shrink-0 animate-spin" />
+          <div className="p-2">
+            <p className="truncate px-2 py-1 text-xs font-semibold text-zinc-900">
+              {userName}
+            </p>
+            <p className="truncate px-2 pb-2 text-[11px] text-zinc-500">
+              {userEmail}
+            </p>
+          </div>
+          <div className="border-t border-zinc-200/80">
+            <Link to="/settings">
+              <Button
+                variant="ghost"
+                className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-zinc-700 hover:bg-zinc-100"
+              >
+                <Settings className="size-4 shrink-0" />
+                Minha conta
+              </Button>
+            </Link>
+            {isLoadingSubscription ? (
+              <div className="flex h-8 items-center gap-2 px-3">
+                <LoaderCircle className="size-4 animate-spin text-zinc-400" />
+                <span className="text-[12px] text-zinc-500">Assinatura...</span>
+              </div>
+            ) : (
+              <Link to="/subscription">
+                <Button
+                  variant="ghost"
+                  className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-zinc-700 hover:bg-zinc-100"
+                >
+                  {hasPaidPlan ? (
+                    <CreditCard className="size-4 shrink-0 text-violet-500" />
+                  ) : (
+                    <Sparkles className="size-4 shrink-0 text-amber-500" />
+                  )}
+                  <span className="min-w-0 flex-1 truncate text-left">
+                    {hasPaidPlan
+                      ? `Assinatura ${subscriptionStatus ?? "ativa"}`
+                      : "Plano grátis • 5 mapas"}
+                  </span>
+                </Button>
+              </Link>
             )}
-            {!isLoggingOut && <LogOut className="size-3 shrink-0" />}
-            Sair
-          </Button>
+          </div>
+          <div className="border-t border-zinc-200/80 p-1">
+            <Button
+              variant="ghost"
+              className="h-8 w-full justify-start gap-2 rounded-md px-2 text-[13px] text-red-600 hover:bg-red-50 hover:text-red-700"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+            >
+              {isLoggingOut ? (
+                <LoaderCircle className="size-4 shrink-0 animate-spin" />
+              ) : (
+                <LogOut className="size-4 shrink-0" />
+              )}
+              Sair
+            </Button>
+          </div>
         </PopoverContent>
       </Popover>
     </div>

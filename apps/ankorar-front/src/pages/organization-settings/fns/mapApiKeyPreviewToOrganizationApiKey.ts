@@ -11,6 +11,10 @@ export function mapApiKeyPreviewToOrganizationApiKey(
   const wasNeverUsed = createdAt.isSame(lastUsedAt, "second");
 
   const partialKey = `ak_org_${apiKey.env}_${apiKey.prefix}_****`;
+  const expiresAt = apiKey.expires_at ?? null;
+  const expiresAtDate = expiresAt ? dayjs(expiresAt) : null;
+  const isExpired =
+    expiresAtDate !== null ? expiresAtDate.isBefore(dayjs()) : false;
 
   return {
     id: apiKey.id,
@@ -23,5 +27,10 @@ export function mapApiKeyPreviewToOrganizationApiKey(
     lastUsedAtLabel: wasNeverUsed
       ? "Nao usado"
       : `Ultimo uso ${lastUsedAt.fromNow()}`,
+    expiresAt,
+    expiresAtLabel: expiresAtDate
+      ? `Expira em ${expiresAtDate.format("DD/MM/YYYY")}`
+      : "Sem expiracao",
+    isExpired,
   };
 }

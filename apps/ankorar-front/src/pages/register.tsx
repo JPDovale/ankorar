@@ -189,7 +189,7 @@ export function RegisterPage() {
         </Button>
         <p className="text-center text-sm text-zinc-600 dark:text-zinc-300">
           Já possui conta?{" "}
-          <Link to="/" className="font-semibold text-violet-400 underline-offset-4 hover:underline dark:text-violet-300">
+          <Link to="/login" className="font-semibold text-violet-400 underline-offset-4 hover:underline dark:text-violet-300">
             Fazer login
           </Link>
         </p>

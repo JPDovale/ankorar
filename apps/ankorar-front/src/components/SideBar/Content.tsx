@@ -18,6 +18,7 @@ export function SideBarContent({
         showExpandControlWhenCollapsed={showExpandControlWhenCollapsed}
       />
       <SideBarNav links={links} />
+      <div className="min-h-0 flex-1" />
       <SideBarFooter />
     </div>
   );

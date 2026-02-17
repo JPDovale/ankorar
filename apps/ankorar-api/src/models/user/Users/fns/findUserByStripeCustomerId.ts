@@ -2,22 +2,20 @@ import { db } from "@/src/infra/database/pool";
 import { UserNotFound } from "@/src/infra/errors/UserNotFound";
 import { User } from "../User";
 
-type FindUserByEmailInput = {
-  email: string;
+type FindUserByStripeCustomerIdInput = {
+  stripeCustomerId: string;
 };
 
-type FindUserByEmailResponse = {
+type FindUserByStripeCustomerIdResponse = {
   user: User;
 };
 
-export async function findUserByEmail({
-  email,
-}: FindUserByEmailInput): Promise<FindUserByEmailResponse> {
-  const normalizedEmail = email.toLowerCase().trim();
-
+export async function findUserByStripeCustomerId({
+  stripeCustomerId,
+}: FindUserByStripeCustomerIdInput): Promise<FindUserByStripeCustomerIdResponse> {
   const userOnDb = await db.user.findFirst({
     where: {
-      email: normalizedEmail,
+      stripe_customer_id: stripeCustomerId,
       deleted_at: null,
     },
   });

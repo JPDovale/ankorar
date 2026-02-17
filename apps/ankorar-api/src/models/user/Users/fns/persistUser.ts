@@ -21,6 +21,10 @@ export async function persistUser({
     password: user.password,
     deleted_at: user.deleted_at,
     updated_at: user.updated_at,
+    stripe_customer_id: user.stripe_customer_id,
+    stripe_subscription_id: user.stripe_subscription_id,
+    stripe_price_id: user.stripe_price_id,
+    subscription_status: user.subscription_status,
   };
 
   if (user.isNewEntity) {

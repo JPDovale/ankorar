@@ -10,11 +10,23 @@ interface UserProps {
   created_at: Date;
   updated_at: Date | null;
   deleted_at: Date | null;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  stripe_price_id: string | null;
+  subscription_status: string | null;
 }
 
 export type CreateUserProps = Optional<
   UserProps,
-  "created_at" | "updated_at" | "deleted_at" | "password" | "ext_id"
+  | "created_at"
+  | "updated_at"
+  | "deleted_at"
+  | "password"
+  | "ext_id"
+  | "stripe_customer_id"
+  | "stripe_subscription_id"
+  | "stripe_price_id"
+  | "subscription_status"
 >;
 
 export class User extends Entity<UserProps> {
@@ -27,6 +39,10 @@ export class User extends Entity<UserProps> {
       created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       deleted_at: props.deleted_at ?? null,
+      stripe_customer_id: props.stripe_customer_id ?? null,
+      stripe_subscription_id: props.stripe_subscription_id ?? null,
+      stripe_price_id: props.stripe_price_id ?? null,
+      subscription_status: props.subscription_status ?? null,
     };
 
     const newUser = new User(userProps, id);
@@ -78,6 +94,28 @@ export class User extends Entity<UserProps> {
 
   get deleted_at() {
     return this.props.deleted_at;
+  }
+
+  get stripe_customer_id() {
+    return this.props.stripe_customer_id;
+  }
+
+  set stripe_customer_id(value: string | null | undefined) {
+    if (value === undefined) return;
+    this.props.stripe_customer_id = value;
+    this.touch();
+  }
+
+  get stripe_subscription_id() {
+    return this.props.stripe_subscription_id;
+  }
+
+  get stripe_price_id() {
+    return this.props.stripe_price_id;
+  }
+
+  get subscription_status() {
+    return this.props.subscription_status;
   }
 
   markAsDeleted() {

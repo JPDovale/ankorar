@@ -33,6 +33,10 @@ export async function findUserByExtId({
       password: userOnDb.password,
       created_at: userOnDb.created_at,
       updated_at: userOnDb.updated_at,
+      stripe_customer_id: userOnDb.stripe_customer_id,
+      stripe_subscription_id: userOnDb.stripe_subscription_id,
+      stripe_price_id: userOnDb.stripe_price_id,
+      subscription_status: userOnDb.subscription_status,
     },
     userOnDb.id,
   );

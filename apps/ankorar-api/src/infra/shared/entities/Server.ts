@@ -7,6 +7,7 @@ import ScalarApiReference, {
 } from "@scalar/fastify-api-reference";
 import type { FastifyRequest } from "fastify";
 import fastify from "fastify";
+import { Readable } from "stream";
 import {
   jsonSchemaTransform,
   serializerCompiler,
@@ -142,6 +143,20 @@ export class Server {
   ) {
     this.app.addHook("onRequest", async (request, reply) =>
       handler(request, reply),
+    );
+  }
+
+  addPreParsingHook(
+    handler: (
+      request: FastifyRequest,
+      payload: Readable,
+      done: (err: Error | null, stream?: Readable) => void,
+    ) => void,
+  ) {
+    this.app.addHook(
+      "preParsing",
+      (request, _reply, payload: import("stream").Readable, done) =>
+        handler(request, payload as Readable, done),
     );
   }
 
