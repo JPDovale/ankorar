@@ -67,7 +67,7 @@ export function CentalNode({ node, className }: CentalNodeProps) {
         >
           <span
             ref={textRef}
-            className="whitespace-pre outline-none"
+            className="whitespace-pre outline-none leading-none"
             contentEditable={!readOnly && editingNodeId === node.id}
             suppressContentEditableWarning
             onMouseDown={(event) => {

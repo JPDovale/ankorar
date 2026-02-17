@@ -244,10 +244,7 @@ export function getNodesBounds(nodes: MindMapNode[]): {
 }
 
 export function Segments({ nodes, className }: SegmentsProps) {
-  const segmentLines = useMemo(
-    () => getSegmentLines(nodes),
-    [nodes],
-  );
+  const segmentLines = useMemo(() => getSegmentLines(nodes), [nodes]);
 
   return (
     <svg

@@ -76,7 +76,7 @@ export function DefaultNode({ node, className }: DefaultNodeProps) {
         >
           <span
             ref={textRef}
-            className="inline-block whitespace-pre outline-none"
+            className="inline-block whitespace-pre outline-none leading-none"
             contentEditable={!readOnly && editingNodeId === node.id}
             suppressContentEditableWarning
             onMouseDown={(event) => {

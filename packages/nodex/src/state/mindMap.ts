@@ -151,17 +151,17 @@ const layoutNodes = (nodes: MindMapNode[]) => {
     }
 
     const visibleChildren = sortBySequence(
-      node.childrens.filter((child) => child.isVisible)
+      node.childrens.filter((child) => child.isVisible),
     );
 
     if (node.type === "central") {
       const orderedChildren = visibleChildren;
       const childrenHeights = orderedChildren.map((child) =>
-        getSubtreeHeight(child)
+        getSubtreeHeight(child),
       );
       const { left, right } = splitChildrenByCount(
         orderedChildren,
-        childrenHeights
+        childrenHeights,
       );
       const leftHeight =
         left.reduce((sum, item) => sum + item.height, 0) +
@@ -175,7 +175,7 @@ const layoutNodes = (nodes: MindMapNode[]) => {
     }
 
     const childrenHeights = visibleChildren.map((child) =>
-      getSubtreeHeight(child)
+      getSubtreeHeight(child),
     );
     const totalHeight =
       childrenHeights.reduce((sum, height) => sum + height, 0) +
@@ -187,7 +187,7 @@ const layoutNodes = (nodes: MindMapNode[]) => {
 
   const splitChildrenByCount = (
     children: MindMapNode[],
-    heights: number[]
+    heights: number[],
   ): {
     left: Array<{ node: MindMapNode; height: number }>;
     right: Array<{ node: MindMapNode; height: number }>;
@@ -205,14 +205,14 @@ const layoutNodes = (nodes: MindMapNode[]) => {
 
   const layoutFrom = (
     parent: MindMapNode,
-    sideHint: "left" | "right" = "right"
+    sideHint: "left" | "right" = "right",
   ) => {
     if (visited.has(parent.id)) {
       return;
     }
     visited.add(parent.id);
     const children = sortBySequence(
-      parent.childrens.filter((child) => child.isVisible)
+      parent.childrens.filter((child) => child.isVisible),
     );
     if (children.length === 0) {
       return;
@@ -226,7 +226,7 @@ const layoutNodes = (nodes: MindMapNode[]) => {
 
       const layoutColumn = (
         column: Array<{ node: MindMapNode; height: number }>,
-        side: "left" | "right"
+        side: "left" | "right",
       ) => {
         if (column.length === 0) {
           return;
@@ -289,7 +289,7 @@ const layoutNodes = (nodes: MindMapNode[]) => {
 const updateVisibilityTree = (
   items: MindMapNode[],
   updater: (node: MindMapNode, parent?: MindMapNode) => boolean,
-  parent?: MindMapNode
+  parent?: MindMapNode,
 ): MindMapNode[] =>
   items.map((node) => {
     const isVisible = updater(node, parent);
@@ -302,7 +302,7 @@ const updateVisibilityTree = (
 
 const removeNodeTree = (
   items: MindMapNode[],
-  nodeId: string
+  nodeId: string,
 ): MindMapNode[] => {
   let changed = false;
   const nextItems = items
@@ -451,7 +451,7 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
   },
   setHelpOpen: (nextValue) => {
     set((state) =>
-      state.helpOpen === nextValue ? state : { helpOpen: nextValue }
+      state.helpOpen === nextValue ? state : { helpOpen: nextValue },
     );
   },
   removeNode: (nodeId) => {
@@ -570,7 +570,7 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
 
     const updater = (
       nodes: MindMapNode[],
-      node: MindMapNode
+      node: MindMapNode,
     ): MindMapNode[] => {
       return nodes.map((n) => {
         const nextNode = n.id === node.id ? node : n;

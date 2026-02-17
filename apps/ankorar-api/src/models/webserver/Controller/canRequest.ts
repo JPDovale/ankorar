@@ -10,10 +10,7 @@ type CanRequestResponse = (
 ) => void;
 
 export function canRequest(feature: CanRequestInput): CanRequestResponse {
-  return function canRequestHook(
-    request: FastifyRequest,
-    _reply: FastifyReply,
-  ) {
+  return function canRequestHook(request: FastifyRequest) {
     const { Auth } = authModule;
     const user = request.context.user;
     const member = request.context.member;

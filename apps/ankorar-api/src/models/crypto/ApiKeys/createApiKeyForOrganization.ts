@@ -4,6 +4,7 @@ import { createApiKey } from "./createApiKey";
 import { generateSecret } from "./fns/generateSecret";
 import { hashSecret } from "./fns/hashSecret";
 import { generateUniquePrefix } from "./fns/generateUniquePrefix";
+import { availableFeatures } from "../../auth/Auth/fns/availableFeatures";
 
 type CreateApiKeyForOrganizationInput = {
   organization: Organization;
@@ -27,7 +28,7 @@ export async function createApiKeyForOrganization({
     organization_id: organization.id,
     prefix,
     secret: hashedSecret,
-    features: ["create:user:other"],
+    features: availableFeatures,
     expires_at: expires_at ?? null,
   });
 
