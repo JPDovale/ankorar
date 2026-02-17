@@ -1,4 +1,5 @@
 import { createMapForMemberRoute } from "../controllers/map/createMapForMember";
+import { createMapFromAiRoute } from "../controllers/map/createMapFromAi";
 import { createMapRoute } from "../controllers/map/createMap";
 import { deleteMapForMemberRoute } from "../controllers/map/deleteMapForMember";
 import { deleteMapRoute } from "../controllers/map/deleteMap";
@@ -20,6 +21,7 @@ const mapController = Controller.create({
 });
 
 mapController.appendRoute(createMapRoute);
+mapController.appendRoute(createMapFromAiRoute);
 mapController.appendRoute(createMapForMemberRoute);
 mapController.appendRoute(listMapsRoute);
 mapController.appendRoute(getMapRoute);

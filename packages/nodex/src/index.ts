@@ -1,4 +1,8 @@
-export { useMindMapState } from "./state/mindMap";
+export {
+  useMindMapState,
+  layoutMindMapNodes,
+  wrapTextAtWords,
+} from "./state/mindMap";
 export {
   useMindMapHistory,
   createMindMapSnapshot,

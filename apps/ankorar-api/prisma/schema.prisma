@@ -101,13 +101,14 @@ model Member {
 }
 
 model Map {
-  id         String    @id @unique
-  title      String
-  content    Json
-  preview    String?   @db.Text
-  created_at DateTime
-  updated_at DateTime?
-  deleted_at DateTime?
+  id              String    @id @unique
+  title           String
+  content         Json
+  preview         String?   @db.Text
+  generated_by_ai Boolean   @default(false)
+  created_at      DateTime
+  updated_at      DateTime?
+  deleted_at      DateTime?
 
   member    Member       @relation(fields: [member_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   member_id String

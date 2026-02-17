@@ -6,9 +6,13 @@ export function HomePageHeader() {
     handleCreateMap,
     handleCreatePopoverOpenChange,
     handleMapTitleChange,
+    handleMapDescriptionChange,
+    handleGenerateWithAiChange,
     isCreatePopoverOpen,
     isCreatingMap,
     mapTitle,
+    mapDescription,
+    generateWithAi,
     mapsSummaryText,
   } = useHomePageHeader();
 
@@ -26,7 +30,11 @@ export function HomePageHeader() {
           isOpen={isCreatePopoverOpen}
           onOpenChange={handleCreatePopoverOpenChange}
           mapTitle={mapTitle}
+          mapDescription={mapDescription}
+          generateWithAi={generateWithAi}
           onMapTitleChange={handleMapTitleChange}
+          onMapDescriptionChange={handleMapDescriptionChange}
+          onGenerateWithAiChange={handleGenerateWithAiChange}
           onCreateMap={handleCreateMap}
           isCreatingMap={isCreatingMap}
         />

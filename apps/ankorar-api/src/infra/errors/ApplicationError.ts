@@ -4,11 +4,14 @@ export interface ApplicationErrorProps {
   action?: string;
   message?: string;
   statusCode?: number;
+  /** Extra data for server logs only (not sent to client in toJson). */
+  details?: unknown;
 }
 
 export class ApplicationError extends Error {
   statusCode: number;
   action: string;
+  details?: unknown;
 
   constructor({
     message,
@@ -16,14 +19,16 @@ export class ApplicationError extends Error {
     cause,
     action,
     name,
+    details,
   }: ApplicationErrorProps) {
     super(message ?? `Application error: ${cause}`, {
-      cause: new Error(cause),
+      cause: cause != null ? new Error(cause) : undefined,
     });
 
     this.name = name ?? this.constructor.name;
     this.statusCode = statusCode ?? 500;
     this.action = action ?? "Please contact support.";
+    this.details = details;
   }
 
   toJson() {

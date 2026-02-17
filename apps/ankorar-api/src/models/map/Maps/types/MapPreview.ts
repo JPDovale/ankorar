@@ -7,6 +7,7 @@ export type MapPreviewProps = {
   updated_at: Date | null;
   likes_count: number;
   preview: string | null;
+  generated_by_ai: boolean;
 };
 
 export class MapPreview extends ValueObject<MapPreviewProps> {
@@ -36,5 +37,9 @@ export class MapPreview extends ValueObject<MapPreviewProps> {
 
   get preview() {
     return this.props.preview;
+  }
+
+  get generated_by_ai() {
+    return this.props.generated_by_ai;
   }
 }

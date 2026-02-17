@@ -241,28 +241,63 @@ export class Server {
   }
 
   private registerDefaultErrorHandler() {
-    this.app.setErrorHandler((err, _request, reply) => {
+    this.app.setErrorHandler((err, request, reply) => {
+      const isDev =
+        process.env.NODE_ENV !== "production" &&
+        process.env.NODE_ENV !== "staging";
+
       if (err instanceof ApplicationError) {
+        const logPayload = {
+          name: err.name,
+          statusCode: err.statusCode,
+          message: err.message,
+          cause: err.cause,
+          ...(err.details != null && { details: err.details }),
+        };
+        request.log.error(logPayload, "ApplicationError");
+        // Garante que o erro apareça no terminal (request.log pode não estar visível)
+        const causeStr =
+          err.cause instanceof Error ? err.cause.message : String(err.cause ?? "");
+        console.error("\n[ERROR]", err.name, err.statusCode, err.message);
+        console.error("  cause:", causeStr);
+        if (err.details != null) {
+          console.error("  details:", JSON.stringify(err.details, null, 2));
+        }
+        console.error("");
+
+        const errorBody = err.toJson();
+        if (isDev && (err.statusCode === 502 || err.statusCode === 422)) {
+          const causeDesc =
+            err.cause instanceof Error ? err.cause.message : String(err.cause ?? "");
+          (errorBody as Record<string, unknown>).cause = causeDesc;
+          if (err.details != null) {
+            (errorBody as Record<string, unknown>).details = err.details;
+          }
+        }
+
         return reply.status(err.statusCode).send({
           status: err.statusCode,
-          error: err.toJson(),
+          error: errorBody,
         });
       }
 
       if (err instanceof Error) {
-        console.error(err);
-
+        request.log.error({ err, message: err.message }, "Unhandled Error");
+        console.error("\n[ERROR] Unhandled Error:", err.message);
+        console.error(err.stack ?? err);
+        console.error("");
         const internalError = new InternalServerError({
           cause: err.message,
         });
-
         return reply.status(internalError.statusCode).send({
           status: internalError.statusCode,
           error: internalError.toJson(),
         });
       }
 
-      console.error(err);
+      request.log.error({ err }, "Unknown error");
+      console.error("\n[ERROR] Unknown:", err);
+      console.error("");
       return reply.send(err);
     });
   }

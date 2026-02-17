@@ -7,6 +7,7 @@ export interface MapPreview {
   updated_at: string | null;
   likes_count: number;
   preview?: string | null;
+  generated_by_ai: boolean;
 }
 
 interface ListMapsRequestData {

@@ -973,6 +973,10 @@
     -webkit-user-select: none;
     user-select: none;
   }
+  .select-text {
+    -webkit-user-select: text;
+    user-select: text;
+  }
   .last\:border-none {
     &:last-child {
       --tw-border-style: none;

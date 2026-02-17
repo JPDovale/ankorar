@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { HomeConnectMapToLibraryDialog } from "@/pages/home/components/HomeConnectMapToLibraryDialog";
 import { HomeDeleteMapDialog } from "@/pages/home/components/HomeDeleteMapDialog";
 import { HomeMapCard } from "@/pages/home/components/HomeMapCard";
+import { HomePendingAiMapCard } from "@/pages/home/components/HomePendingAiMapCard";
 import { useHomeMapsSection } from "@/pages/home/hooks/useHomeMapsSection";
 import { MapPlus } from "lucide-react";
 
@@ -23,10 +24,11 @@ export function HomeMapsSection() {
     mapPendingDeletion,
     mapPendingLibraryConnection,
     maps,
+    pendingAiMap,
     selectedLibraryId,
     setSelectedLibraryId,
   } = useHomeMapsSection();
-  const isEmptyState = maps.length === 0;
+  const isEmptyState = maps.length === 0 && !pendingAiMap;
 
   return (
     <>
@@ -59,6 +61,9 @@ export function HomeMapsSection() {
 
       {!isEmptyState && (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {pendingAiMap && (
+            <HomePendingAiMapCard key="pending-ai" pending={pendingAiMap} />
+          )}
           {maps.map((map) => (
             <HomeMapCard
               key={map.id}

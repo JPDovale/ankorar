@@ -49,10 +49,14 @@ export function CentalNode({ node, className }: CentalNodeProps) {
         <div
           data-bold={node.style.isBold}
           data-italic={node.style.isItalic}
-          className="flex items-center justify-center rounded-full border border-slate-300 bg-white text-slate-900 shadow-sm data-[bold=true]:font-bold data-[italic=true]:italic"
+          className={cn(
+            "flex items-center justify-center rounded-full border border-slate-300 bg-white text-slate-900 shadow-sm data-[bold=true]:font-bold data-[italic=true]:italic",
+            editingNodeId === node.id ? "select-text" : "select-none",
+          )}
           style={{
             width: node.style.w,
             height: node.style.h,
+            padding: `${node.style.padding.y}px ${node.style.padding.x}px`,
             borderColor: node.style.color,
             fontSize: node.style.fontSize,
             color: node.style.textColor,

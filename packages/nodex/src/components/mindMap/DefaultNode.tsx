@@ -55,12 +55,16 @@ export function DefaultNode({ node, className }: DefaultNodeProps) {
         style={{ padding: node.style.wrapperPadding }}
       >
         <div
-          className="rounded-xl px-3 py-2 text-slate-900 data-[bold=true]:font-semibold data-[italic=true]:italic"
+          className={cn(
+            "flex items-center justify-center rounded-xl text-slate-900 data-[bold=true]:font-semibold data-[italic=true]:italic",
+            editingNodeId === node.id ? "select-text" : "select-none",
+          )}
           data-bold={node.style.isBold}
           data-italic={node.style.isItalic}
           style={{
             width: node.style.w,
             height: node.style.h,
+            padding: `${node.style.padding.y}px ${node.style.padding.x}px`,
             borderColor: node.style.color,
             fontSize: node.style.fontSize,
             color: node.style.textColor,

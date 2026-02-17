@@ -16,6 +16,7 @@ export interface LibraryMapPreview {
   likes_count: number;
   liked_by_me: boolean;
   preview?: string | null;
+  generated_by_ai: boolean;
 }
 
 interface ListLibrariesRequestData {

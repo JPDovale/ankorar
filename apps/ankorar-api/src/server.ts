@@ -15,6 +15,7 @@ import { DateModule } from "./models/date/DateModule";
 import { EmailModule } from "./models/email/EmailModule";
 import { LibraryModule } from "./models/library/LibraryModule";
 import { MapModule } from "./models/map/MapModule";
+import { OpenAiModule } from "./models/openai/OpenAiModule";
 import { OrganizationModule } from "./models/organization/OrganizationModule";
 import { SessionModule } from "./models/session/SessionModule";
 import { StripeModule } from "./models/stripe/StripeModule";
@@ -45,6 +46,7 @@ export function createServerInstance(
   server.appendModule(DateModule);
   server.appendModule(EmailModule);
   server.appendModule(StripeModule);
+  server.appendModule(OpenAiModule);
 
   const { Controller, Webserver } = server.modules.webserver;
   server.setOrigin(Webserver.origin);

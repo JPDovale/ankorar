@@ -11,6 +11,7 @@ interface MapProps {
   title: string;
   content: JsonValue[];
   preview: string | null;
+  generated_by_ai: boolean;
   created_at: Date;
   updated_at: Date | null;
   deleted_at: Date | null;
@@ -18,7 +19,7 @@ interface MapProps {
 
 export type CreateMapProps = Optional<
   MapProps,
-  "content" | "preview" | "created_at" | "updated_at" | "deleted_at"
+  "content" | "preview" | "generated_by_ai" | "created_at" | "updated_at" | "deleted_at"
 >;
 
 export class Map extends Entity<MapProps> {
@@ -28,6 +29,7 @@ export class Map extends Entity<MapProps> {
       title: props.title.trim(),
       content: props.content ?? [],
       preview: props.preview ?? null,
+      generated_by_ai: props.generated_by_ai ?? false,
       created_at: props.created_at ?? dateModule.Date.nowUtcDate(),
       updated_at: props.updated_at ?? null,
       deleted_at: props.deleted_at ?? null,
@@ -67,6 +69,10 @@ export class Map extends Entity<MapProps> {
   set preview(preview: string | null) {
     this.props.preview = preview;
     this.touch();
+  }
+
+  get generated_by_ai() {
+    return this.props.generated_by_ai;
   }
 
   get created_at() {

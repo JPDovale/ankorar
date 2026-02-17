@@ -31,6 +31,9 @@ export function useMindMapDebounce(
     }
     timeoutRef.current = window.setTimeout(() => {
       const nextNodes = latestNodesRef.current;
+      if (nextNodes.length === 0) {
+        return;
+      }
       const previewDataUrl = getMindMapPreviewDataUrl(nextNodes);
       callbackRef.current(nextNodes, previewDataUrl);
     }, delayMs);

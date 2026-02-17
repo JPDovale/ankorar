@@ -81,12 +81,41 @@ const getTextMeasureContext = () => {
   return textMeasureContext;
 };
 
+/** Insere quebras de linha a cada `wordsPerLine` palavras para medição e exibição consistente. */
+export function wrapTextAtWords(
+  text: string,
+  wordsPerLine: number,
+): string {
+  if (!text.trim()) return text;
+  const limit = Math.max(1, Math.round(wordsPerLine));
+  const segments = text.split("\n");
+  const out: string[] = [];
+  for (const segment of segments) {
+    const words = segment.split(/\s+/).filter(Boolean);
+    if (words.length <= limit) {
+      out.push(segment);
+      continue;
+    }
+    for (let i = 0; i < words.length; i += limit) {
+      const chunk = words.slice(i, i + limit).join(" ");
+      if (chunk) out.push(chunk);
+    }
+  }
+  return out.join("\n");
+}
+
 const getNodeFontWeight = (node: MindMapNode) => {
   if (!node.style.isBold) {
     return 400;
   }
   return node.type === "central" ? 700 : 600;
 };
+
+/**
+ * Line-height multiplier matching CSS `leading-none` (line-height: 1).
+ * The slight extra (1.15) accounts for descenders / ascenders not covered by em-square.
+ */
+const LINE_HEIGHT_FACTOR = 1.15;
 
 const measureNodeText = (node: MindMapNode) => {
   const context = getTextMeasureContext();
@@ -104,17 +133,22 @@ const measureNodeText = (node: MindMapNode) => {
   const lines = (node.text ?? "").split("\n");
   let maxWidth = 0;
   for (const line of lines) {
-    const width = context.measureText(line).width;
+    const metrics = context.measureText(line);
+    const width =
+      metrics.actualBoundingBoxLeft !== undefined
+        ? metrics.actualBoundingBoxLeft + metrics.actualBoundingBoxRight
+        : metrics.width;
     if (width > maxWidth) {
       maxWidth = width;
     }
   }
 
-  const lineHeight = Math.ceil(node.style.fontSize * 1.5);
+  const lineHeight = Math.ceil(node.style.fontSize * LINE_HEIGHT_FACTOR);
+  const textH = lineHeight * Math.max(1, lines.length);
 
   return {
     w: Math.ceil(maxWidth),
-    h: Math.ceil(lineHeight * Math.max(1, lines.length)),
+    h: Math.ceil(textH),
   };
 };
 const cloneNodes = (nodes: MindMapNode[]): MindMapNode[] =>
@@ -126,6 +160,64 @@ const cloneNodes = (nodes: MindMapNode[]): MindMapNode[] =>
     isVisible: node.isVisible,
     childrens: cloneNodes(node.childrens),
   }));
+
+const PLACEHOLDER_W = 120;
+const PLACEHOLDER_H = 40;
+
+function getDefaultStyleForType(
+  type: "central" | "default",
+): MindMapNodeStyle {
+  if (type === "central") {
+    return {
+      w: PLACEHOLDER_W,
+      h: PLACEHOLDER_H,
+      color: "hsl(220, 70%, 50%)",
+      wrapperPadding: 4,
+      isBold: true,
+      isItalic: false,
+      fontSize: 24,
+      textColor: "#0f172a",
+      backgroundColor: "transparent",
+      textAlign: "left",
+      padding: { x: 24, y: 12 },
+    };
+  }
+  return {
+    w: PLACEHOLDER_W,
+    h: PLACEHOLDER_H,
+    color: "hsl(220, 70%, 50%)",
+    wrapperPadding: 32,
+    isBold: false,
+    isItalic: false,
+    fontSize: 14,
+    textColor: "#0f172a",
+    backgroundColor: "transparent",
+    textAlign: "left",
+    padding: { x: 12, y: 8 },
+  };
+}
+
+function mergeMinimalStyle(nodes: MindMapNode[]): MindMapNode[] {
+  const roots = cloneNodes(nodes);
+  const walk = (items: MindMapNode[]) => {
+    for (const node of items) {
+      if (node.type !== "image") {
+        const defaults = getDefaultStyleForType(node.type);
+        node.style = {
+          ...defaults,
+          ...node.style,
+          padding:
+            node.style.padding != null
+              ? { ...defaults.padding, ...node.style.padding }
+              : defaults.padding,
+        };
+      }
+      walk(node.childrens);
+    }
+  };
+  walk(roots);
+  return roots;
+}
 
 const layoutNodes = (nodes: MindMapNode[]) => {
   const roots = cloneNodes(nodes);
@@ -285,6 +377,43 @@ const layoutNodes = (nodes: MindMapNode[]) => {
 
   return roots;
 };
+
+/** Words per line used for automatic text wrapping (break at the 5th word). */
+const WRAP_WORDS_PER_LINE = 5;
+
+function applyMeasuredDimensionsToNode(node: MindMapNode): void {
+  if (node.type === "image") {
+    return;
+  }
+  node.text = wrapTextAtWords(node.text ?? "", WRAP_WORDS_PER_LINE);
+  const textSize = measureNodeText(node);
+  const padding = node.style.padding;
+  node.style.w = Math.max(8, textSize.w + padding.x * 2);
+  node.style.h = Math.max(8, textSize.h + padding.y * 2);
+}
+
+function applyMeasuredDimensions(nodes: MindMapNode[]): MindMapNode[] {
+  const roots = cloneNodes(nodes);
+  const walk = (items: MindMapNode[]) => {
+    for (const node of items) {
+      applyMeasuredDimensionsToNode(node);
+      walk(node.childrens);
+    }
+  };
+  walk(roots);
+  return roots;
+}
+
+/**
+ * Hydrates minimal nodes (e.g. from API: only style.color / style.backgroundColor),
+ * then applies text-based dimensions (w/h) and layout (positions).
+ * Nodex controls all styling and layout when content opens; no style treatment on backend.
+ */
+export function layoutMindMapNodes(nodes: MindMapNode[]): MindMapNode[] {
+  const withDefaults = mergeMinimalStyle(nodes);
+  const measured = applyMeasuredDimensions(withDefaults);
+  return layoutNodes(measured);
+}
 
 const updateVisibilityTree = (
   items: MindMapNode[],
@@ -551,21 +680,13 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
       return;
     }
 
-    const { nodes, scale } = get();
+    const { nodes } = get();
 
     if (node.type !== "image") {
-      const padding = node.style.padding;
       const textSize = measureNodeText(node);
-      const measuredRect = {
-        width: textSize.w * scale,
-        height: textSize.h * scale,
-      };
-      const nextSize = {
-        w: Math.max(8, Math.ceil(measuredRect.width / scale + padding.x)),
-        h: Math.max(8, Math.ceil(measuredRect.height / scale + padding.y)),
-      };
-      node.style.w = nextSize.w;
-      node.style.h = nextSize.h;
+      const padding = node.style.padding;
+      node.style.w = Math.max(8, textSize.w + padding.x * 2);
+      node.style.h = Math.max(8, textSize.h + padding.y * 2);
     }
 
     const updater = (
@@ -597,7 +718,7 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
       style: {
         w: 91,
         h: 36,
-        padding: { x: 24, y: 16 },
+        padding: { x: 12, y: 8 },
         color: node.type === "central" ? randomColor() : node.style.color,
         wrapperPadding: 32,
         isBold: false,

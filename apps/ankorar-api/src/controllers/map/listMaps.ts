@@ -27,6 +27,7 @@ export const listMapsRoute = Route.create({
           updated_at: map.updated_at,
           likes_count: map.likes_count,
           preview: map.preview,
+          generated_by_ai: map.generated_by_ai,
         })),
       },
     });

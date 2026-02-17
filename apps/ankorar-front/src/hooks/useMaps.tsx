@@ -8,6 +8,10 @@ import {
 import { librariesQueryKey } from "@/hooks/useLibraries";
 import { connectMapToLibraryRequest } from "@/services/libraries/connectMapToLibraryRequest";
 import {
+  createMapFromAiRequest,
+  type CreateMapFromAiRequestBody,
+} from "@/services/maps/createMapFromAiRequest";
+import {
   createMapRequest,
   type CreateMapRequestBody,
 } from "@/services/maps/createMapRequest";
@@ -22,6 +26,11 @@ export const mapsQueryKey = ["maps"] as const;
 
 interface CreateMapMutationResult {
   success: boolean;
+}
+
+interface CreateMapFromAiMutationResult {
+  success: boolean;
+  map_id?: string;
 }
 
 interface DeleteMapMutationResult {
@@ -66,6 +75,36 @@ async function createMapMutationFn(
 
   return {
     success: true,
+  };
+}
+
+async function createMapFromAiMutationFn(
+  payload: CreateMapFromAiRequestBody,
+): Promise<CreateMapFromAiMutationResult> {
+  const response = await createMapFromAiRequest(payload);
+
+  if (response.status !== 201) {
+    toast.error(
+      response.error?.message ?? "Não foi possível gerar o mapa com IA.",
+      {
+        action: response.error?.action,
+      },
+    );
+
+    return {
+      success: false,
+    };
+  }
+
+  const mapId = response.data?.map_id;
+  if (!mapId) {
+    toast.error("Resposta inválida ao criar mapa.");
+    return { success: false };
+  }
+
+  return {
+    success: true,
+    map_id: mapId,
   };
 }
 
@@ -185,6 +224,17 @@ export function useMaps() {
     },
   });
 
+  const createMapFromAiMutation = useMutation({
+    mutationFn: createMapFromAiMutationFn,
+    onSuccess: (result) => {
+      if (result.success) {
+        queryClient.invalidateQueries({
+          queryKey: mapsQueryKey,
+        });
+      }
+    },
+  });
+
   const createMap = useCallback(
     async (payload: CreateMapRequestBody): Promise<CreateMapMutationResult> => {
       return createMapMutation.mutateAsync(payload).catch((error) => {
@@ -228,14 +278,31 @@ export function useMaps() {
     [connectMapToLibraryMutation],
   );
 
+  const createMapFromAi = useCallback(
+    async (
+      payload: CreateMapFromAiRequestBody,
+    ): Promise<CreateMapFromAiMutationResult> => {
+      return createMapFromAiMutation.mutateAsync(payload).catch((error) => {
+        toast.error(extractUnexpectedErrorMessage(error));
+
+        return {
+          success: false,
+        };
+      });
+    },
+    [createMapFromAiMutation],
+  );
+
   return {
     maps: mapsQuery.data ?? [],
     isLoadingMaps: mapsQuery.isPending,
     refetchMaps: mapsQuery.refetch,
     createMap,
+    createMapFromAi,
     deleteMap,
     connectMapToLibrary,
     isCreatingMap: createMapMutation.isPending,
+    isCreatingMapFromAi: createMapFromAiMutation.isPending,
     isDeletingMap: deleteMapMutation.isPending,
     isConnectingMapToLibrary: connectMapToLibraryMutation.isPending,
   };

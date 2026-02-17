@@ -1,6 +1,7 @@
 import { useMap } from "@/hooks/useMap";
 import {
   clearMindMapHistory,
+  layoutMindMapNodes,
   type MindMapNode,
   type MindMapSaveStatus,
   useMindMapDebounce,
@@ -85,6 +86,9 @@ export function useMapEditorPage() {
       if (!mapId || !map || isReadOnly) {
         return;
       }
+      if (nextNodes.length === 0) {
+        return;
+      }
 
       const serializedNodes = JSON.stringify(nextNodes);
 
@@ -117,11 +121,12 @@ export function useMapEditorPage() {
       return;
     }
 
-    const mapNodes = getNodesFromContent(map.content);
+    const rawNodes = getNodesFromContent(map.content);
+    const mapNodes = layoutMindMapNodes(rawNodes);
     clearMindMapHistory();
 
     useMindMapState.setState({
-      nodes: JSON.parse(JSON.stringify(mapNodes)) as MindMapNode[],
+      nodes: mapNodes,
       offset: {
         x: initialMindMapState.offset.x,
         y: initialMindMapState.offset.y,

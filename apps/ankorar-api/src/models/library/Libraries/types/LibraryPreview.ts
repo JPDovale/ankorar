@@ -8,6 +8,7 @@ export type LibraryPreviewMapItem = {
   likes_count: number;
   liked_by_me: boolean;
   preview: string | null;
+  generated_by_ai: boolean;
 };
 
 export type LibraryPreviewProps = {

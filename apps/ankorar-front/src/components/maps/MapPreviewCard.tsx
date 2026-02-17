@@ -1,6 +1,6 @@
 import { MapLikeButton } from "@/components/maps/MapLikeButton";
 import { buildMapLastActivityLabel } from "@/utils/buildMapLastActivityLabel";
-import { CalendarClock, Heart, Map, Sparkles } from "lucide-react";
+import { CalendarClock, Heart, Map, Sparkles, UserPen } from "lucide-react";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router";
 
@@ -13,6 +13,7 @@ interface MapPreviewCardMap {
   created_at: string;
   updated_at: string | null;
   preview?: string | null;
+  generated_by_ai?: boolean;
 }
 
 interface MapPreviewCardProps {
@@ -40,6 +41,13 @@ export function MapPreviewCard({
 }: MapPreviewCardProps) {
   const navigate = useNavigate();
   const mapLastActivityLabel = buildMapLastActivityLabel(map);
+  const hasHumanIntervention =
+    map.updated_at != null &&
+    map.created_at != null &&
+    new Date(map.updated_at).getTime() > new Date(map.created_at).getTime();
+  const generatedByAi = map.generated_by_ai ?? false;
+  const isAiOnly = generatedByAi && !hasHumanIntervention;
+  const isAiWithHumanIntervention = generatedByAi && hasHumanIntervention;
   const canShowLike =
     showLike &&
     typeof likesCount === "number" &&
@@ -89,8 +97,27 @@ export function MapPreviewCard({
           <span className="size-2 rounded-full bg-amber-400/80 shadow-sm" />
           <span className="size-2 rounded-full bg-emerald-400/70 shadow-sm" />
         </div>
-        <div className="absolute right-3 top-3 inline-flex size-7 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-zinc-200/50">
-          <Sparkles className="size-3.5 text-zinc-500" />
+        <div
+          className="absolute right-3 top-3 flex items-center justify-center gap-1.5"
+          title={
+            isAiOnly
+              ? "Gerado por IA"
+              : isAiWithHumanIntervention
+                ? "Gerado por IA e editado"
+                : "Editado com intervenção humana"
+          }
+          aria-hidden
+        >
+          {(isAiOnly || isAiWithHumanIntervention) && (
+            <span className="inline-flex size-7 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-zinc-200/50">
+              <Sparkles className="size-3.5 text-zinc-500" />
+            </span>
+          )}
+          {(hasHumanIntervention || !generatedByAi) && (
+            <span className="inline-flex size-7 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-zinc-200/50">
+              <UserPen className="size-3.5 text-zinc-500" />
+            </span>
+          )}
         </div>
       </div>
 

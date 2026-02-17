@@ -12,6 +12,7 @@ export const listMapsResponses = {
           updated_at: z.date().nullable(),
           likes_count: z.number().int().min(0),
           preview: z.string().nullable(),
+          generated_by_ai: z.boolean(),
         }),
       ),
     }),

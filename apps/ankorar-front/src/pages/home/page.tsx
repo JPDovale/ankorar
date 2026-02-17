@@ -4,22 +4,25 @@ import { HomeOrganizationLibrariesSection } from "@/pages/home/components/HomeOr
 import { HomeOrganizationLibrariesSectionSkeleton } from "@/pages/home/components/HomeOrganizationLibrariesSectionSkeleton";
 import { HomePageHeader } from "@/pages/home/components/HomePageHeader";
 import { HomePageHeaderSkeleton } from "@/pages/home/components/HomePageHeaderSkeleton";
+import { HomePendingAiMapProvider } from "@/pages/home/context/HomePendingAiMapContext";
 import { Suspense } from "react";
 
 export function HomePage() {
   return (
-    <section className="space-y-6">
-      <Suspense fallback={<HomePageHeaderSkeleton />}>
-        <HomePageHeader />
-      </Suspense>
+    <HomePendingAiMapProvider>
+      <section className="space-y-6">
+        <Suspense fallback={<HomePageHeaderSkeleton />}>
+          <HomePageHeader />
+        </Suspense>
 
-      <Suspense fallback={<HomeMapsSectionSkeleton />}>
-        <HomeMapsSection />
-      </Suspense>
+        <Suspense fallback={<HomeMapsSectionSkeleton />}>
+          <HomeMapsSection />
+        </Suspense>
 
-      <Suspense fallback={<HomeOrganizationLibrariesSectionSkeleton />}>
-        <HomeOrganizationLibrariesSection />
-      </Suspense>
-    </section>
+        <Suspense fallback={<HomeOrganizationLibrariesSectionSkeleton />}>
+          <HomeOrganizationLibrariesSection />
+        </Suspense>
+      </section>
+    </HomePendingAiMapProvider>
   );
 }

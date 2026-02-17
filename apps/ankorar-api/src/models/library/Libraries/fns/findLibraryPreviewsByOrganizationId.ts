@@ -40,6 +40,7 @@ export async function findLibraryPreviewsByOrganizationId({
         likes_count: info.likes_count,
         liked_by_me: info.liked_by_me,
         preview: map.preview,
+        generated_by_ai: map.generated_by_ai,
       };
     });
     return LibraryPreview.create({

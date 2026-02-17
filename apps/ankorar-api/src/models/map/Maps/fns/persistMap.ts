@@ -19,6 +19,7 @@ export async function persistMap({
     title: map.title,
     content: map.content as Prisma.InputJsonValue,
     preview: map.preview,
+    generated_by_ai: map.generated_by_ai,
     created_at: map.created_at,
     updated_at: map.updated_at,
     deleted_at: map.deleted_at,

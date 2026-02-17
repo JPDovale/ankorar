@@ -36,6 +36,7 @@ export const listLibrariesRoute = Route.create({
             likes_count: map.likes_count,
             liked_by_me: map.liked_by_me,
             preview: map.preview,
+            generated_by_ai: map.generated_by_ai,
           })),
         })),
       },

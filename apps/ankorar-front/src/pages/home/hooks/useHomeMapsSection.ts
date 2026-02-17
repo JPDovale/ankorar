@@ -1,12 +1,14 @@
+import { HomePendingAiMapContext } from "@/pages/home/context/HomePendingAiMapContext";
 import { useSuspenseLibraries } from "@/hooks/useLibraries";
 import { useMaps, useSuspenseMaps } from "@/hooks/useMaps";
 import { createDateBasedMapTitle } from "@/utils/createDateBasedMapTitle";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export function useHomeMapsSection() {
-  const { data: libraries } = useSuspenseLibraries();
+  const pendingAiMapContext = useContext(HomePendingAiMapContext);
   const { data: maps } = useSuspenseMaps();
+  const { data: libraries } = useSuspenseLibraries();
   const {
     createMap,
     isCreatingMap,
@@ -25,6 +27,17 @@ export function useHomeMapsSection() {
     title: string;
   } | null>(null);
   const [selectedLibraryId, setSelectedLibraryId] = useState("");
+
+  const pending = pendingAiMapContext?.pending ?? null;
+
+  useEffect(() => {
+    if (
+      pending?.status === "finished" &&
+      maps.some((m) => m.id === pending.mapId)
+    ) {
+      pendingAiMapContext?.setPending(null);
+    }
+  }, [maps, pending, pendingAiMapContext]);
 
   async function handleCreateMap() {
     const title = createDateBasedMapTitle();
@@ -131,6 +144,7 @@ export function useHomeMapsSection() {
     mapPendingDeletion,
     mapPendingLibraryConnection,
     maps,
+    pendingAiMap: pending,
     selectedLibraryId,
     setSelectedLibraryId,
   };

@@ -170,9 +170,12 @@ export function ImageNode({ node, className }: ImageNodeProps) {
         style={{ padding: node.style.wrapperPadding }}
       >
         <div
-          className={`rounded-xl border border-slate-200 bg-white text-slate-900 shadow-sm overflow-hidden ${
-            node.style.isBold ? "font-semibold" : "font-medium"
-          } ${node.style.isItalic ? "italic" : "not-italic"}`}
+          className={cn(
+            "rounded-xl border border-slate-200 bg-white text-slate-900 shadow-sm overflow-hidden",
+            node.style.isBold ? "font-semibold" : "font-medium",
+            node.style.isItalic ? "italic" : "not-italic",
+            isEditing ? "select-text" : "select-none",
+          )}
           style={{
             width: node.style.w,
             height: node.style.h,
