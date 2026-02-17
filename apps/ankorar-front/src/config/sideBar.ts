@@ -1,36 +1,12 @@
-import {
-  Building2,
-  CreditCard,
-  House,
-  LibraryBig,
-  type LucideIcon,
-} from "lucide-react";
+import { LibraryBig, Map, type LucideIcon } from "lucide-react";
 
-export interface SideBarLink {
+export interface SideBarSection {
   label: string;
   to: string;
   icon: LucideIcon;
 }
 
-export const sideBarLinks: SideBarLink[] = [
-  {
-    label: "Mapas",
-    to: "/home",
-    icon: House,
-  },
-  {
-    label: "Bibliotecas",
-    to: "/libraries",
-    icon: LibraryBig,
-  },
-  {
-    label: "Organizacao",
-    to: "/organizations/settings",
-    icon: Building2,
-  },
-  {
-    label: "Assinatura",
-    to: "/subscription",
-    icon: CreditCard,
-  },
+export const sideBarSections: SideBarSection[] = [
+  { label: "Mapas", to: "/home", icon: Map },
+  { label: "Bibliotecas", to: "/libraries", icon: LibraryBig },
 ];

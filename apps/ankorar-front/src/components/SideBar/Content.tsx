@@ -1,15 +1,23 @@
-import type { SideBarLink } from "@/config/sideBar";
+import { Suspense } from "react";
 import { SideBarBrand } from "./Brand";
 import { SideBarFooter } from "./Footer";
 import { SideBarNav } from "./Nav";
 
 interface SideBarContentProps {
-  links: SideBarLink[];
   showExpandControlWhenCollapsed?: boolean;
 }
 
+function SideBarNavFallback() {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col gap-1 px-1.5 py-2">
+      <div className="h-8 animate-pulse rounded-md bg-zinc-100" />
+      <div className="h-8 animate-pulse rounded-md bg-zinc-100" />
+      <div className="h-8 animate-pulse rounded-md bg-zinc-100" />
+    </div>
+  );
+}
+
 export function SideBarContent({
-  links,
   showExpandControlWhenCollapsed = false,
 }: SideBarContentProps) {
   return (
@@ -17,8 +25,11 @@ export function SideBarContent({
       <SideBarBrand
         showExpandControlWhenCollapsed={showExpandControlWhenCollapsed}
       />
-      <SideBarNav links={links} />
-      <div className="min-h-0 flex-1" />
+      <div className="flex min-h-0 flex-1 flex-col">
+        <Suspense fallback={<SideBarNavFallback />}>
+          <SideBarNav />
+        </Suspense>
+      </div>
       <SideBarFooter />
     </div>
   );

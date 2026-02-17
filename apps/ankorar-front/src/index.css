@@ -127,22 +127,22 @@
 }
 
 :root {
-  --scrollbar-track: rgb(228 228 231 / 0.5);
-  --scrollbar-thumb: rgb(161 161 170 / 0.8);
-  --scrollbar-thumb-hover: rgb(113 113 122);
-  --scrollbar-thumb-active: rgb(82 82 91);
-  --scrollbar-size: 8px;
+  --scrollbar-size: 4px;
+  --scrollbar-track: rgb(228 228 231 / 0.2);
+  --scrollbar-thumb: rgb(212 212 216 / 0.6);
+  --scrollbar-thumb-hover: rgb(161 161 170 / 0.85);
+  --scrollbar-thumb-active: rgb(196 181 253 / 0.9);
 }
 
 .dark {
-  --scrollbar-track: rgb(39 39 42 / 0.6);
-  --scrollbar-thumb: rgb(63 63 70 / 0.9);
-  --scrollbar-thumb-hover: rgb(82 82 91);
-  --scrollbar-thumb-active: rgb(113 113 122);
+  --scrollbar-track: rgb(39 39 42 / 0.25);
+  --scrollbar-thumb: rgb(63 63 70 / 0.55);
+  --scrollbar-thumb-hover: rgb(82 82 91 / 0.85);
+  --scrollbar-thumb-active: rgb(167 139 250 / 0.85);
 }
 
 @layer utilities {
-  /* Barra de rolagem personalizada — fina, arredondada, alinhada ao tema */
+  /* Scrollbar fina, alinhada à identidade (zinc + violeta, radius do tema) */
   .scrollbar {
     scrollbar-width: thin;
     scrollbar-gutter: stable;
@@ -154,13 +154,13 @@
   }
   .scrollbar::-webkit-scrollbar-track {
     background: var(--scrollbar-track);
-    border-radius: 9999px;
-    margin: 4px;
+    border-radius: var(--radius);
+    margin: 2px;
   }
   .scrollbar::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
-    border-radius: 9999px;
-    border: 2px solid transparent;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
     background-clip: padding-box;
   }
   .scrollbar::-webkit-scrollbar-thumb:hover {

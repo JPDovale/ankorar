@@ -1,4 +1,3 @@
-import { sideBarLinks } from "@/config/sideBar";
 import { useSideBar } from "@/hooks/useSideBar";
 import { SideBarContent } from "./Content";
 
@@ -17,7 +16,6 @@ export function SideBar({
       className="group sticky top-2 h-[calc(100dvh-1rem)] shrink-0 transition-all duration-200 data-[collapsed=true]:w-14 data-[collapsed=false]:w-60"
     >
       <SideBarContent
-        links={sideBarLinks}
         showExpandControlWhenCollapsed={showExpandControlWhenCollapsed}
       />
     </aside>

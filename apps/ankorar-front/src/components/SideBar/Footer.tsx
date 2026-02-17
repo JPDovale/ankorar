@@ -8,6 +8,7 @@ import { useCurrentSubscription } from "@/hooks/useSubscription";
 import { useUser } from "@/hooks/useUser";
 import { getUserInitials } from "@/utils/getUserInitials";
 import {
+  Building2,
   CreditCard,
   LoaderCircle,
   LogOut,
@@ -91,6 +92,15 @@ export function SideBarFooter() {
               >
                 <Settings className="size-4 shrink-0" />
                 Minha conta
+              </Button>
+            </Link>
+            <Link to="/organizations/settings">
+              <Button
+                variant="ghost"
+                className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-zinc-700 hover:bg-zinc-100"
+              >
+                <Building2 className="size-4 shrink-0" />
+                Organização
               </Button>
             </Link>
             {isLoadingSubscription ? (
