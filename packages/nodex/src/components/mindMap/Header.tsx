@@ -7,7 +7,9 @@ import {
   type MindMapSaveStatus,
 } from "./SaveStatusIndicator";
 import { exportMindMapAsHighQualityImage } from "../../utils/exportMindMapAsHighQualityImage";
-import { Download, EllipsisVertical, LoaderCircle } from "lucide-react";
+import { exportMindMapAsMarkdown } from "../../utils/exportMindMapAsMarkdown";
+import { exportMindMapAsPdf } from "../../utils/exportMindMapAsPdf";
+import { Download, EllipsisVertical, FileText, LoaderCircle, FileDown } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 interface HeaderProps {
@@ -30,7 +32,7 @@ export function Header({
 }: HeaderProps) {
   const [exporting, setExporting] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { zenMode, nodes, getFlatNodes } = useMindMapState(
+  const { zenMode, nodes } = useMindMapState(
     useShallow((state) => ({
       zenMode: state.zenMode,
       nodes: state.nodes,
@@ -38,18 +40,34 @@ export function Header({
     })),
   );
 
+  const slug =
+    (title ?? "mind-map")
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "") || `mind-map-${Date.now()}`;
+
   const handleExportImage = async () => {
     if (exporting || nodes.length === 0) return;
     setExporting(true);
     try {
-      const flat = getFlatNodes();
-      const slug = (title ?? "mind-map")
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "");
-      await exportMindMapAsHighQualityImage(flat, {
-        filename: slug || `mind-map-${Date.now()}`,
-      });
+      await exportMindMapAsHighQualityImage(nodes, { filename: slug });
+      setMenuOpen(false);
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleExportMarkdown = () => {
+    if (nodes.length === 0) return;
+    exportMindMapAsMarkdown(nodes, { filename: slug });
+    setMenuOpen(false);
+  };
+
+  const handleExportPdf = () => {
+    if (nodes.length === 0) return;
+    setExporting(true);
+    try {
+      exportMindMapAsPdf(nodes, { filename: slug });
       setMenuOpen(false);
     } finally {
       setExporting(false);
@@ -89,12 +107,12 @@ export function Header({
                   )}
                 </button>
               </PopoverTrigger>
-              <PopoverContent align="end" className="w-48 p-1">
+              <PopoverContent align="end" className="w-52 p-1">
                 <button
                   type="button"
                   onClick={handleExportImage}
                   disabled={exporting || nodes.length === 0}
-                  className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+                  className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
                 >
                   {exporting ? (
                     <LoaderCircle
@@ -107,6 +125,24 @@ export function Header({
                   <span>
                     {exporting ? "Exportando…" : "Exportar imagem"}
                   </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExportMarkdown}
+                  disabled={nodes.length === 0}
+                  className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+                >
+                  <FileText className="h-4 w-4 shrink-0" aria-hidden />
+                  <span>Exportar em texto (MD)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExportPdf}
+                  disabled={exporting || nodes.length === 0}
+                  className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+                >
+                  <FileDown className="h-4 w-4 shrink-0" aria-hidden />
+                  <span>Exportar PDF</span>
                 </button>
               </PopoverContent>
             </Popover>

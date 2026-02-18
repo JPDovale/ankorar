@@ -1,3 +1,4 @@
+import { PermissionDenied } from "@/src/infra/errors/PermissionDenied";
 import { Route } from "@/src/infra/shared/entities/Route";
 import {
   createOrganizationInviteBody,
@@ -9,14 +10,20 @@ export const createOrganizationInviteRoute = Route.create({
   method: "post",
   tags: ["Organizations"],
   summary: "Create organization invite",
-  description: "Create invite by email for authenticated organization",
+  description: "Create invite by email. Only the organization owner can invite.",
   body: createOrganizationInviteBody,
   response: createOrganizationInviteResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("create:organization_invite")],
   handler: async (request, reply, { modules }) => {
     const { Organizations } = modules.organization;
     const organization = request.context.organization;
     const user = request.context.user;
+
+    if (organization.creator_id !== user.id) {
+      throw new PermissionDenied({
+        message: "Apenas o dono da organização pode convidar novos usuários.",
+      });
+    }
 
     await Organizations.createInvite({
       organizationId: organization.id,

@@ -1,5 +1,6 @@
 import { AuthenticatedLayout } from "@/layouts/authenticated";
 import { DefaultLayout } from "@/layouts/default";
+import { ActivateAccountPage } from "@/pages/activate-account/page";
 import { LibrariesPage } from "@/pages/libraries/page";
 import { MapEditorPage } from "@/pages/map-editor/page";
 import { LandingPage } from "@/pages/landing/page";
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
           {
             path: "/register",
             Component: RegisterPage,
+          },
+          {
+            path: "/register/activate/:tokenId",
+            Component: ActivateAccountPage,
           },
         ],
       },

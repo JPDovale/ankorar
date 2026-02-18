@@ -69,7 +69,7 @@ describe("case: registration flow (all successful by api key)", () => {
 
     expect(activationTokenId).toHaveLength(36);
     expect(email.body).toContain(
-      `${webserverModule.Webserver.origin}/register/activate/${activationTokenId}`,
+      `${webserverModule.Webserver.frontendOrigin}/register/activate/${activationTokenId}`,
     );
 
     const { activationToken } =

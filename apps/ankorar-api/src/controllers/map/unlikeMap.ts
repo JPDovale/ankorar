@@ -9,7 +9,7 @@ export const unlikeMapRoute = Route.create({
   description: "Remove like from map for the authenticated member.",
   params: unlikeMapParams,
   response: unlikeMapResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("like:map")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
     const member = request.context.member;

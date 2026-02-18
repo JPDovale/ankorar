@@ -22,6 +22,20 @@ const EXPORT_PADDING = 48;
  */
 const MAX_CANVAS_DIMENSION = 16384;
 
+/** Collects all visible nodes from the tree (depth-first). */
+function getFlatVisibleNodes(nodes: MindMapNode[]): MindMapNode[] {
+  const out: MindMapNode[] = [];
+  function walk(list: MindMapNode[]) {
+    for (const node of list) {
+      if (!node.isVisible) continue;
+      out.push(node);
+      walk(node.childrens);
+    }
+  }
+  walk(nodes);
+  return out;
+}
+
 function getNodeFontWeight(node: MindMapNode): number {
   if (!node.style.isBold) return 400;
   return node.type === "central" ? 700 : 600;
@@ -217,31 +231,28 @@ export type ExportImageOptions = {
   filename?: string;
 };
 
-/**
- * Renders the current mind map to a high-resolution PNG and triggers a download.
- * Uses a scale factor so that zooming into the image keeps text readable even on very large maps.
- * Must be called in a browser environment with the mind map already mounted.
- */
-export function exportMindMapAsHighQualityImage(
-  nodes: MindMapNode[],
-  options: ExportImageOptions = {},
-): Promise<void> {
-  const scale = Math.min(4, Math.max(1, options.scale ?? HIGH_QUALITY_EXPORT_SCALE));
-  const filename = options.filename ?? `mind-map-${Date.now()}`;
+export type CreateMindMapCanvasOptions = {
+  scale?: number;
+};
 
-  const flat = nodes.filter((n) => n.isVisible);
-  if (flat.length === 0) {
-    return Promise.resolve();
-  }
+/**
+ * Renders the mind map to a canvas and returns it (for PNG export or PDF). Returns null if no visible nodes or canvas unavailable.
+ */
+export function createMindMapExportCanvas(
+  nodes: MindMapNode[],
+  options: CreateMindMapCanvasOptions = {},
+): HTMLCanvasElement | null {
+  const scale = Math.min(4, Math.max(1, options.scale ?? HIGH_QUALITY_EXPORT_SCALE));
+  const flat = getFlatVisibleNodes(nodes);
+  if (flat.length === 0) return null;
 
   const bounds = getNodesBounds(nodes);
-  if (!bounds) return Promise.resolve();
+  if (!bounds) return null;
 
   const padding = EXPORT_PADDING;
   const contentW = bounds.maxX - bounds.minX + padding * 2;
   const contentH = bounds.maxY - bounds.minY + padding * 2;
 
-  // Cap scale so canvas dimensions stay within browser limits (e.g. Chrome ~16k per side)
   const maxScaleByW = contentW > 0 ? MAX_CANVAS_DIMENSION / contentW : scale;
   const maxScaleByH = contentH > 0 ? MAX_CANVAS_DIMENSION / contentH : scale;
   const effectiveScale = Math.min(scale, maxScaleByW, maxScaleByH);
@@ -258,7 +269,7 @@ export function exportMindMapAsHighQualityImage(
   canvas.width = canvasW;
   canvas.height = canvasH;
   const ctx = canvas.getContext("2d");
-  if (!ctx) return Promise.resolve();
+  if (!ctx) return null;
 
   ctx.fillStyle = "#f8fafc";
   ctx.fillRect(0, 0, canvasW, canvasH);
@@ -268,15 +279,27 @@ export function exportMindMapAsHighQualityImage(
   ctx.translate(-bounds.minX + padding, -bounds.minY + padding);
 
   const segmentLines = getSegmentLines(nodes);
-  for (const seg of segmentLines) {
-    drawSegment(ctx, seg);
-  }
-
-  for (const node of flat) {
-    drawNode(ctx, node);
-  }
+  for (const seg of segmentLines) drawSegment(ctx, seg);
+  for (const node of flat) drawNode(ctx, node);
 
   ctx.restore();
+  return canvas;
+}
+
+/**
+ * Renders the current mind map to a high-resolution PNG and triggers a download.
+ * Uses a scale factor so that zooming into the image keeps text readable even on very large maps.
+ * Must be called in a browser environment with the mind map already mounted.
+ */
+export function exportMindMapAsHighQualityImage(
+  nodes: MindMapNode[],
+  options: ExportImageOptions = {},
+): Promise<void> {
+  const filename = options.filename ?? `mind-map-${Date.now()}`;
+  const canvas = createMindMapExportCanvas(nodes, {
+    scale: options.scale,
+  });
+  if (!canvas) return Promise.resolve();
 
   return new Promise((resolve, reject) => {
     canvas.toBlob(

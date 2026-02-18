@@ -18,11 +18,15 @@ export const deepenMapNodeRoute = Route.create({
   params: deepenMapNodeParams,
   body: deepenMapNodeBody,
   response: deepenMapNodeResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("update:map")],
   handler: async (request, reply, { modules }) => {
+    const { Users } = modules.user;
     const member = request.context.member;
+    const user = request.context.user;
     const { map_id: mapId } = request.params;
     const { node, contextPath } = request.body;
+
+    await Users.fns.consumeAiCredit({ userId: user.id });
 
     await findMapByIdAndMemberId({
       id: mapId,

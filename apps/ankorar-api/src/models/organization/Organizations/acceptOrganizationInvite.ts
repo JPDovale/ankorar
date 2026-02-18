@@ -1,12 +1,15 @@
+import { PlanLimitExceeded } from "@/src/infra/errors/PlanLimitExceeded";
 import { db } from "@/src/infra/database/pool";
+import { getPlanLimits, getPlanMemberFeatures } from "@/src/models/subscription/planConfig";
 import { User } from "../../user/Users/User";
 import { createMember } from "../Members/createMember";
+import { findMembersByUserId } from "../Members/fns/findMembersByUserId";
+import { persistMember } from "../Members/fns/persistMember";
+import { Member } from "../Members/Member";
+import { MemberAlreadyInOrganization } from "@/src/infra/errors/MemberAlreadyInOrganization";
 import { OrganizationInvite } from "./OrganizationInvite";
 import { findPendingOrganizationInviteByIdAndUserId } from "./fns/findPendingOrganizationInviteByIdAndUserId";
 import { persistOrganizationInvite } from "./fns/persistOrganizationInvite";
-import { MemberAlreadyInOrganization } from "@/src/infra/errors/MemberAlreadyInOrganization";
-import { persistMember } from "../Members/fns/persistMember";
-import { Member } from "../Members/Member";
 
 type AcceptOrganizationInviteInput = {
   inviteId: string;
@@ -21,6 +24,14 @@ export async function acceptOrganizationInvite({
   inviteId,
   user,
 }: AcceptOrganizationInviteInput): Promise<AcceptOrganizationInviteResponse> {
+  const limits = getPlanLimits(user.stripe_price_id);
+  const { members } = await findMembersByUserId({ userId: user.id });
+  if (members.length >= limits.max_organizations_join) {
+    throw new PlanLimitExceeded({
+      message: `Seu plano permite participar de no máximo ${limits.max_organizations_join} organizações. Faça upgrade para entrar em mais.`,
+    });
+  }
+
   const { organizationInvite } =
     await findPendingOrganizationInviteByIdAndUserId({
       id: inviteId,
@@ -38,6 +49,8 @@ export async function acceptOrganizationInvite({
     throw new MemberAlreadyInOrganization();
   }
 
+  const planFeatures = getPlanMemberFeatures(user.stripe_price_id);
+
   if (memberOnDb && memberOnDb.deleted_at !== null) {
     const member = Member.create(
       {
@@ -52,6 +65,7 @@ export async function acceptOrganizationInvite({
     );
 
     member.markAsNotDeleted();
+    member.features = planFeatures;
     await persistMember({ member });
   }
 
@@ -59,7 +73,7 @@ export async function acceptOrganizationInvite({
     await createMember({
       user_id: user.id,
       org_id: organizationInvite.organization_id,
-      features: ["read:session", "read:organization"],
+      features: planFeatures,
     });
   }
 

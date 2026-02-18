@@ -1,3 +1,4 @@
+import { Can } from "@/components/auth/Can";
 import { MapPreviewCard } from "@/components/maps/MapPreviewCard";
 import { Button } from "@/components/ui/button";
 import {
@@ -68,50 +69,57 @@ export function HomeMapCard({
             </div>
 
             <div className="space-y-0.5 p-1.5">
-              <Link
-                to={`/maps/${map.id}`}
-                className="flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
-              >
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-zinc-100/80 text-zinc-500">
-                  <PencilLine className="size-3.5" />
-                </span>
-                Editar mapa
-              </Link>
-
-              <Button
-                variant="ghost"
-                className="h-9 w-full justify-start gap-2.5 rounded-lg px-2.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-                onClick={() =>
-                  onConnectMapRequest({ id: map.id, title: map.title })
-                }
-              >
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-zinc-100/80 text-zinc-500">
-                  <Link2 className="size-3.5" />
-                </span>
-                Vincular biblioteca
-              </Button>
-
-              <div className="my-1 border-t border-zinc-200/80" role="separator" />
-
-              <Button
-                variant="ghost"
-                className="h-9 w-full justify-start gap-2.5 rounded-lg px-2.5 text-xs font-medium text-red-600 hover:bg-red-50 hover:text-red-700"
-                onClick={() =>
-                  onDeleteMapRequest({ id: map.id, title: map.title })
-                }
-                disabled={isDeletingCurrentMap}
-              >
-                {isDeletingCurrentMap ? (
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-red-50">
-                    <LoaderCircle className="size-3.5 animate-spin text-red-600" />
+              <Can feature="read:map">
+                <Link
+                  to={`/maps/${map.id}`}
+                  className="flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+                >
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-zinc-100/80 text-zinc-500">
+                    <PencilLine className="size-3.5" />
                   </span>
-                ) : (
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-red-50/80 text-red-500">
-                    <Trash2 className="size-3.5" />
+                  Editar mapa
+                </Link>
+              </Can>
+
+              <Can feature="connect:library">
+                <Button
+                  variant="ghost"
+                  className="h-9 w-full justify-start gap-2.5 rounded-lg px-2.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                  onClick={() =>
+                    onConnectMapRequest({ id: map.id, title: map.title })
+                  }
+                >
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-zinc-100/80 text-zinc-500">
+                    <Link2 className="size-3.5" />
                   </span>
-                )}
-                Excluir mapa
-              </Button>
+                  Vincular biblioteca
+                </Button>
+              </Can>
+
+              <Can feature="delete:map">
+                <>
+                  <div className="my-1 border-t border-zinc-200/80" role="separator" />
+                  <Button
+                    variant="ghost"
+                    className="h-9 w-full justify-start gap-2.5 rounded-lg px-2.5 text-xs font-medium text-red-600 hover:bg-red-50 hover:text-red-700"
+                    onClick={() =>
+                      onDeleteMapRequest({ id: map.id, title: map.title })
+                    }
+                    disabled={isDeletingCurrentMap}
+                  >
+                    {isDeletingCurrentMap ? (
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-red-50">
+                        <LoaderCircle className="size-3.5 animate-spin text-red-600" />
+                      </span>
+                    ) : (
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-red-50/80 text-red-500">
+                        <Trash2 className="size-3.5" />
+                      </span>
+                    )}
+                    Excluir mapa
+                  </Button>
+                </>
+              </Can>
             </div>
           </PopoverContent>
         </Popover>

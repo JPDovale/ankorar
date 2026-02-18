@@ -1,5 +1,6 @@
 import { CreationActionButton } from "@/components/actions/CreationActionButton";
 import { Card, CardContent } from "@/components/ui/card";
+import { useUser } from "@/hooks/useUser";
 import { HomeConnectMapToLibraryDialog } from "@/pages/home/components/HomeConnectMapToLibraryDialog";
 import { HomeDeleteMapDialog } from "@/pages/home/components/HomeDeleteMapDialog";
 import { HomeMapCard } from "@/pages/home/components/HomeMapCard";
@@ -8,6 +9,7 @@ import { useHomeMapsSection } from "@/pages/home/hooks/useHomeMapsSection";
 import { MapPlus } from "lucide-react";
 
 export function HomeMapsSection() {
+  const { can } = useUser();
   const {
     deletingMapId,
     handleCloseConnectDialog,
@@ -29,6 +31,7 @@ export function HomeMapsSection() {
     setSelectedLibraryId,
   } = useHomeMapsSection();
   const isEmptyState = maps.length === 0 && !pendingAiMap;
+  const canCreateMap = can("create:map");
 
   return (
     <>
@@ -43,18 +46,22 @@ export function HomeMapsSection() {
                 Nenhum mapa criado ainda
               </p>
               <p className="text-xs text-zinc-500">
-                Crie seu primeiro mapa mental para começar a organizar ideias.
+                {canCreateMap
+                  ? "Crie seu primeiro mapa mental para começar a organizar ideias."
+                  : "Você não tem permissão para criar mapas nesta organização."}
               </p>
             </div>
-            <CreationActionButton
-              icon={MapPlus}
-              label="Criar mapa mental"
-              loading={isCreatingMap}
-              loadingLabel="Criando mapa..."
-              onClick={handleCreateMap}
-              disabled={isCreatingMap}
-              className="h-9 min-w-56 px-5"
-            />
+            {canCreateMap && (
+              <CreationActionButton
+                icon={MapPlus}
+                label="Criar mapa mental"
+                loading={isCreatingMap}
+                loadingLabel="Criando mapa..."
+                onClick={handleCreateMap}
+                disabled={isCreatingMap}
+                className="h-9 min-w-56 px-5"
+              />
+            )}
           </CardContent>
         </Card>
       )}

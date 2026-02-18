@@ -1,3 +1,4 @@
+import { Can } from "@/components/auth/Can";
 import { CreationActionButton } from "@/components/actions/CreationActionButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { LibraryCard } from "@/pages/libraries/components/LibraryCard";
@@ -33,12 +34,14 @@ export function LibrariesListSection({
                 Crie bibliotecas para estruturar os mapas da organização.
               </p>
             </div>
-            <CreationActionButton
-              icon={Plus}
-              label="Criar biblioteca"
-              onClick={onCreateLibrary}
-              className="h-9 min-w-56 px-5"
-            />
+            <Can feature="create:library">
+              <CreationActionButton
+                icon={Plus}
+                label="Criar biblioteca"
+                onClick={onCreateLibrary}
+                className="h-9 min-w-56 px-5"
+              />
+            </Can>
           </CardContent>
         </Card>
       )}

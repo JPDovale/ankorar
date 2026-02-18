@@ -5,7 +5,14 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useOrganizations } from "@/hooks/useOrganizations";
+import { librariesQueryKey } from "@/hooks/useLibraries";
+import { mapsQueryKey } from "@/hooks/useMaps";
+import {
+  organizationInvitesQueryKey,
+  organizationMembersQueryKey,
+  organizationsQueryKey,
+  useOrganizations,
+} from "@/hooks/useOrganizations";
 import { cancelOrganizationInviteRequest } from "@/services/organizations/cancelOrganizationInviteRequest";
 import {
   listOrganizationMembersRequest,
@@ -18,7 +25,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { z } from "zod";
 
-export const organizationMembersQueryKey = ["organization-members"] as const;
+export { organizationMembersQueryKey };
 
 const inviteMemberSchema = z.object({
   email: z
@@ -109,6 +116,14 @@ export function useOrganizationMembers() {
       queryClient.invalidateQueries({
         queryKey: organizationMembersQueryKey,
       });
+
+      // Ao remover um membro (ex.: auto-remoção), invalida contexto da org
+      if (variables.member.status !== "invited") {
+        queryClient.invalidateQueries({ queryKey: organizationsQueryKey });
+        queryClient.invalidateQueries({ queryKey: mapsQueryKey });
+        queryClient.invalidateQueries({ queryKey: librariesQueryKey });
+        queryClient.invalidateQueries({ queryKey: organizationInvitesQueryKey });
+      }
     },
   });
 

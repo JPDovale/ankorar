@@ -12,7 +12,7 @@ export const removeMemberRoute = Route.create({
   description: "Soft delete a member from the authenticated organization",
   params: removeMemberParams,
   response: removeMemberResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("remove:member")],
   handler: async (request, reply, { modules }) => {
     const { Members } = modules.organization;
     const organization = request.context.organization;

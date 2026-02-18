@@ -12,7 +12,7 @@ export const updateOrganizationNameRoute = Route.create({
   description: "Update the name of the authenticated organization",
   body: updateOrganizationNameBody,
   response: updateOrganizationNameResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("update:organization")],
   handler: async (request, reply, { modules }) => {
     const { Organizations } = modules.organization;
     const organization = request.context.organization;

@@ -1,3 +1,4 @@
+import { Can } from "@/components/auth/Can";
 import { useMapLike } from "@/hooks/useMapLike";
 import { Heart } from "lucide-react";
 
@@ -9,6 +10,24 @@ interface MapLikeButtonProps {
 }
 
 export function MapLikeButton({
+  mapId,
+  likesCount,
+  likedByMe,
+  "aria-label": ariaLabel,
+}: MapLikeButtonProps) {
+  return (
+    <Can feature="like:map">
+      <MapLikeButtonInner
+        mapId={mapId}
+        likesCount={likesCount}
+        likedByMe={likedByMe}
+        aria-label={ariaLabel}
+      />
+    </Can>
+  );
+}
+
+function MapLikeButtonInner({
   mapId,
   likesCount,
   likedByMe,

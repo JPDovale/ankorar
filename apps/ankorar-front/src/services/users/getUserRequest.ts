@@ -8,8 +8,11 @@ export interface User {
   updated_at: string | null;
 }
 
+export type Feature = string;
+
 interface GetUserRequestData {
   user: User;
+  features: Feature[];
 }
 
 export async function getUserRequest() {

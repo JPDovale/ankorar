@@ -1,12 +1,13 @@
+import { Can } from "@/components/auth/Can";
 import { Button } from "@/components/ui/button";
 import { CreateApiKeyDialog } from "./CreateApiKeyDialog";
 import { OrganizationSettingsApiKeyItem } from "./OrganizationSettingsApiKeyItem";
-import type { CreateApiKeyExpiration } from "../hooks/useOrganizationApiKeys";
+import type { CreateApiKeyPayload } from "../hooks/useOrganizationApiKeys";
 import type { OrganizationApiKey } from "../hooks/useOrganizationSettingsPage";
 
 interface OrganizationApiKeysSectionProps {
   apiKeys: OrganizationApiKey[];
-  handleCreateApiKey: (expiration: CreateApiKeyExpiration) => Promise<unknown>;
+  handleCreateApiKey: (payload: CreateApiKeyPayload) => Promise<unknown>;
   handleRevokeApiKey: (apiKey: OrganizationApiKey) => void;
   handleDeleteApiKey: (apiKey: OrganizationApiKey) => void;
   isCreateKeyDialogOpen: boolean;
@@ -43,14 +44,16 @@ export function OrganizationApiKeysSection({
           </p>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={isCreatingApiKey}
-          onClick={() => setCreateKeyDialogOpen(true)}
-        >
-          {isCreatingApiKey ? "Gerando..." : "Gerar chave"}
-        </Button>
+        <Can feature="create:api_key">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={isCreatingApiKey}
+            onClick={() => setCreateKeyDialogOpen(true)}
+          >
+            {isCreatingApiKey ? "Gerando..." : "Gerar chave"}
+          </Button>
+        </Can>
       </div>
 
       <CreateApiKeyDialog

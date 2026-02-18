@@ -1,6 +1,8 @@
 import { createMapForMemberRoute } from "../controllers/map/createMapForMember";
+import { createMapFromAiForMemberRoute } from "../controllers/map/createMapFromAiForMember";
 import { createMapFromAiRoute } from "../controllers/map/createMapFromAi";
 import { createMapRoute } from "../controllers/map/createMap";
+import { deepenMapNodeForMemberRoute } from "../controllers/map/deepenMapNodeForMember";
 import { deepenMapNodeRoute } from "../controllers/map/deepenMapNode";
 import { deleteMapForMemberRoute } from "../controllers/map/deleteMapForMember";
 import { deleteMapRoute } from "../controllers/map/deleteMap";
@@ -25,6 +27,8 @@ mapController.appendRoute(createMapRoute);
 mapController.appendRoute(createMapFromAiRoute);
 mapController.appendRoute(deepenMapNodeRoute);
 mapController.appendRoute(createMapForMemberRoute);
+mapController.appendRoute(createMapFromAiForMemberRoute);
+mapController.appendRoute(deepenMapNodeForMemberRoute);
 mapController.appendRoute(listMapsRoute);
 mapController.appendRoute(getMapRoute);
 mapController.appendRoute(getMapForMemberRoute);

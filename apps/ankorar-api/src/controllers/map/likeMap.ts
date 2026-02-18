@@ -10,7 +10,7 @@ export const likeMapRoute = Route.create({
     "Mark map as liked by the authenticated member. Only allowed for maps that are not owned by the member.",
   params: likeMapParams,
   response: likeMapResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("like:map")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
     const member = request.context.member;

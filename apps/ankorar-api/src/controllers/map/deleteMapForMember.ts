@@ -13,7 +13,7 @@ export const deleteMapForMemberRoute = Route.create({
     "Soft delete a map. The member must be the map owner (member does not need to belong to the request organization).",
   params: deleteMapForMemberParams,
   response: deleteMapForMemberResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("delete:map:other")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
 

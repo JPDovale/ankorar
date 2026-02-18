@@ -12,7 +12,7 @@ export const connectMapToLibraryRoute = Route.create({
   description: "Connect map to a library from authenticated organization",
   params: connectMapToLibraryParams,
   response: connectMapToLibraryResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("connect:library")],
   handler: async (request, reply, { modules }) => {
     const { Libraries } = modules.library;
     const { Maps } = modules.map;

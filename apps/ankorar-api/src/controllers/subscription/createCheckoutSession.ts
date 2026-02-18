@@ -16,7 +16,7 @@ export const createCheckoutSessionRoute = Route.create({
     "Create a Stripe Checkout session for the authenticated user to subscribe to a plan. Returns the URL to redirect the user to.",
   body: createCheckoutSessionBody,
   response: createCheckoutSessionResponses,
-  preHandler: [Route.canRequest("read:session")],
+  preHandler: [Route.canRequest("create:checkout")],
   handler: async (request, reply, { modules }) => {
     const user = request.context.user;
     const { price_id } = request.body;

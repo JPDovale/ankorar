@@ -1,3 +1,4 @@
+import { Can } from "@/components/auth/Can";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -94,38 +95,42 @@ export function SideBarFooter() {
                 Minha conta
               </Button>
             </Link>
-            <Link to="/organizations/settings">
-              <Button
-                variant="ghost"
-                className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-zinc-700 hover:bg-zinc-100"
-              >
-                <Building2 className="size-4 shrink-0" />
-                Organização
-              </Button>
-            </Link>
+            <Can feature="read:organization">
+              <Link to="/organizations/settings">
+                <Button
+                  variant="ghost"
+                  className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-zinc-700 hover:bg-zinc-100"
+                >
+                  <Building2 className="size-4 shrink-0" />
+                  Organização
+                </Button>
+              </Link>
+            </Can>
             {isLoadingSubscription ? (
               <div className="flex h-8 items-center gap-2 px-3">
                 <LoaderCircle className="size-4 animate-spin text-zinc-400" />
                 <span className="text-[12px] text-zinc-500">Assinatura...</span>
               </div>
             ) : (
-              <Link to="/subscription">
-                <Button
-                  variant="ghost"
-                  className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-zinc-700 hover:bg-zinc-100"
-                >
-                  {hasPaidPlan ? (
-                    <CreditCard className="size-4 shrink-0 text-violet-500" />
-                  ) : (
-                    <Sparkles className="size-4 shrink-0 text-amber-500" />
-                  )}
-                  <span className="min-w-0 flex-1 truncate text-left">
-                    {hasPaidPlan
-                      ? `Assinatura ${subscriptionStatus ?? "ativa"}`
-                      : "Plano grátis • 5 mapas"}
-                  </span>
-                </Button>
-              </Link>
+              <Can feature="read:subscription">
+                <Link to="/subscription">
+                  <Button
+                    variant="ghost"
+                    className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-zinc-700 hover:bg-zinc-100"
+                  >
+                    {hasPaidPlan ? (
+                      <CreditCard className="size-4 shrink-0 text-violet-500" />
+                    ) : (
+                      <Sparkles className="size-4 shrink-0 text-amber-500" />
+                    )}
+                    <span className="min-w-0 flex-1 truncate text-left">
+                      {hasPaidPlan
+                        ? `Assinatura ${subscriptionStatus ?? "ativa"}`
+                        : "Plano grátis • 5 mapas"}
+                    </span>
+                  </Button>
+                </Link>
+              </Can>
             )}
           </div>
           <div className="border-t border-zinc-200/80 p-1">

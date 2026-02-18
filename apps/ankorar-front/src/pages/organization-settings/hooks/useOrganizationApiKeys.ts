@@ -43,6 +43,11 @@ export function mapApiKeyPreviewToOrganizationApiKey(
 
 export type CreateApiKeyExpiration = "permanent" | { expires_at: string };
 
+export type CreateApiKeyPayload = {
+  expiration: CreateApiKeyExpiration;
+  features?: string[];
+};
+
 export function useOrganizationApiKeys() {
   const {
     apiKeys: rawApiKeys,
@@ -59,13 +64,14 @@ export function useOrganizationApiKeys() {
 
   const [isCreateKeyDialogOpen, setCreateKeyDialogOpen] = useState(false);
 
-  async function handleCreateApiKey(expiration: CreateApiKeyExpiration) {
-    const payload =
+  async function handleCreateApiKey(payload: CreateApiKeyPayload) {
+    const { expiration, features } = payload;
+    const body =
       expiration === "permanent"
-        ? { expires_at: null }
-        : { expires_at: expiration.expires_at };
+        ? { expires_at: null, features }
+        : { expires_at: expiration.expires_at, features };
 
-    const result = await createApiKey(payload);
+    const result = await createApiKey(body);
 
     if (result.success && result.apiKeyText) {
       setCreateKeyDialogOpen(false);

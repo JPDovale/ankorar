@@ -9,7 +9,7 @@ export const deleteMapRoute = Route.create({
   description: "Soft delete map from authenticated member",
   params: deleteMapParams,
   response: deleteMapResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("delete:map")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
     const member = request.context.member;

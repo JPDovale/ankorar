@@ -1,3 +1,4 @@
+import { Can } from "@/components/auth/Can";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { OrganizationMember } from "../hooks/useOrganizationSettingsPage";
@@ -52,26 +53,30 @@ export function OrganizationSettingsMemberItem({
       <td className="px-4 py-3 text-right">
         <div className="flex items-center justify-end gap-1">
           {member.status === "active" && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 px-2 text-xs text-zinc-600"
-              onClick={() => onChangeRole(member)}
-              aria-label={`Alterar perfil de ${member.name}`}
-            >
-              Alterar perfil
-            </Button>
+            <Can feature="create:user:other">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2 text-xs text-zinc-600"
+                onClick={() => onChangeRole(member)}
+                aria-label={`Alterar perfil de ${member.name}`}
+              >
+                Alterar perfil
+              </Button>
+            </Can>
           )}
           {member.role !== "owner" && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
-              onClick={() => onRemove(member)}
-              aria-label={`Remover ${member.name}`}
-            >
-              {member.status === "invited" ? "Cancelar convite" : "Remover"}
-            </Button>
+            <Can feature="remove:member">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
+                onClick={() => onRemove(member)}
+                aria-label={`Remover ${member.name}`}
+              >
+                {member.status === "invited" ? "Cancelar convite" : "Remover"}
+              </Button>
+            </Can>
           )}
         </div>
       </td>

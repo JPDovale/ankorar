@@ -13,7 +13,7 @@ export const likeMapForMemberRoute = Route.create({
     "Marca o mapa como curtido pelo membro (member_id). O membro deve pertencer à organização do contexto. Não é permitido curtir o próprio mapa.",
   params: likeMapForMemberParams,
   response: likeMapForMemberResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("like:map:other")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
     const organization = request.context.organization;

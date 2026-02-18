@@ -9,7 +9,7 @@ export const getMapRoute = Route.create({
   description: "Get a full map by id from authenticated organization",
   params: getMapParams,
   response: getMapResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("read:map")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
     const organization = request.context.organization;

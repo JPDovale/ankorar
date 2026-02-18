@@ -14,6 +14,7 @@ export const getUserResponses = {
         updated_at: z.date().nullable(),
         name: z.string().min(3).max(256).trim(),
       }),
+      features: z.array(z.string()),
     }),
   }),
   401: z.object({

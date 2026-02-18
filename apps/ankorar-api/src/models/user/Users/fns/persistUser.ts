@@ -25,6 +25,8 @@ export async function persistUser({
     stripe_subscription_id: user.stripe_subscription_id,
     stripe_price_id: user.stripe_price_id,
     subscription_status: user.subscription_status,
+    ai_credits: user.ai_credits,
+    ai_credits_reset_at: user.ai_credits_reset_at,
   };
 
   if (user.isNewEntity) {

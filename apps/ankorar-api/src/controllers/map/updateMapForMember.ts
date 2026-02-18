@@ -17,7 +17,7 @@ export const updateMapForMemberRoute = Route.create({
   params: updateMapForMemberParams,
   body: updateMapForMemberBody,
   response: updateMapForMemberResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("update:map:other")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
     const organization = request.context.organization;

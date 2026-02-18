@@ -16,7 +16,7 @@ export const updateMapContentRoute = Route.create({
   params: updateMapContentParams,
   body: updateMapContentBody,
   response: updateMapContentResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("update:map")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
     const member = request.context.member;

@@ -4,11 +4,12 @@ import { createApiKey } from "./createApiKey";
 import { generateSecret } from "./fns/generateSecret";
 import { hashSecret } from "./fns/hashSecret";
 import { generateUniquePrefix } from "./fns/generateUniquePrefix";
-import { availableFeatures } from "../../auth/Auth/fns/availableFeatures";
+import { organizationApiKeyFeatures } from "../../auth/Auth/fns/availableFeatures";
 
 type CreateApiKeyForOrganizationInput = {
   organization: Organization;
   expires_at?: Date | null;
+  features?: string[];
 };
 
 type CreateApiKeyForOrganizationResponse = {
@@ -19,16 +20,19 @@ type CreateApiKeyForOrganizationResponse = {
 export async function createApiKeyForOrganization({
   organization,
   expires_at = null,
+  features: requestedFeatures,
 }: CreateApiKeyForOrganizationInput): Promise<CreateApiKeyForOrganizationResponse> {
   const secret = generateSecret();
   const hashedSecret = hashSecret({ secret });
   const prefix = generateUniquePrefix();
+  const features =
+    requestedFeatures?.length ? requestedFeatures : [...organizationApiKeyFeatures];
 
   const { apiKey } = await createApiKey({
     organization_id: organization.id,
     prefix,
     secret: hashedSecret,
-    features: availableFeatures,
+    features,
     expires_at: expires_at ?? null,
   });
 

@@ -39,6 +39,8 @@ export async function findUserByEmail({
       stripe_subscription_id: userOnDb.stripe_subscription_id,
       stripe_price_id: userOnDb.stripe_price_id,
       subscription_status: userOnDb.subscription_status,
+      ai_credits: userOnDb.ai_credits,
+      ai_credits_reset_at: userOnDb.ai_credits_reset_at,
     },
     userOnDb.id,
   );

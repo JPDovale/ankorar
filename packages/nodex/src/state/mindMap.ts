@@ -82,10 +82,7 @@ const getTextMeasureContext = () => {
 };
 
 /** Insere quebras de linha a cada `wordsPerLine` palavras para medição e exibição consistente. */
-export function wrapTextAtWords(
-  text: string,
-  wordsPerLine: number,
-): string {
+export function wrapTextAtWords(text: string, wordsPerLine: number): string {
   if (!text.trim()) return text;
   const limit = Math.max(1, Math.round(wordsPerLine));
   const segments = text.split("\n");
@@ -164,9 +161,7 @@ const cloneNodes = (nodes: MindMapNode[]): MindMapNode[] =>
 const PLACEHOLDER_W = 120;
 const PLACEHOLDER_H = 40;
 
-function getDefaultStyleForType(
-  type: "central" | "default",
-): MindMapNodeStyle {
+function getDefaultStyleForType(type: "central" | "default"): MindMapNodeStyle {
   if (type === "central") {
     return {
       w: PLACEHOLDER_W,
@@ -222,8 +217,8 @@ function mergeMinimalStyle(nodes: MindMapNode[]): MindMapNode[] {
 const layoutNodes = (nodes: MindMapNode[]) => {
   const roots = cloneNodes(nodes);
   const visited = new Set<string>();
-  const gapX = 180;
-  const gapY = 72;
+  const gapX = 360;
+  const gapY = 12;
   const subtreeHeightMemo = new Map<string, number>();
 
   const sortBySequence = (items: MindMapNode[]) =>

@@ -14,6 +14,8 @@ interface UserProps {
   stripe_subscription_id: string | null;
   stripe_price_id: string | null;
   subscription_status: string | null;
+  ai_credits: number;
+  ai_credits_reset_at: Date | null;
 }
 
 export type CreateUserProps = Optional<
@@ -27,6 +29,8 @@ export type CreateUserProps = Optional<
   | "stripe_subscription_id"
   | "stripe_price_id"
   | "subscription_status"
+  | "ai_credits"
+  | "ai_credits_reset_at"
 >;
 
 export class User extends Entity<UserProps> {
@@ -43,6 +47,8 @@ export class User extends Entity<UserProps> {
       stripe_subscription_id: props.stripe_subscription_id ?? null,
       stripe_price_id: props.stripe_price_id ?? null,
       subscription_status: props.subscription_status ?? null,
+      ai_credits: props.ai_credits ?? 0,
+      ai_credits_reset_at: props.ai_credits_reset_at ?? null,
     };
 
     const newUser = new User(userProps, id);
@@ -116,6 +122,26 @@ export class User extends Entity<UserProps> {
 
   get subscription_status() {
     return this.props.subscription_status;
+  }
+
+  get ai_credits() {
+    return this.props.ai_credits;
+  }
+
+  set ai_credits(value: number | undefined) {
+    if (value === undefined) return;
+    this.props.ai_credits = value;
+    this.touch();
+  }
+
+  get ai_credits_reset_at() {
+    return this.props.ai_credits_reset_at;
+  }
+
+  set ai_credits_reset_at(value: Date | null | undefined) {
+    if (value === undefined) return;
+    this.props.ai_credits_reset_at = value;
+    this.touch();
   }
 
   markAsDeleted() {

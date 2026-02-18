@@ -37,6 +37,7 @@ export const stripeWebhookRoute = Route.create({
 
     const { Stripe } = modules.stripe;
     const { Users } = modules.user;
+    const { Members } = modules.organization;
 
     let event: Stripe.Event;
     try {
@@ -80,13 +81,21 @@ export const stripeWebhookRoute = Route.create({
             ? "canceled"
             : subscription.status;
 
-        const priceId = subscription.items?.data?.[0]?.price?.id ?? null;
+        const priceId =
+          status === "canceled"
+            ? null
+            : subscription.items?.data?.[0]?.price?.id ?? null;
 
         await Users.fns.updateSubscriptionFields({
           userId: user.id,
           stripeSubscriptionId: subscription.id,
           stripePriceId: priceId,
           subscriptionStatus: status,
+        });
+
+        await Members.fns.updateFeaturesForUser({
+          userId: user.id,
+          stripePriceId: priceId,
         });
       } catch {
         // User not found for this customer - ignore (e.g. test event)

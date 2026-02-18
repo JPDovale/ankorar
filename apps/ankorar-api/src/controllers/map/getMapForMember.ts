@@ -13,7 +13,7 @@ export const getMapForMemberRoute = Route.create({
     "Retorna os detalhes do mapa. O path deve conter o id do membro dono do mapa (member_id) e o id do mapa (map_id). O mapa só é retornado se pertencer a esse membro.",
   params: getMapForMemberParams,
   response: getMapForMemberResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("read:map:other")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
 

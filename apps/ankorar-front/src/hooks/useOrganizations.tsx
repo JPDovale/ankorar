@@ -24,6 +24,7 @@ import {
 
 export const organizationsQueryKey = ["organizations"] as const;
 export const organizationInvitesQueryKey = ["organization-invites"] as const;
+export const organizationMembersQueryKey = ["organization-members"] as const;
 
 async function getOrganizationsQueryFn(): Promise<OrganizationPreview[]> {
   const response = await listUserOrganizationsRequest();
@@ -243,7 +244,8 @@ export function useOrganizations(params: UseOrganizationsParams = {}) {
         return;
       }
 
-      queryClient.invalidateQueries();
+      // Invalida apenas dados que dependem do contexto da org. Não invalida user
+      // para evitar refetch imediato que pode usar cookies antigos e causar redirect ao login.
       queryClient.invalidateQueries({
         queryKey: organizationsQueryKey,
       });
@@ -255,6 +257,9 @@ export function useOrganizations(params: UseOrganizationsParams = {}) {
       });
       queryClient.invalidateQueries({
         queryKey: organizationInvitesQueryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: organizationMembersQueryKey,
       });
     },
   });

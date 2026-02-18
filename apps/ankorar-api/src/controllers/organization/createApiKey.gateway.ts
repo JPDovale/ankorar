@@ -2,6 +2,7 @@ import z from "zod";
 
 export const createApiKeyBody = z.object({
   expires_at: z.string().optional().nullable(),
+  features: z.array(z.string().min(1)).min(1).optional(),
 });
 
 export const createApiKeyResponses = {

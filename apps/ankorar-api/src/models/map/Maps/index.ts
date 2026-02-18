@@ -2,6 +2,8 @@ import { createForMember } from "./createForMember";
 import { createMap } from "./createMap";
 import { deleteForMember } from "./deleteForMember";
 import { deleteMap } from "./deleteMap";
+import { countMapsByMemberId } from "./fns/countMapsByMemberId";
+import { countMapsByUserId } from "./fns/countMapsByUserId";
 import { createCentralNode } from "./fns/createCentralNode";
 import { deleteMapLike } from "./fns/deleteMapLike";
 import { extractCentralNodeTitle } from "./fns/extractCentralNodeTitle";
@@ -44,6 +46,8 @@ const Maps = {
     findByMemberId: findMapsByMemberId,
     findPreviewsByMemberId: findMapPreviewsByMemberId,
     findMapLikeByMapIdAndMemberId,
+    countByMemberId: countMapsByMemberId,
+    countByUserId: countMapsByUserId,
     getMapLikesInfo,
     getMapsLikesInfo,
     createCentralNode,

@@ -8,7 +8,7 @@ export const listApiKeysRoute = Route.create({
   summary: "List api keys for organization",
   description: "List all api keys for the authenticated organization",
   response: listApiKeysResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("read:api_key")],
   handler: async (request, reply, { modules }) => {
     const { ApiKeys } = modules.crypto;
     const organization = request.context.organization;

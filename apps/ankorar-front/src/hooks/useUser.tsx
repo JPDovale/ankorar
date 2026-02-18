@@ -15,7 +15,9 @@ import {
 import { getUserRequest, type User } from "@/services/users/getUserRequest";
 import { toast } from "sonner";
 
-const userQueryKey = ["user"] as const;
+export const userQueryKey = ["user"] as const;
+
+type UserWithFeatures = { user: User; features: string[] };
 
 function extractUnexpectedErrorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -25,11 +27,14 @@ function extractUnexpectedErrorMessage(error: unknown): string {
   return "Não foi possível concluir a operação.";
 }
 
-async function getUserQueryFn(): Promise<User | null> {
+async function getUserQueryFn(): Promise<UserWithFeatures | null> {
   const response = await getUserRequest();
 
   if (response.status === 200 && response.data?.user) {
-    return response.data.user;
+    return {
+      user: response.data.user,
+      features: response.data.features ?? [],
+    };
   }
 
   return null;
@@ -38,6 +43,7 @@ async function getUserQueryFn(): Promise<User | null> {
 interface LoginMutationResult {
   success: boolean;
   user: User | null;
+  features: string[];
 }
 
 interface CreateUserMutationResult {
@@ -60,7 +66,7 @@ async function loginMutationFn(
         action: loginResponse.error?.action,
       },
     );
-    return { success: false, user: null };
+    return { success: false, user: null, features: [] };
   }
 
   const meResponse = await getUserRequest();
@@ -69,6 +75,7 @@ async function loginMutationFn(
     return {
       success: true,
       user: meResponse.data.user,
+      features: meResponse.data.features ?? [],
     };
   }
 
@@ -80,7 +87,7 @@ async function loginMutationFn(
     },
   );
 
-  return { success: false, user: null };
+  return { success: false, user: null, features: [] };
 }
 
 async function createUserMutationFn(
@@ -129,7 +136,10 @@ export function useUser() {
     mutationFn: loginMutationFn,
     onSuccess: (result) => {
       if (result.success && result.user) {
-        queryClient.setQueryData(userQueryKey, result.user);
+        queryClient.setQueryData(userQueryKey, {
+          user: result.user,
+          features: result.features,
+        });
         queryClient.invalidateQueries({
           queryKey: organizationsQueryKey,
         });
@@ -154,6 +164,14 @@ export function useUser() {
       queryClient.removeQueries({ queryKey: librariesQueryKey });
     },
   });
+
+  const me = userQuery.data;
+  const user = me?.user ?? null;
+  const features = me?.features ?? [];
+  const can = useCallback(
+    (feature: string) => features.includes(feature),
+    [features],
+  );
 
   const login = useCallback(
     async (payload: LoginRequestBody): Promise<LoginMutationResult> => {
@@ -185,7 +203,9 @@ export function useUser() {
   }, [logoutMutation]);
 
   return {
-    user: userQuery.data ?? null,
+    user,
+    features,
+    can,
     isLoadingUser: userQuery.isPending,
     refetchUser: userQuery.refetch,
     login,

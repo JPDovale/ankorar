@@ -1,3 +1,4 @@
+import { Can } from "@/components/auth/Can";
 import { HomeMapsSection } from "@/pages/home/components/HomeMapsSection";
 import { HomeMapsSectionSkeleton } from "@/pages/home/components/HomeMapsSectionSkeleton";
 import { HomeOrganizationLibrariesSection } from "@/pages/home/components/HomeOrganizationLibrariesSection";
@@ -11,17 +12,21 @@ export function HomePage() {
   return (
     <HomePendingAiMapProvider>
       <section className="space-y-6">
-        <Suspense fallback={<HomePageHeaderSkeleton />}>
-          <HomePageHeader />
-        </Suspense>
+        <Can feature="read:map">
+          <Suspense fallback={<HomePageHeaderSkeleton />}>
+            <HomePageHeader />
+          </Suspense>
 
-        <Suspense fallback={<HomeMapsSectionSkeleton />}>
-          <HomeMapsSection />
-        </Suspense>
+          <Suspense fallback={<HomeMapsSectionSkeleton />}>
+            <HomeMapsSection />
+          </Suspense>
+        </Can>
 
-        <Suspense fallback={<HomeOrganizationLibrariesSectionSkeleton />}>
-          <HomeOrganizationLibrariesSection />
-        </Suspense>
+        <Can feature="read:library">
+          <Suspense fallback={<HomeOrganizationLibrariesSectionSkeleton />}>
+            <HomeOrganizationLibrariesSection />
+          </Suspense>
+        </Can>
       </section>
     </HomePendingAiMapProvider>
   );

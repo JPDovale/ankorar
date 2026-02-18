@@ -2,6 +2,7 @@ import { connection } from "@/services/ankorarApi/axios";
 
 interface CreateApiKeyRequestBody {
   expires_at?: string | null;
+  features?: string[];
 }
 
 interface CreateApiKeyResponseData {

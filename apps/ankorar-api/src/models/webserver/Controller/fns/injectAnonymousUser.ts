@@ -24,7 +24,12 @@ export function injectAnonymousUser({
   });
 
   const member = Member.create({
-    features: ["create:session", "create:user", "read:activation_token"],
+    features: [
+      "create:session",
+      "create:user",
+      "read:activation_token",
+      "read:plans",
+    ],
     org_id: organization.id,
     user_id: user.id,
   });

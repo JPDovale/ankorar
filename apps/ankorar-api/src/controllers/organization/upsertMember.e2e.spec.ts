@@ -1,3 +1,4 @@
+import { defaultMemberFeatures } from "@/src/models/auth/Auth/fns/defaultMemberFeatures";
 import { organizationModule } from "@/src/models/organization/OrganizationModule";
 import { userModule } from "@/src/models/user/UserModule";
 import { orchestrator } from "@/test/orchestrator";
@@ -107,7 +108,7 @@ describe("[POST] /v1/organizations/members/upsert", () => {
         expect(member.toJson()).toEqual({
           created_at: expect.any(Date),
           deleted_at: null,
-          features: ["read:session"],
+          features: defaultMemberFeatures,
           id: expect.any(String),
           org_id: expect.any(String),
           updated_at: null,
@@ -162,7 +163,7 @@ describe("[POST] /v1/organizations/members/upsert", () => {
         expect(member.toJson()).toEqual({
           created_at: expect.any(Date),
           deleted_at: null,
-          features: ["read:session"],
+          features: defaultMemberFeatures,
           id: expect.any(String),
           org_id: expect.any(String),
           updated_at: expect.any(Date),

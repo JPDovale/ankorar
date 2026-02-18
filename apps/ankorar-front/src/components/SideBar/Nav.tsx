@@ -1,3 +1,4 @@
+import { Can } from "@/components/auth/Can";
 import { sideBarSections } from "@/config/sideBar";
 import { useSuspenseLibraries } from "@/hooks/useLibraries";
 import { useSuspenseMaps } from "@/hooks/useMaps";
@@ -38,56 +39,60 @@ export function SideBarNav() {
     >
       <div className="space-y-0.5">
         {/* Mapas */}
-        <SideBarTreeSection
-          label={sideBarSections[0].label}
-          to={sideBarSections[0].to}
-          icon={sideBarSections[0].icon}
-          isOpen={mapsOpen}
-          onToggle={() => setMapsOpen((o) => !o)}
-          isSectionActive={isMapsSectionActive}
-        >
-          {mapsList.length === 0 ? (
-            <div className="py-1 pl-5 pr-2">
-              <span className="text-[11px] text-zinc-400">Nenhum mapa</span>
-            </div>
-          ) : (
-            mapsList.map((map) => (
-              <SideBarTreeItem
-                key={map.id}
-                to={`/maps/${map.id}`}
-                label={map.title}
-                icon={FileText}
-              />
-            ))
-          )}
-        </SideBarTreeSection>
+        <Can feature="read:map">
+          <SideBarTreeSection
+            label={sideBarSections[0].label}
+            to={sideBarSections[0].to}
+            icon={sideBarSections[0].icon}
+            isOpen={mapsOpen}
+            onToggle={() => setMapsOpen((o) => !o)}
+            isSectionActive={isMapsSectionActive}
+          >
+            {mapsList.length === 0 ? (
+              <div className="py-1 pl-5 pr-2">
+                <span className="text-[11px] text-zinc-400">Nenhum mapa</span>
+              </div>
+            ) : (
+              mapsList.map((map) => (
+                <SideBarTreeItem
+                  key={map.id}
+                  to={`/maps/${map.id}`}
+                  label={map.title}
+                  icon={FileText}
+                />
+              ))
+            )}
+          </SideBarTreeSection>
+        </Can>
 
         {/* Bibliotecas */}
-        <SideBarTreeSection
-          label={sideBarSections[1].label}
-          to={sideBarSections[1].to}
-          icon={sideBarSections[1].icon}
-          isOpen={librariesOpen}
-          onToggle={() => setLibrariesOpen((o) => !o)}
-          isSectionActive={isLibrariesSectionActive}
-        >
-          {librariesList.length === 0 ? (
-            <div className="py-1 pl-5 pr-2">
-              <span className="text-[11px] text-zinc-400">
-                Nenhuma biblioteca
-              </span>
-            </div>
-          ) : (
-            librariesList.map((lib) => (
-              <SideBarTreeLibrary
-                key={lib.id}
-                library={lib}
-                isOpen={openLibraryIds.has(lib.id)}
-                onToggle={() => toggleLibrary(lib.id)}
-              />
-            ))
-          )}
-        </SideBarTreeSection>
+        <Can feature="read:library">
+          <SideBarTreeSection
+            label={sideBarSections[1].label}
+            to={sideBarSections[1].to}
+            icon={sideBarSections[1].icon}
+            isOpen={librariesOpen}
+            onToggle={() => setLibrariesOpen((o) => !o)}
+            isSectionActive={isLibrariesSectionActive}
+          >
+            {librariesList.length === 0 ? (
+              <div className="py-1 pl-5 pr-2">
+                <span className="text-[11px] text-zinc-400">
+                  Nenhuma biblioteca
+                </span>
+              </div>
+            ) : (
+              librariesList.map((lib) => (
+                <SideBarTreeLibrary
+                  key={lib.id}
+                  library={lib}
+                  isOpen={openLibraryIds.has(lib.id)}
+                  onToggle={() => toggleLibrary(lib.id)}
+                />
+              ))
+            )}
+          </SideBarTreeSection>
+        </Can>
       </div>
     </nav>
   );

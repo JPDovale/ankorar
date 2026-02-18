@@ -13,7 +13,7 @@ export const cancelOrganizationInviteRoute = Route.create({
     "Cancel a pending invite from the authenticated organization",
   params: cancelOrganizationInviteParams,
   response: cancelOrganizationInviteResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("cancel:organization_invite")],
   handler: async (request, reply, { modules }) => {
     const { Organizations } = modules.organization;
     const organization = request.context.organization;

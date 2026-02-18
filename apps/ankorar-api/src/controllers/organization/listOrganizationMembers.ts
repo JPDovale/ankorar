@@ -24,7 +24,7 @@ export const listOrganizationMembersRoute = Route.create({
   description:
     "List all members and pending invites for the authenticated organization",
   response: listOrganizationMembersResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("read:organization_members")],
   handler: async (request, reply, { modules }) => {
     const { Members, Organizations } = modules.organization;
     const organization = request.context.organization;

@@ -8,7 +8,7 @@ export const listLibrariesRoute = Route.create({
   summary: "List libraries",
   description: "List libraries from authenticated organization",
   response: listLibrariesResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("read:library")],
   handler: async (request, reply, { modules }) => {
     const { Libraries } = modules.library;
     const organization = request.context.organization;

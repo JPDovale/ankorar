@@ -7,13 +7,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/hooks/useUser";
 import {
   usePlans,
   useCurrentSubscription,
   useCreateCheckoutSession,
 } from "@/hooks/useSubscription";
 import type { Plan } from "@/services/subscription/listPlansRequest";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
   Loader2,
   CheckCircle2,
@@ -37,6 +38,7 @@ const FREE_PLAN = {
     "5 mapas mentais",
     "Acesso à plataforma",
     "Crie e edite seus mapas",
+    "Participar de 2 Organizações",
   ],
 } as const;
 
@@ -243,10 +245,10 @@ function PricingCard({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 space-y-4">
-        <ul className="space-y-3 text-sm text-zinc-700">
+        <ul className="space-y-2 text-xs text-zinc-700">
           {plan.features.map((feature, i) => (
-            <li key={i} className="flex items-start gap-3">
-              <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-emerald-500" />
+            <li key={i} className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
               <span>{feature}</span>
             </li>
           ))}
@@ -316,10 +318,10 @@ function FreePlanCard({ isCurrentPlan = true }: { isCurrentPlan?: boolean }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 space-y-4">
-        <ul className="space-y-3 text-sm text-zinc-700">
+        <ul className="space-y-2 text-xs text-zinc-700">
           {FREE_PLAN.features.map((feature, i) => (
-            <li key={i} className="flex items-start gap-3">
-              <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-emerald-500" />
+            <li key={i} className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
               <span>{feature}</span>
             </li>
           ))}
@@ -341,12 +343,22 @@ function FreePlanCard({ isCurrentPlan = true }: { isCurrentPlan?: boolean }) {
 }
 
 export function PricingPage() {
+  const { user } = useUser();
+  const navigate = useNavigate();
   const { data: plans, isLoading, isError } = usePlans();
   const { data: subscription } = useCurrentSubscription();
   const createCheckout = useCreateCheckoutSession();
 
   const currentPriceId = subscription?.stripe_price_id ?? null;
   const isFreeCurrentPlan = !currentPriceId;
+
+  function handleSelectPlan(priceId: string) {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    createCheckout.mutate(priceId);
+  }
 
   if (isLoading) {
     return <PricingPageSkeleton />;
@@ -369,8 +381,7 @@ export function PricingPage() {
   }
 
   const paidPlans = [...(plans ?? [])].sort((a, b) => a.amount - b.amount);
-  const popularIndex =
-    paidPlans.length >= 2 ? Math.floor(paidPlans.length / 2) : -1;
+  const popularIndex = paidPlans.length >= 2 ? 1 : -1;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 via-white to-zinc-50/80">
@@ -488,7 +499,7 @@ export function PricingPage() {
       {/* Preços */}
       <section
         id="pricing-cards"
-        className="scroll-mt-24 mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20"
+        className="scroll-mt-24 mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20"
       >
         <h2 className="text-center text-2xl font-bold text-zinc-900 sm:text-3xl">
           Escolha seu plano
@@ -514,7 +525,7 @@ export function PricingPage() {
             </span>
           ))}
         </div>
-        <div className="mx-auto mt-10 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mx-auto mt-10 grid w-full max-w-7xl gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <FreePlanCard isCurrentPlan={isFreeCurrentPlan} />
           {paidPlans.map((plan, index) => (
             <PricingCard
@@ -523,7 +534,7 @@ export function PricingPage() {
               isPopular={index === popularIndex}
               isCurrentPlan={plan.price_id === currentPriceId}
               formatPriceFn={formatPrice}
-              onSelect={() => createCheckout.mutate(plan.price_id)}
+              onSelect={() => handleSelectPlan(plan.price_id)}
               isPending={createCheckout.isPending}
             />
           ))}

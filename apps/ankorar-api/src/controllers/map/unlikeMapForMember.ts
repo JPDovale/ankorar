@@ -13,7 +13,7 @@ export const unlikeMapForMemberRoute = Route.create({
     "Remove a curtida do mapa pelo membro (member_id). O membro deve pertencer à organização do contexto.",
   params: unlikeMapForMemberParams,
   response: unlikeMapForMemberResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("unlike:map:other")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
     const organization = request.context.organization;

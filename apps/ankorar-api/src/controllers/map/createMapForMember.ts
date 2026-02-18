@@ -15,7 +15,7 @@ export const createMapForMemberRoute = Route.create({
   params: createMapForMemberParams,
   body: createMapForMemberBody,
   response: createMapForMemberResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("create:map:other")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
     const { Libraries } = modules.library;

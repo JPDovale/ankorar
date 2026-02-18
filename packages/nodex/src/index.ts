@@ -11,10 +11,21 @@ export {
 export { useMindMapDebounce } from "./hooks/mindMap/useMindMapDebounce";
 export { getMindMapPreviewDataUrl } from "./utils/getMindMapPreviewDataUrl";
 export {
+  createMindMapExportCanvas,
   exportMindMapAsHighQualityImage,
   HIGH_QUALITY_EXPORT_SCALE,
+  type CreateMindMapCanvasOptions,
   type ExportImageOptions,
 } from "./utils/exportMindMapAsHighQualityImage";
+export {
+  exportMindMapAsMarkdown,
+  mindMapToMarkdown,
+  type ExportMarkdownOptions,
+} from "./utils/exportMindMapAsMarkdown";
+export {
+  exportMindMapAsPdf,
+  type ExportPdfOptions,
+} from "./utils/exportMindMapAsPdf";
 export { useMindMapHistoryDebounce } from "./hooks/mindMap/useMindMapHistoryDebounce";
 
 export { Background } from "./components/mindMap/Background";

@@ -9,6 +9,7 @@ export const listPlansRoute = Route.create({
   description:
     "List available subscription plans from Stripe (active recurring prices with product expanded) for the pricing page.",
   response: { 200: listPlansResponse },
+  preHandler: [Route.canRequest("read:plans")],
   handler: async (_request, reply, { modules }) => {
     const stripe = modules.stripe.client;
     const { plans } = await modules.stripe.Stripe.listPricesForPlans({

@@ -34,6 +34,7 @@ export const getUserRoute = Route.create({
       status: 200,
       data: {
         user: payload,
+        features: request.context.member.features,
       },
     });
   },

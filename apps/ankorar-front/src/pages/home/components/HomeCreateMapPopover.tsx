@@ -7,6 +7,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Toggle } from "@/components/ui/toggle";
+import { useCurrentSubscription } from "@/hooks/useSubscription";
 import { MapPlus, Sparkles, WandSparkles } from "lucide-react";
 
 interface HomeCreateMapPopoverProps {
@@ -34,6 +35,8 @@ export function HomeCreateMapPopover({
   onGenerateWithAiChange,
   onOpenChange,
 }: HomeCreateMapPopoverProps) {
+  const { data: subscription } = useCurrentSubscription();
+  const aiCredits = subscription?.ai_credits ?? 0;
   const canSubmit = !generateWithAi || mapDescription.trim().length > 0;
 
   return (
@@ -74,6 +77,9 @@ export function HomeCreateMapPopover({
               <Sparkles className="size-3.5" />
               Gerar com IA
             </Toggle>
+            <span className="text-xs text-zinc-500 tabular-nums">
+              {aiCredits} créditos restantes
+            </span>
           </div>
 
           {generateWithAi && (

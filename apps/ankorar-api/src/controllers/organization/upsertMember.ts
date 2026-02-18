@@ -3,6 +3,7 @@ import {
   upsertMemberBody,
   upsertMemberResponses,
 } from "./upsertMember.gateway";
+import { getPlanMemberFeatures } from "@/src/models/subscription/planConfig";
 import { User } from "@/src/models/user/Users/User";
 import { InternalServerError } from "@/src/infra/errors/InternalServerError";
 import { safeCall } from "@/src/utils/safeCall";
@@ -65,7 +66,7 @@ export const upsertMemberRoute = Route.create({
     await Organizations.upsertMember({
       user: finalUser,
       organization,
-      features: ["read:session"],
+      features: getPlanMemberFeatures(finalUser.stripe_price_id),
     });
 
     return reply.status(201).send({

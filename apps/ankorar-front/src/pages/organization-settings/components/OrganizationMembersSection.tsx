@@ -1,3 +1,4 @@
+import { Can } from "@/components/auth/Can";
 import { Button } from "@/components/ui/button";
 import { OrganizationSettingsMemberItem } from "./OrganizationSettingsMemberItem";
 import type { OrganizationMember } from "../hooks/useOrganizationSettingsPage";
@@ -35,9 +36,11 @@ export function OrganizationMembersSection({
           </p>
         </div>
 
-        <Button variant="outline" size="sm" onClick={handleInviteMember}>
-          Convidar
-        </Button>
+        <Can feature="create:organization_invite">
+          <Button variant="outline" size="sm" onClick={handleInviteMember}>
+            Convidar
+          </Button>
+        </Can>
       </div>
 
       <div className="mt-4">

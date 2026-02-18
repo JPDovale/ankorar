@@ -16,10 +16,12 @@ export async function sendEmailOfActivationToUser({
 }: SendEmailOfActivationToUserProps): Promise<SendEmailOfActivationToUserResponse> {
   const { Webserver: webserver } = webserverModule;
 
+  const frontendOrigin = webserver.frontendOrigin;
+
   await emailModule.Email.send({
     from: "Ankorar <contato@ankorar.com>",
     to: user.email,
     subject: "Ative sua conta no Ankorar",
-    text: `${user.name},\n\nPor favor, clique no link abaixo para ativar sua conta:\n\n${webserver.origin}/register/activate/${activationToken.id}\n\nObrigado,\nEquipe Ankorar`,
+    text: `${user.name},\n\nPor favor, clique no link abaixo para ativar sua conta:\n\n${frontendOrigin}/register/activate/${activationToken.id}\n\nObrigado,\nEquipe Ankorar`,
   });
 }

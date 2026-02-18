@@ -77,7 +77,7 @@ describe("[GET] /v1/maps/:map_id", () => {
       const { member: viewerMember } = await organizationModule.Members.create({
         user_id: activatedViewerUser.id,
         org_id: organization.id,
-        features: ["read:session", "read:organization"],
+        features: ["read:session", "read:organization", "read:map"],
       });
 
       const newSession = await orchestrator.createSession({

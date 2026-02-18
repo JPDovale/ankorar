@@ -1,4 +1,5 @@
 import { PermissionDenied } from "@/src/infra/errors/PermissionDenied";
+import { getPlanMemberFeatures } from "@/src/models/subscription/planConfig";
 import { authModule } from "../../auth/AuthModule";
 import { organizationModule } from "../../organization/OrganizationModule";
 import { Member } from "../../organization/Members/Member";
@@ -38,10 +39,8 @@ export async function activateUserById({
   }
 
   member.features = [
-    "create:session",
-    "read:session",
-    "create:api_key",
-    "read:organization",
+    ...getPlanMemberFeatures(user.stripe_price_id),
+    "create:organization_invite", // owner da org pode convidar
   ];
   await Members.fns.persist({ member });
 

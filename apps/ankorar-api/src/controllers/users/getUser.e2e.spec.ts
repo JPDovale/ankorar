@@ -75,18 +75,15 @@ describe("[GET] /v1/users", () => {
       const body = (await response.json()) as any;
 
       expect(response.status).toBe(200);
-      expect(body).toEqual({
-        data: {
-          user: {
-            created_at: expect.any(String),
-            email: newUser.email,
-            name: newUser.name,
-            id: newUser.id,
-            updated_at: null,
-          },
-        },
-        status: 200,
+      expect(body.status).toBe(200);
+      expect(body.data.user).toEqual({
+        created_at: expect.any(String),
+        email: newUser.email,
+        name: newUser.name,
+        id: newUser.id,
+        updated_at: null,
       });
+      expect(Array.isArray(body.data.features)).toBe(true);
 
       const parsedCookies = parse(response.headers.getSetCookie(), {
         map: true,

@@ -1,4 +1,5 @@
 import { Separator } from "@/components/ui/separator";
+import { useUser } from "@/hooks/useUser";
 import { useOrganizationSettingsPage } from "../hooks/useOrganizationSettingsPage";
 import { CreatedApiKeyDialog } from "./CreatedApiKeyDialog";
 import { InviteMemberDialog } from "./InviteMemberDialog";
@@ -7,6 +8,7 @@ import { OrganizationIdentitySection } from "./OrganizationIdentitySection";
 import { OrganizationMembersSection } from "./OrganizationMembersSection";
 
 export function OrganizationSettingsPageContent() {
+  const { can } = useUser();
   const {
     apiKeys,
     createdApiKeyText,
@@ -46,34 +48,54 @@ export function OrganizationSettingsPageContent() {
       </header>
 
       <div className="space-y-10">
-        <OrganizationIdentitySection
-          organizationNameErrorMessage={organizationNameErrorMessage}
-          handleIdentitySubmit={handleIdentitySubmit}
-          isSubmittingIdentity={isSubmittingIdentity}
-          register={register}
-          formOrganizationName={formOrganizationName}
-        />
+        {can("update:organization") && (
+          <OrganizationIdentitySection
+            organizationNameErrorMessage={organizationNameErrorMessage}
+            handleIdentitySubmit={handleIdentitySubmit}
+            isSubmittingIdentity={isSubmittingIdentity}
+            register={register}
+            formOrganizationName={formOrganizationName}
+          />
+        )}
 
-        <Separator />
+        {can("update:organization") &&
+          (can("read:api_key") || can("read:organization_members")) && (
+          <Separator />
+        )}
 
-        <OrganizationApiKeysSection
-          apiKeys={apiKeys}
-          handleCreateApiKey={handleCreateApiKey}
-          handleRevokeApiKey={handleRevokeApiKey}
-          handleDeleteApiKey={handleDeleteApiKey}
-          isCreateKeyDialogOpen={isCreateKeyDialogOpen}
-          setCreateKeyDialogOpen={setCreateKeyDialogOpen}
-          isCreatingApiKey={isCreatingApiKey}
-        />
+        {can("read:api_key") && (
+          <OrganizationApiKeysSection
+            apiKeys={apiKeys}
+            handleCreateApiKey={handleCreateApiKey}
+            handleRevokeApiKey={handleRevokeApiKey}
+            handleDeleteApiKey={handleDeleteApiKey}
+            isCreateKeyDialogOpen={isCreateKeyDialogOpen}
+            setCreateKeyDialogOpen={setCreateKeyDialogOpen}
+            isCreatingApiKey={isCreatingApiKey}
+          />
+        )}
 
-        <Separator />
+        {can("read:api_key") && can("read:organization_members") && (
+          <Separator />
+        )}
 
-        <OrganizationMembersSection
-          members={members}
-          handleChangeMemberRole={handleChangeMemberRole}
-          handleInviteMember={handleInviteMember}
-          handleRemoveMember={handleRemoveMember}
-        />
+        {can("read:organization_members") && (
+          <OrganizationMembersSection
+            members={members}
+            handleChangeMemberRole={handleChangeMemberRole}
+            handleInviteMember={handleInviteMember}
+            handleRemoveMember={handleRemoveMember}
+          />
+        )}
+
+        {!can("update:organization") &&
+          !can("read:api_key") &&
+          !can("read:organization_members") && (
+            <p className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50/50 px-4 py-8 text-center text-sm text-zinc-500">
+              Você não tem permissão para ver nenhuma configuração nesta
+              organização.
+            </p>
+          )}
       </div>
 
       <CreatedApiKeyDialog

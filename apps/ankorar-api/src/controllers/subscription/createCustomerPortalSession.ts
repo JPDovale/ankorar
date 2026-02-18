@@ -12,7 +12,7 @@ export const createCustomerPortalSessionRoute = Route.create({
   description:
     "Create a Stripe Customer Portal session so the user can manage their subscription. Returns the URL to redirect the user to.",
   response: createCustomerPortalSessionResponses,
-  preHandler: [Route.canRequest("read:session")],
+  preHandler: [Route.canRequest("create:portal")],
   handler: async (request, reply, { modules }) => {
     const user = request.context.user;
 

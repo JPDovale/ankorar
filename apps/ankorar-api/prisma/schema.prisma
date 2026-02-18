@@ -26,6 +26,8 @@ model User {
   stripe_subscription_id String?
   stripe_price_id        String?
   subscription_status    String?
+  ai_credits             Int       @default(0)
+  ai_credits_reset_at    DateTime?
 
   sessions                      Session[]
   activation_tokens             ActivationToken[]

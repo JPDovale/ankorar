@@ -42,6 +42,7 @@ interface CreateApiKeyMutationResult {
 
 interface CreateApiKeyMutationPayload {
   expires_at?: string | null;
+  features?: string[];
 }
 
 async function createApiKeyMutationFn(

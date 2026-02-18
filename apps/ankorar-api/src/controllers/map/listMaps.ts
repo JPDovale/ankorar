@@ -8,7 +8,7 @@ export const listMapsRoute = Route.create({
   summary: "List maps",
   description: "List maps from authenticated member",
   response: listMapsResponses,
-  preHandler: [Route.canRequest("read:organization")],
+  preHandler: [Route.canRequest("read:map")],
   handler: async (request, reply, { modules }) => {
     const { Maps } = modules.map;
     const member = request.context.member;

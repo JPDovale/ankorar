@@ -27,6 +27,8 @@ export function canRequest(feature: CanRequestInput): CanRequestResponse {
       return;
     }
 
-    throw new PermissionDenied();
+    throw new PermissionDenied({
+      details: { feature },
+    });
   };
 }

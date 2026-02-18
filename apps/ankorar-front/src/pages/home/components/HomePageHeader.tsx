@@ -1,3 +1,4 @@
+import { Can } from "@/components/auth/Can";
 import { HomeCreateMapPopover } from "@/pages/home/components/HomeCreateMapPopover";
 import { useHomePageHeader } from "@/pages/home/hooks/useHomePageHeader";
 
@@ -26,7 +27,8 @@ export function HomePageHeader() {
       </div>
 
       <div className="flex sm:items-center sm:justify-end">
-        <HomeCreateMapPopover
+        <Can feature="create:map">
+          <HomeCreateMapPopover
           isOpen={isCreatePopoverOpen}
           onOpenChange={handleCreatePopoverOpenChange}
           mapTitle={mapTitle}
@@ -38,6 +40,7 @@ export function HomePageHeader() {
           onCreateMap={handleCreateMap}
           isCreatingMap={isCreatingMap}
         />
+        </Can>
       </div>
     </header>
   );

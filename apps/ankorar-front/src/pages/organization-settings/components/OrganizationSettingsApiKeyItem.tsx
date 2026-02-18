@@ -1,3 +1,4 @@
+import { Can } from "@/components/auth/Can";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { OrganizationApiKey } from "../hooks/useOrganizationSettingsPage";
@@ -62,28 +63,30 @@ export function OrganizationSettingsApiKeyItem({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center justify-end gap-1">
-          {isActive && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
-              onClick={() => onRevoke(apiKey)}
-              aria-label="Revogar chave"
-            >
-              Revogar
-            </Button>
-          )}
-          {!isActive && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
-              onClick={() => onDelete(apiKey)}
-              aria-label="Excluir chave"
-            >
-              Excluir
-            </Button>
-          )}
+          <Can feature="create:api_key">
+            {isActive && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
+                onClick={() => onRevoke(apiKey)}
+                aria-label="Revogar chave"
+              >
+                Revogar
+              </Button>
+            )}
+            {!isActive && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 px-2 text-xs text-red-600 hover:bg-red-50 hover:text-red-700"
+                onClick={() => onDelete(apiKey)}
+                aria-label="Excluir chave"
+              >
+                Excluir
+              </Button>
+            )}
+          </Can>
         </div>
       </td>
     </tr>
