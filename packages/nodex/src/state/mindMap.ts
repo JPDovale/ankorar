@@ -707,7 +707,7 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
 
     const nextNodes = updater(nodes, node);
 
-    set({ nodes: layoutNodes(nextNodes) });
+    set({ nodes: layoutMindMapNodes(nextNodes) });
   },
   makeChildNode: (node: MindMapNode) => {
     return {

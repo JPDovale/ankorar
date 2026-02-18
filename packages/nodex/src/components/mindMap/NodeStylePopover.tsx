@@ -18,6 +18,7 @@ import {
 } from "../ui/select";
 import { useShallow } from "zustand/react/shallow";
 import { useMindMapNode } from "../../hooks/mindMap/useMindMapNode";
+import { useMindMapNodeEditorContext } from "../../contexts/MindMapNodeEditorContext";
 import { cn } from "../../lib/utils";
 
 interface NodeStylePopoverProps {
@@ -25,6 +26,7 @@ interface NodeStylePopoverProps {
 }
 
 export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
+  const { customButtons } = useMindMapNodeEditorContext();
   const { zenMode, scale, offset, selectedNodeId, readOnly } = useMindMapState(
     useShallow((state) => ({
       zenMode: state.zenMode,
@@ -96,6 +98,24 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
         }}
       >
         <div className="flex items-center gap-2">
+          {customButtons.map((btn) => (
+            <button
+              key={btn.key}
+              type="button"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"
+              onPointerDown={(event) => {
+                event.stopPropagation();
+              }}
+              onClick={(event) => {
+                event.stopPropagation();
+                btn.onAction(selectedNode);
+              }}
+              aria-label={btn.key}
+              data-nodex-ui
+            >
+              {btn.children}
+            </button>
+          ))}
           <ToggleGroup
             type="single"
             size="sm"

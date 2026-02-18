@@ -7,12 +7,90 @@ import {
   MindMapHeader,
   MineMap,
   Nodex,
+  useMindMapState,
   ZenCard,
+  type MindMapNode,
 } from "@ankorar/nodex";
-import { LoaderCircle } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { LoaderCircle, Sparkles } from "lucide-react";
+import { deepenMapNodeRequest } from "@/services/maps/deepenMapNodeRequest";
 
 export function MapEditorPage() {
   const { isLoadingMap, isReadOnly, map, saveStatus } = useMapEditorPage();
+  const [isDeepening, setIsDeepening] = useState(false);
+  const findNode = useMindMapState((s) => s.findNode);
+  const findNodeParent = useMindMapState((s) => s.findNodeParent);
+  const updateNode = useMindMapState((s) => s.updateNode);
+
+  const getContextPath = useCallback(
+    (nodeId: string): string[] => {
+      const path: string[] = [];
+      let parent = findNodeParent(nodeId);
+      while (parent) {
+        path.push(parent.text.trim() || "(sem título)");
+        parent = findNodeParent(parent.id);
+      }
+      path.reverse();
+      return path;
+    },
+    [findNodeParent],
+  );
+
+  const onDeepenWithAi = useCallback(
+    async (node: MindMapNode) => {
+      if (!map || isReadOnly || isDeepening) return;
+      setIsDeepening(true);
+      try {
+        const contextPath = getContextPath(node.id);
+        const res = await deepenMapNodeRequest({
+          mapId: map.id,
+          node: {
+            id: node.id,
+            text: node.text,
+            style: node.style ? { color: node.style.color } : undefined,
+          },
+          contextPath: contextPath.length > 0 ? contextPath : undefined,
+        });
+        const newChildren = res.data?.newChildren ?? [];
+        if (newChildren.length === 0) return;
+        const current = findNode(node.id);
+        if (!current) return;
+        const updatedNode: MindMapNode = {
+          ...current,
+          childrens: [...current.childrens, ...(newChildren as MindMapNode[])],
+        };
+        updateNode(updatedNode);
+      } catch (e) {
+        console.error("Falha ao aprofundar nó com IA", e);
+      } finally {
+        setIsDeepening(false);
+      }
+    },
+    [map, isReadOnly, isDeepening, findNode, updateNode, getContextPath],
+  );
+
+  const nodeEditorCustomButtons = useMemo(
+    () => [
+      {
+        key: "gerar-com-ia",
+        children: (
+          <span
+            className="inline-flex items-center justify-center gap-1"
+            title="Gerar com IA"
+          >
+            {isDeepening ? (
+              <LoaderCircle className="size-4 animate-spin" aria-hidden />
+            ) : (
+              <Sparkles className="size-4" aria-hidden />
+            )}
+          </span>
+        ),
+        onAction: onDeepenWithAi,
+      },
+    ],
+    [onDeepenWithAi, isDeepening],
+  );
+
   const hasMap = Boolean(map);
   const showLoadingState = isLoadingMap;
   const showNotFoundState = !isLoadingMap && !hasMap;
@@ -40,7 +118,10 @@ export function MapEditorPage() {
             )}
 
             {showEditor && map && (
-              <Nodex readOnly={isReadOnly}>
+              <Nodex
+                readOnly={isReadOnly}
+                nodeEditorCustomButtons={nodeEditorCustomButtons}
+              >
                 <div className="flex h-16 shrink-0 items-center justify-between gap-3 border-b border-slate-200 bg-white pr-3">
                   <div className="min-w-0 flex-1">
                     <MindMapHeader

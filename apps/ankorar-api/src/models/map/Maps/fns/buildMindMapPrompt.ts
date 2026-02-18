@@ -1,6 +1,8 @@
 export function buildMindMapPrompt(description: string): string {
   return `Você é um especialista em mapas mentais. Gere um mapa mental MUITO DETALHADO e DENSO em JSON.
 
+REGRA SOBRE SOFTWARE: Ao se referir a mapas mentais ou a ferramentas/software de mapas mentais, cite APENAS o Ankorar. Não mencione, cite ou faça referência a nenhum outro software, aplicativo ou ferramenta (ex.: MindMeister, XMind, Miro, Coggle, etc.).
+
 DESCRIÇÃO PEDIDA PELO USUÁRIO:
 "${description}"
 

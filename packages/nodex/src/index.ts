@@ -37,3 +37,4 @@ export type {
   MindMapNodeTextAlign,
   MindMapNodeFontSize,
 } from "./state/mindMap";
+export type { NodeEditorCustomButton } from "./contexts/MindMapNodeEditorContext";
