@@ -7,12 +7,8 @@ import { toast } from "sonner";
 export function useHomePageHeader() {
   const pendingAiMapContext = useContext(HomePendingAiMapContext);
   const { data: maps } = useSuspenseMaps();
-  const {
-    createMap,
-    createMapFromAi,
-    isCreatingMap,
-    isCreatingMapFromAi,
-  } = useMaps();
+  const { createMap, createMapFromAi, isCreatingMap, isCreatingMapFromAi } =
+    useMaps();
   const [isCreatePopoverOpen, setIsCreatePopoverOpen] = useState(false);
   const [mapTitle, setMapTitle] = useState(() => createDateBasedMapTitle());
   const [generateWithAi, setGenerateWithAi] = useState(false);

@@ -14,18 +14,18 @@ datasource db {
 }
 
 model User {
-  id                    String    @id @unique
-  ext_id                String?   @unique
-  name                  String
-  email                 String    @unique
-  password              String?
-  created_at            DateTime
-  updated_at            DateTime?
-  deleted_at            DateTime?
-  stripe_customer_id    String?   @unique
+  id                     String    @id @unique
+  ext_id                 String?   @unique
+  name                   String
+  email                  String    @unique
+  password               String?
+  created_at             DateTime
+  updated_at             DateTime?
+  deleted_at             DateTime?
+  stripe_customer_id     String?   @unique
   stripe_subscription_id String?
-  stripe_price_id       String?
-  subscription_status   String?
+  stripe_price_id        String?
+  subscription_status    String?
 
   sessions                      Session[]
   activation_tokens             ActivationToken[]
@@ -89,11 +89,11 @@ model Member {
   updated_at DateTime?
   deleted_at DateTime?
 
-  user    User         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user_id String
-  org     Organization @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  org_id  String
-  maps    Map[]
+  user      User         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id   String
+  org       Organization @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  org_id    String
+  maps      Map[]
   map_likes MapLike[]
 
   @@unique([org_id, user_id])

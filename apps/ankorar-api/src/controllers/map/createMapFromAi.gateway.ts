@@ -22,6 +22,6 @@ export const createMapFromAiResponses = {
 };
 
 export const createMapFromAiBody = z.object({
-  description: z.string().min(1).max(4000).trim(),
+  description: z.string().min(1).max(10000).trim(),
   title: z.string().min(1).max(256).trim().optional(),
 });

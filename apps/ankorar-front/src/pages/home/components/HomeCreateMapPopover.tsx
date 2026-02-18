@@ -85,7 +85,7 @@ export function HomeCreateMapPopover({
                 value={mapDescription}
                 onChange={(e) => onMapDescriptionChange(e.target.value)}
                 placeholder="Ex.: Mapa com as fases do projeto: planejamento, execução, revisão e entrega"
-                maxLength={4000}
+                maxLength={10000}
                 rows={3}
                 className="w-full resize-none rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 shadow-[0_1px_2px_rgba(16,24,40,0.06)] focus:outline-none focus:ring-2 focus:ring-zinc-300"
               />

@@ -66,10 +66,8 @@ describe("[GET] /v1/maps/:map_id", () => {
 
     test("with valid and existent map from another member in same organization", async () => {
       const { user: ownerUser } = await orchestrator.createUser({});
-      const {
-        organization,
-        member: ownerMember,
-      } = await orchestrator.activateUser(ownerUser.id);
+      const { organization, member: ownerMember } =
+        await orchestrator.activateUser(ownerUser.id);
 
       const { user: viewerUser } = await orchestrator.createUser({});
       const { user: activatedViewerUser } = await orchestrator.activateUser(

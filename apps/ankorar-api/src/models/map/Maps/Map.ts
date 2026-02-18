@@ -19,7 +19,12 @@ interface MapProps {
 
 export type CreateMapProps = Optional<
   MapProps,
-  "content" | "preview" | "generated_by_ai" | "created_at" | "updated_at" | "deleted_at"
+  | "content"
+  | "preview"
+  | "generated_by_ai"
+  | "created_at"
+  | "updated_at"
+  | "deleted_at"
 >;
 
 export class Map extends Entity<MapProps> {

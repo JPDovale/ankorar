@@ -27,8 +27,80 @@ type RawNode = {
   [key: string]: unknown;
 };
 
+/** Formato amigável retornado pela IA: lista plana com parentId (sem recursão). */
+type FlatNode = {
+  id: string;
+  text: string;
+  type: string;
+  parentId: string | null;
+};
+
 function isRawNode(value: unknown): value is RawNode {
   return value !== null && typeof value === "object" && "text" in value;
+}
+
+function isFlatNode(value: unknown): value is FlatNode {
+  if (value === null || typeof value !== "object") return false;
+  const o = value as Record<string, unknown>;
+  return (
+    typeof o.id === "string" &&
+    typeof o.text === "string" &&
+    ("parentId" in o && (o.parentId === null || typeof o.parentId === "string"))
+  );
+}
+
+/** Verifica se o payload é formato flat (nodes com parentId). */
+function isFlatFormat(data: unknown): data is { nodes: FlatNode[] } {
+  if (data === null || typeof data !== "object" || !("nodes" in data)) return false;
+  const nodes = (data as { nodes: unknown }).nodes;
+  if (!Array.isArray(nodes) || nodes.length === 0) return false;
+  return isFlatNode(nodes[0]);
+}
+
+/**
+ * Converte lista plana (flat) em árvore RawNode com childrens preenchidos.
+ * Ordena filhos por ordem de aparição na lista original.
+ */
+function buildTreeFromFlat(nodes: FlatNode[]): RawNode {
+  const byId = new Map<string, RawNode & { childrens: RawNode[] }>();
+  for (const n of nodes) {
+    const raw: RawNode & { childrens: RawNode[] } = {
+      id: n.id,
+      text: n.text,
+      type: n.type,
+      childrens: [],
+    };
+    byId.set(n.id, raw);
+  }
+  let root: (RawNode & { childrens: RawNode[] }) | null = null;
+  for (const n of nodes) {
+    const raw = byId.get(n.id)!;
+    if (n.parentId === null) {
+      if (root != null) {
+        throw new MindMapNormalizationError(
+          "Flat format must have exactly one root (parentId: null)",
+          { raw: nodes.slice(0, 5) },
+        );
+      }
+      root = raw;
+    } else {
+      const parent = byId.get(n.parentId);
+      if (!parent) {
+        throw new MindMapNormalizationError(
+          `Flat node "${n.id}" references missing parentId "${n.parentId}"`,
+          { raw: n },
+        );
+      }
+      parent.childrens.push(raw);
+    }
+  }
+  if (!root) {
+    throw new MindMapNormalizationError(
+      "Flat format must have one node with parentId: null",
+      { raw: nodes.length },
+    );
+  }
+  return root;
 }
 
 /**
@@ -44,7 +116,11 @@ function normalizeNode(
 ): JsonValue {
   const id = String(raw.id ?? idSeq.next++);
   const text = typeof raw.text === "string" ? raw.text : " ";
-  const type = isRoot ? "central" : (raw.type === "central" ? "central" : "default");
+  const type = isRoot
+    ? "central"
+    : raw.type === "central"
+      ? "central"
+      : "default";
 
   const isDirectChildOfCentral = parentColor === null && !isRoot;
   const color = isRoot
@@ -99,17 +175,32 @@ function extractRootNodes(data: unknown): RawNode[] {
 
 /**
  * Normalizes raw AI output into a single root node array suitable for Map content.
+ * Aceita dois formatos:
+ * - Flat: { nodes: [ { id, text, type, parentId }, ... ] } — preferido, mais fácil para a IA gerar em cadeia.
+ * - Aninhado (legado): { nodes: [ { id, text, type, childrens: [...] } ] }.
  */
 export function normalizeMindMapNodesFromAi(raw: unknown): JsonValue[] {
+  const idSeq = { next: 1 };
+  const colorIndex = { next: 0 };
+
+  if (isFlatFormat(raw)) {
+    const rootRaw = buildTreeFromFlat(raw.nodes);
+    const normalized = normalizeNode(rootRaw, idSeq, colorIndex, true, null);
+    return [normalized];
+  }
+
   const roots = extractRootNodes(raw);
   if (roots.length === 0) {
     throw new MindMapNormalizationError(
-      "Expected an object with 'nodes' array containing one root node",
-      { raw: typeof raw === "object" && raw !== null ? raw : String(raw).slice(0, 500) },
+      "Expected an object with 'nodes' array (flat with parentId or one nested root node)",
+      {
+        raw:
+          typeof raw === "object" && raw !== null
+            ? raw
+            : String(raw).slice(0, 500),
+      },
     );
   }
-  const idSeq = { next: 1 };
-  const colorIndex = { next: 0 };
   const normalized = normalizeNode(roots[0], idSeq, colorIndex, true, null);
   return [normalized];
 }
