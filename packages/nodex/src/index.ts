@@ -10,6 +10,11 @@ export {
 } from "./state/mindMapHistory";
 export { useMindMapDebounce } from "./hooks/mindMap/useMindMapDebounce";
 export { getMindMapPreviewDataUrl } from "./utils/getMindMapPreviewDataUrl";
+export {
+  exportMindMapAsHighQualityImage,
+  HIGH_QUALITY_EXPORT_SCALE,
+  type ExportImageOptions,
+} from "./utils/exportMindMapAsHighQualityImage";
 export { useMindMapHistoryDebounce } from "./hooks/mindMap/useMindMapHistoryDebounce";
 
 export { Background } from "./components/mindMap/Background";

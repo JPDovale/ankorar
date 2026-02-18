@@ -128,6 +128,7 @@ export function MapEditorPage() {
                       title={map.title}
                       className="h-16"
                       saveStatus={saveStatus}
+                      showExportImageButton
                     />
                   </div>
                   {isReadOnly && (

@@ -1,6 +1,7 @@
 import { Route } from "@/src/infra/shared/entities/Route";
 import { JsonValue } from "@/src/models/map/Maps/Map";
 import { buildMindMapPrompt } from "@/src/models/map/Maps/fns/buildMindMapPrompt";
+import { deepenAllLeafNodes } from "@/src/models/map/Maps/fns/deepenAllLeafNodes";
 import { normalizeMindMapNodesFromAi } from "@/src/models/map/Maps/fns/normalizeMindMapNodesFromAi";
 import {
   createMapFromAiBody,
@@ -44,7 +45,13 @@ export const createMapFromAiRoute = Route.create({
     });
 
     const normalizedNodes = normalizeMindMapNodesFromAi(result.data);
-    const content = normalizedNodes as JsonValue[];
+    let content = normalizedNodes as JsonValue[];
+
+    content = await deepenAllLeafNodes(content, {
+      generateJson: OpenAi.generateJson,
+      client: modules.openai.client,
+    });
+
     const { map } = await Maps.create({
       member_id: member.id,
       title,

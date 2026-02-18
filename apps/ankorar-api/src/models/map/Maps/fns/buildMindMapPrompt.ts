@@ -9,7 +9,7 @@ DESCRIÇÃO PEDIDA PELO USUÁRIO:
 REQUISITOS DE CONTEÚDO (OBRIGATÓRIOS):
 - O mapa deve ser EXTREMAMENTE DETALHADO: explore o tema em profundidade, com vários níveis de ramificação (idealmente 4 ou mais níveis de profundidade quando o tema permitir).
 - ALTA DENSIDADE: o nó central deve ter pelo menos 4 a 8 ramos principais; cada ramo deve ter sub-ramos (2 a 5 filhos por nó quando fizer sentido); continue ramificando até níveis mais granulares.
-- NÓ CENTRAL: apenas o TÍTULO com NO MÁXIMO TRÊS PALAVRAS, sem descrição. Exemplos: "Sharding Vertical", "Protocolo TCP", "Mapa Mental".
+- NÓ CENTRAL (OBRIGATÓRIO): contém SOMENTE o título, SEM descrição e SEM quebras de linha. No máximo três palavras. Exemplos válidos: "Sharding Vertical", "Protocolo TCP", "Mapa Mental". NUNCA use \\n\\n nem texto explicativo no nó central.
 - DEMAIS NÓS — formato do texto:
   * TÍTULO (conceito ou nome curto).
   * Duas quebras de linha (\\n\\n).
@@ -24,12 +24,12 @@ Responda APENAS com um objeto JSON com uma única chave "nodes" cujo valor é um
 Cada nó é um objeto com exatamente: "id" (string única, "1", "2", "3", ...), "text" (string), "type" ("central" ou "default"), "parentId" (string do id do nó pai, ou null para o nó raiz).
 
 REGRAS DO FORMATO:
-1. O PRIMEIRO nó da lista deve ser o nó central: id "1", type "central", parentId null.
+1. O PRIMEIRO nó da lista deve ser o nó central: id "1", type "central", parentId null. O "text" do nó central deve ser APENAS o título (máximo três palavras), sem descrição.
 2. Os demais nós referenciam o pai pelo parentId: use o "id" do nó pai. Ex.: um nó com parentId "1" é filho do central; um nó com parentId "2" é filho do nó de id "2".
 3. Não use aninhamento (sem "childrens"). A hierarquia é definida só por parentId. Assim você pode incluir dezenas de nós e vários níveis de profundidade sem se perder em chaves.
 4. Ordene os nós de forma que um pai apareça antes de seus filhos na lista (raiz primeiro, depois filhos diretos, depois netos, etc.).
 
-EXEMPLO (lista plana — central primeiro, depois filhos por parentId):
+EXEMPLO (lista plana — central primeiro com SÓ título; demais com título + \\n\\n + descrição):
 {
   "nodes": [
     { "id": "1", "text": "Tema Central", "type": "central", "parentId": null },

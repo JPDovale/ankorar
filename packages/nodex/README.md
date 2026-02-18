@@ -75,6 +75,24 @@ Use `Nodex` with `readOnly` when the map should be visual-only:
 
 In `readOnly` mode, the package blocks content mutations (keyboard shortcuts, inline edits, add/remove node actions, and style popover updates).
 
+## High-quality image export
+
+You can export the whole map as a high-resolution PNG so that text stays readable when zooming, even on very large maps.
+
+- **From the header**: set `showExportImageButton` on `MindMapHeader` to show an “Export image” button that downloads a PNG (scale factor 3× by default).
+- **Programmatic**: use `exportMindMapAsHighQualityImage(nodes, options?)` with optional `scale` (1–4) and `filename`. Exported image dimensions are derived from node bounds plus padding, then multiplied by `scale`.
+
+```tsx
+import { MindMapHeader, exportMindMapAsHighQualityImage, useMindMapState } from "@ankorar/nodex";
+
+// In your page:
+<MindMapHeader title="My Map" showExportImageButton />
+
+// Or call manually:
+const nodes = useMindMapState.getState().getFlatNodes();
+await exportMindMapAsHighQualityImage(nodes, { scale: 3, filename: "my-map" });
+```
+
 ## Initial State
 
 `@ankorar/nodex` now starts with an empty node list (`nodes: []`).
@@ -124,7 +142,13 @@ import "@ankorar/nodex/styles.css";
 - `KeyboardHelpDialog`
 - `MineMap`
 - `ZenCard`
-- `MindMapHeader`
+- `MindMapHeader` (optional: `showExportImageButton` for PNG export)
+
+### Utilities
+
+- `getMindMapPreviewDataUrl(nodes)` – data URL for minimap-style preview thumbnails
+- `exportMindMapAsHighQualityImage(nodes, options?)` – render map to high-resolution PNG and trigger download
+- `HIGH_QUALITY_EXPORT_SCALE` – default scale factor (3) for export
 
 ### Hooks
 
