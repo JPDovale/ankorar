@@ -172,4 +172,19 @@
   .scrollbar::-webkit-scrollbar-corner {
     background: transparent;
   }
+
+  /* Dashboard: fundo com grid sutil */
+  .dashboard-bg {
+    background-color: oklch(0.98 0 0);
+    background-image:
+      linear-gradient(to right, oklch(0.92 0 0 / 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(0.92 0 0 / 0.4) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .dark .dashboard-bg {
+    background-color: oklch(0.12 0 0);
+    background-image:
+      linear-gradient(to right, oklch(0.25 0 0 / 0.3) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(0.25 0 0 / 0.3) 1px, transparent 1px);
+  }
 }

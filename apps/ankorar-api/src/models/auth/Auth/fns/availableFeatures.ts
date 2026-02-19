@@ -44,6 +44,9 @@ const availableFeatures = [
   "read:subscription",
   "create:checkout",
   "create:portal",
+
+  // SAAS DASHBOARD
+  "read:saas_dashboard",
 ];
 
 /** Features que uma chave de API pode ter (contexto da organização: membros e mapas). */

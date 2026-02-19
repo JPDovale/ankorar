@@ -1,6 +1,7 @@
 import { AuthenticatedLayout } from "@/layouts/authenticated";
 import { DefaultLayout } from "@/layouts/default";
 import { ActivateAccountPage } from "@/pages/activate-account/page";
+import { DashboardPage } from "@/pages/dashboard/page";
 import { LibrariesPage } from "@/pages/libraries/page";
 import { MapEditorPage } from "@/pages/map-editor/page";
 import { LandingPage } from "@/pages/landing/page";
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
           {
             Component: AuthenticatedLayout,
             children: [
+              {
+                path: "/dashboard",
+                Component: DashboardPage,
+              },
               {
                 path: "/home",
                 Component: HomePage,

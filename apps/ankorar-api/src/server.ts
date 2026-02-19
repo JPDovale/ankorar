@@ -6,6 +6,7 @@ import { activationController } from "./routes/activationController";
 import { organizationController } from "./routes/organizationController";
 import { mapController } from "./routes/mapController";
 import { libraryController } from "./routes/libraryController";
+import { dashboardController } from "./routes/dashboardController";
 import { subscriptionController } from "./routes/subscriptionController";
 import { Server } from "./infra/shared/entities/Server";
 import { ActivationModule } from "./models/activation/ActivationModule";
@@ -75,6 +76,7 @@ export function createServerInstance(
   server.appendController(mapController);
   server.appendController(libraryController);
   server.appendController(subscriptionController);
+  server.appendController(dashboardController);
 
   server.addOnRequestHook((request, reply) =>
     Controller.injectAnonymousOrUser({ request, reply }),
