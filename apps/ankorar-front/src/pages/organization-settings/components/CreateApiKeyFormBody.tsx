@@ -7,6 +7,7 @@ function featureLabel(feature: string): string {
     "create:user": "Criar usuário",
     "create:user:other": "Criar usuário (outro)",
     "read:user": "Ler usuário",
+    "read:user:other": "Ler outros usuários",
     "read:activation_token": "Ler token de ativação",
     "create:session": "Criar sessão",
     "read:session": "Ler sessão",

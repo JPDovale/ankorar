@@ -3,6 +3,7 @@ const availableFeatures = [
   "create:user",
   "create:user:other",
   "read:user",
+  "read:user:other",
 
   // ACTIVATION
   "read:activation_token",

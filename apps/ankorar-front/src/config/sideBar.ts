@@ -1,4 +1,10 @@
-import { LayoutDashboard, LibraryBig, Map, type LucideIcon } from "lucide-react";
+import {
+  LayoutDashboard,
+  LibraryBig,
+  Map,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 
 export interface SideBarSection {
   label: string;
@@ -8,6 +14,7 @@ export interface SideBarSection {
 
 export const sideBarSections: SideBarSection[] = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
+  { label: "Usuários", to: "/users", icon: Users },
   { label: "Mapas", to: "/home", icon: Map },
   { label: "Bibliotecas", to: "/libraries", icon: LibraryBig },
 ];

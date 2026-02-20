@@ -17,6 +17,8 @@ export function SideBarNav() {
   const location = useLocation();
 
   const isDashboardActive = location.pathname === "/dashboard";
+  const isUsersSectionActive =
+    location.pathname === "/users" || location.pathname.startsWith("/users/");
   const isMapsSectionActive =
     location.pathname === "/home" || location.pathname.startsWith("/maps/");
   const isLibrariesSectionActive = location.pathname === "/libraries";
@@ -33,6 +35,7 @@ export function SideBarNav() {
   const mapsList = maps ?? [];
   const librariesList = libraries ?? [];
   const DashboardIcon = sideBarSections[0].icon;
+  const UsersIcon = sideBarSections[1].icon;
 
   return (
     <nav
@@ -63,12 +66,35 @@ export function SideBarNav() {
           </div>
         </Can>
 
+        {/* Usuários */}
+        <Can feature="read:user:other">
+          <div className="rounded-md">
+            <NavLink
+              to={sideBarSections[1].to}
+              className={({ isActive }) =>
+                cn(
+                  "group/section flex items-center gap-2 rounded-md px-1.5 py-1.5 transition-colors",
+                  "group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-1",
+                  isActive || isUsersSectionActive
+                    ? "bg-violet-500/12 text-violet-700"
+                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
+                )
+              }
+            >
+              <UsersIcon className="size-3.5 shrink-0" />
+              <span className="truncate text-[13px] font-medium group-data-[collapsed=true]:hidden">
+                {sideBarSections[1].label}
+              </span>
+            </NavLink>
+          </div>
+        </Can>
+
         {/* Mapas */}
         <Can feature="read:map">
           <SideBarTreeSection
-            label={sideBarSections[1].label}
-            to={sideBarSections[1].to}
-            icon={sideBarSections[1].icon}
+            label={sideBarSections[2].label}
+            to={sideBarSections[2].to}
+            icon={sideBarSections[2].icon}
             isOpen={mapsOpen}
             onToggle={() => setMapsOpen((o) => !o)}
             isSectionActive={isMapsSectionActive}
@@ -93,9 +119,9 @@ export function SideBarNav() {
         {/* Bibliotecas */}
         <Can feature="read:library">
           <SideBarTreeSection
-            label={sideBarSections[2].label}
-            to={sideBarSections[2].to}
-            icon={sideBarSections[2].icon}
+            label={sideBarSections[3].label}
+            to={sideBarSections[3].to}
+            icon={sideBarSections[3].icon}
             isOpen={librariesOpen}
             onToggle={() => setLibrariesOpen((o) => !o)}
             isSectionActive={isLibrariesSectionActive}

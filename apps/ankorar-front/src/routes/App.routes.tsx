@@ -10,7 +10,9 @@ import { OrganizationSettingsPage } from "@/pages/organization-settings/page";
 import { PricingPage } from "@/pages/pricing/page";
 import { RegisterPage } from "@/pages/register";
 import { SubscriptionPage } from "@/pages/subscription/page";
+import { UserDetailPage } from "@/pages/user-detail/page";
 import { UserSettingsPage } from "@/pages/user-settings/page";
+import { UsersPage } from "@/pages/users/page";
 import { ProtectedRoute, PublicOnlyRoute } from "@/routes/guards";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { HomePage } from "@/pages/home/page";
@@ -58,6 +60,14 @@ const router = createBrowserRouter([
               {
                 path: "/dashboard",
                 Component: DashboardPage,
+              },
+              {
+                path: "/users",
+                Component: UsersPage,
+              },
+              {
+                path: "/users/:user_id",
+                Component: UserDetailPage,
               },
               {
                 path: "/home",

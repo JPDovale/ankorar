@@ -8,6 +8,7 @@ import { findUserByEmail } from "./fns/findUserByEmail";
 import { findUserByExtId } from "./fns/findUserByExtId";
 import { findUserById } from "./fns/findUserById";
 import { consumeAiCredit } from "./fns/consumeAiCredit";
+import { findManyPaginated } from "./fns/findManyPaginated";
 import { findUserByStripeCustomerId } from "./fns/findUserByStripeCustomerId";
 import { persistUser } from "./fns/persistUser";
 import { updateUserSubscriptionFields } from "./fns/updateUserSubscriptionFields";
@@ -24,6 +25,7 @@ const Users = {
     findById: findUserById,
     findByExtId: findUserByExtId,
     findByStripeCustomerId: findUserByStripeCustomerId,
+    findManyPaginated,
     persist: persistUser,
     updateSubscriptionFields: updateUserSubscriptionFields,
     consumeAiCredit,
