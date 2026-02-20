@@ -14,6 +14,7 @@ const availableFeatures = [
 
   // ORGANIZATIONS
   "read:organization",
+  "create:organization",
   "read:organization_members",
   "remove:member",
   "read:api_key",

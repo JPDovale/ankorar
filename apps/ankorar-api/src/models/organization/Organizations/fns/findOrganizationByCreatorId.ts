@@ -12,10 +12,12 @@ type FindOrganizationByCreatorIdResponse = {
 export async function findOrganizationByCreatorId({
   id,
 }: FindOrganizationByCreatorIdInput): Promise<FindOrganizationByCreatorIdResponse> {
-  const organizationOnDb = await db.organization.findUnique({
+  const organizationOnDb = await db.organization.findFirst({
     where: {
       creator_id: id,
+      deleted_at: null,
     },
+    orderBy: { created_at: "asc" },
   });
 
   if (!organizationOnDb) {

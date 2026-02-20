@@ -1,4 +1,5 @@
 import { useOrganizations } from "@/hooks/useOrganizations";
+import { useCurrentSubscription } from "@/hooks/useSubscription";
 import type { OrganizationInvitePreview } from "@/services/organizations/listOrganizationInvitesRequest";
 import type { OrganizationOption } from "@/types/auth";
 import { getOrganizationSlug } from "@/utils/getOrganizationSlug";
@@ -6,6 +7,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 export function useOrganizationSwitcher() {
+  const { data: subscription } = useCurrentSubscription();
   const {
     organizations: organizationsPreview,
     organizationInvites,
@@ -14,11 +16,14 @@ export function useOrganizationSwitcher() {
     acceptOrganizationInvite,
     rejectOrganizationInvite,
     switchOrganizationContext,
+    createOrganization,
     isAcceptingOrganizationInvite,
     isRejectingOrganizationInvite,
     isSwitchingOrganizationContext,
+    isCreatingOrganization,
   } = useOrganizations();
   const [handlingInviteId, setHandlingInviteId] = useState<string | null>(null);
+  const [createOrganizationDialogOpen, setCreateOrganizationDialogOpen] = useState(false);
 
   const organizations = useMemo<OrganizationOption[]>(() => {
     return organizationsPreview.map((organization) => ({
@@ -52,6 +57,17 @@ export function useOrganizationSwitcher() {
       null
     );
   }, [organizations, selectedOrgId]);
+
+  const organizationsCreatedCount = useMemo(
+    () => organizationsPreview.filter((o) => o.role === "Owner").length,
+    [organizationsPreview],
+  );
+  const maxOrganizationsCreate = subscription?.limits?.max_organizations_create ?? 1;
+  const canCreateOrganization = organizationsCreatedCount < maxOrganizationsCreate;
+  const createOrganizationLimitLabel =
+    maxOrganizationsCreate < 999
+      ? `Limite do plano: ${organizationsCreatedCount}/${maxOrganizationsCreate} organizações criadas.`
+      : undefined;
 
   const showLoadingOrganizations = isLoadingOrganizations;
   const showOrganizationSwitcher =
@@ -91,6 +107,17 @@ export function useOrganizationSwitcher() {
     });
   }
 
+  async function handleCreateOrganization(payload: { name: string }) {
+    const result = await createOrganization(payload);
+    if (result.success && result.organizationId) {
+      await switchOrganizationContext({
+        organization_id: result.organizationId,
+      });
+      toast.success("Organização criada. Você está nela agora.");
+    }
+    return result;
+  }
+
   return {
     organizations,
     selectedOrgId,
@@ -112,5 +139,11 @@ export function useOrganizationSwitcher() {
     handleRejectInvite: (invite: OrganizationInvitePreview) => {
       void handleInviteAction(invite, rejectOrganizationInvite, "rejeitado");
     },
+    createOrganizationDialogOpen,
+    setCreateOrganizationDialogOpen,
+    handleCreateOrganization,
+    isCreatingOrganization,
+    canCreateOrganization,
+    createOrganizationLimitLabel,
   };
 }

@@ -2,6 +2,7 @@ import { Controller } from "../infra/shared/entities/Controller";
 import { Route } from "../infra/shared/entities/Route";
 import { cancelOrganizationInviteRoute } from "../controllers/organization/cancelOrganizationInvite";
 import { createApiKeyRoute } from "../controllers/organization/createApiKey";
+import { createOrganizationRoute } from "../controllers/organization/createOrganization";
 import { upsertMemberRoute } from "../controllers/organization/upsertMember";
 import { listUserOrganizationsRoute } from "../controllers/organization/listUserOrganizations";
 import { createOrganizationInviteRoute } from "../controllers/organization/createOrganizationInvite";
@@ -23,6 +24,7 @@ const organizationController = Controller.create({
 });
 
 organizationController.appendRoute(createApiKeyRoute);
+organizationController.appendRoute(createOrganizationRoute);
 organizationController.appendRoute(listAvailableApiKeyFeaturesRoute);
 organizationController.appendRoute(listApiKeysRoute);
 organizationController.appendRoute(revokeApiKeyRoute);

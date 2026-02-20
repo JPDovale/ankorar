@@ -362,6 +362,9 @@ importers:
       clsx:
         specifier: 2.1.1
         version: 2.1.1
+      contrast:
+        specifier: 1.0.1
+        version: 1.0.1
       jspdf:
         specifier: 2.5.2
         version: 2.5.2
@@ -2949,6 +2952,9 @@ packages:
     resolution: {integrity: sha512-5IKcdX0nnYavi6G7TtOhwkYzyjfJlatbjMjuLSfE2kYT5pMDOilZ4OvMhi637CcDICTmz3wARPoyhqyX1Y+XvA==}
     engines: {node: ^14.18.0 || >=16.10.0}
 
+  contrast@1.0.1:
+    resolution: {integrity: sha512-cJvPtJOPXxFtkppBYqk1A1+ZtPT7neKmgjBKMtjnwSAZ5k+5GNdJHeDmIjCTLEItLcqna+K7GTtaGjQtDJcF4A==}
+
   conventional-changelog-angular@8.1.0:
     resolution: {integrity: sha512-GGf2Nipn1RUCAktxuVauVr1e3r8QrLP/B0lEUsFktmGqc3ddbQkhoJZHJctVU829U1c6mTSWftrVOCHaL85Q3w==}
     engines: {node: '>=18'}
@@ -3694,6 +3700,9 @@ packages:
 
   hermes-parser@0.25.1:
     resolution: {integrity: sha512-6pEjquH3rqaI6cYAXYPcz9MS4rY6R4ngRgrgfDshRptUZIc3lw0MCIJIGDj9++mfySOuPTHB4nrSW99BCvOPIA==}
+
+  hex-to-rgb@1.0.1:
+    resolution: {integrity: sha512-2GsESdjpJIrRL8I7iPOp0r0wczJBk++Q/zFrviNaTRPWMIgk5bPqDmKPUvRHN0SZrYT9N1e+xZU1niYJ6QxzMg==}
 
   homedir-polyfill@1.0.3:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
@@ -8004,6 +8013,10 @@ snapshots:
 
   consola@3.4.2: {}
 
+  contrast@1.0.1:
+    dependencies:
+      hex-to-rgb: 1.0.1
+
   conventional-changelog-angular@8.1.0:
     dependencies:
       compare-func: 2.0.0
@@ -8779,6 +8792,8 @@ snapshots:
   hermes-parser@0.25.1:
     dependencies:
       hermes-estree: 0.25.1
+
+  hex-to-rgb@1.0.1: {}
 
   homedir-polyfill@1.0.3:
     dependencies:

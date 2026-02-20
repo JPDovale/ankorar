@@ -3,13 +3,14 @@
  * Inclui:
  * - Sessão: create:session, read:session
  * - Mapas: criar/ler/editar/apagar (read:map, create:map, update:map, delete:map)
- * - Organização: editar nome, cancelar convite, remover membros (create:organization_invite só para owner)
+ * - Organização: criar org, editar nome, cancelar convite, remover membros (create:organization_invite só para owner)
  * - Planos e assinatura: read:plans, read:subscription, create:checkout, create:portal
  */
 const defaultMemberFeatures = [
   "create:session",
   "read:session",
   "read:organization",
+  "create:organization",
   "read:organization_members",
   "remove:member",
   "cancel:organization_invite",

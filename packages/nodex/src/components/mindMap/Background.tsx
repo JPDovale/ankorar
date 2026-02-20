@@ -6,9 +6,10 @@ import { cn } from "../../lib/utils";
 
 interface BackgroundProps {
   className?: string;
+  style?: CSSProperties;
 }
 
-export function Background({ className }: BackgroundProps = {}) {
+export function Background({ className, style }: BackgroundProps = {}) {
   const { offset, scale } = useMindMapState(
     useShallow((state) => ({
       offset: state.offset,
@@ -31,6 +32,7 @@ export function Background({ className }: BackgroundProps = {}) {
             "var(--nodex-grid-size, 40px) var(--nodex-grid-size, 40px)",
           backgroundPosition:
             "var(--nodex-offset-x, 0px) var(--nodex-offset-y, 0px)",
+          ...style,
         } as CSSProperties
       }
     />

@@ -7,6 +7,7 @@ import { listPendingOrganizationInvitesByUserId } from "./listPendingOrganizatio
 import { rejectOrganizationInvite } from "./rejectOrganizationInvite";
 import { updateOrganization } from "./updateOrganization";
 import { upsertOrganizationMember } from "./upsertOrganizationMember";
+import { countOrganizationsByCreatorId } from "./fns/countOrganizationsByCreatorId";
 import { findOrganizationByCreatorId } from "./fns/findOrganizationByCreatorId";
 import { findOrganizationById } from "./fns/findOrganizationById";
 import { findOrganizationsByUserId } from "./fns/findOrganizationsByUserId";
@@ -24,6 +25,7 @@ const Organizations = {
   acceptInvite: acceptOrganizationInvite,
   rejectInvite: rejectOrganizationInvite,
   fns: {
+    countByCreatorId: countOrganizationsByCreatorId,
     findById: findOrganizationById,
     findByUserId: findOrganizationsByUserId,
     persist: persistOrganization,

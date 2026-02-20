@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -5,6 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CreateOrganizationDialog } from "./CreateOrganizationDialog";
 import { OrganizationSwitcherOrganizationsList } from "./OrganizationSwitcherOrganizationsList";
 import { OrganizationSwitcherPendingInvites } from "./OrganizationSwitcherPendingInvites";
 import { OrganizationSwitcherTrigger } from "./OrganizationSwitcherTrigger";
@@ -28,6 +30,12 @@ export function OrganizationSwitcher() {
     handleSelectOrganization,
     handleAcceptInvite,
     handleRejectInvite,
+    createOrganizationDialogOpen,
+    setCreateOrganizationDialogOpen,
+    handleCreateOrganization,
+    isCreatingOrganization,
+    canCreateOrganization,
+    createOrganizationLimitLabel,
   } = useOrganizationSwitcher();
 
   return (
@@ -39,8 +47,15 @@ export function OrganizationSwitcher() {
       )}
 
       {showEmptyOrganizationsState && (
-        <Button variant="outline" className="h-10 gap-3 px-3" disabled>
-          Sem organizações
+        <Button
+          variant="outline"
+          className="h-10 gap-3 px-3"
+          onClick={() => canCreateOrganization && setCreateOrganizationDialogOpen(true)}
+          disabled={!canCreateOrganization}
+        >
+          {canCreateOrganization
+            ? "Criar organização"
+            : "Limite de organizações atingido"}
         </Button>
       )}
 
@@ -70,6 +85,25 @@ export function OrganizationSwitcher() {
               onSelectOrganization={handleSelectOrganization}
             />
 
+            <div className="border-t border-zinc-200 px-2 py-2">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start gap-2 text-zinc-600"
+                onClick={() => setCreateOrganizationDialogOpen(true)}
+                disabled={!canCreateOrganization}
+              >
+                <Plus className="size-4" />
+                Criar organização
+              </Button>
+              {createOrganizationLimitLabel != null && (
+                <p className="mt-1 px-2 text-[11px] text-zinc-500">
+                  {createOrganizationLimitLabel}
+                </p>
+              )}
+            </div>
+
             {isLoadingInvites && (
               <div className="border-t border-zinc-200 px-3 py-2">
                 <div className="space-y-1">
@@ -93,6 +127,15 @@ export function OrganizationSwitcher() {
           </PopoverContent>
         </Popover>
       )}
+
+      <CreateOrganizationDialog
+        open={createOrganizationDialogOpen}
+        onOpenChange={setCreateOrganizationDialogOpen}
+        onSubmit={handleCreateOrganization}
+        isCreating={isCreatingOrganization}
+        limitReached={!canCreateOrganization}
+        limitLabel={createOrganizationLimitLabel}
+      />
     </>
   );
 }

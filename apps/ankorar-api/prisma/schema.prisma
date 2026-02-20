@@ -31,7 +31,7 @@ model User {
 
   sessions                      Session[]
   activation_tokens             ActivationToken[]
-  organization                  Organization?
+  organizations_created         Organization[]
   members                       Member[]
   organization_invites_sent     OrganizationInvite[] @relation("organization_invites_sent")
   organization_invites_received OrganizationInvite[] @relation("organization_invites_received")
@@ -74,7 +74,7 @@ model Organization {
   deleted_at DateTime?
 
   creator    User   @relation(fields: [creator_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  creator_id String @unique
+  creator_id String
 
   members   Member[]
   api_keys  ApiKey[]

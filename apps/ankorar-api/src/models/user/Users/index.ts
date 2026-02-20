@@ -11,7 +11,9 @@ import { consumeAiCredit } from "./fns/consumeAiCredit";
 import { findManyPaginated } from "./fns/findManyPaginated";
 import { findUserByStripeCustomerId } from "./fns/findUserByStripeCustomerId";
 import { persistUser } from "./fns/persistUser";
+import { updateProfileById } from "./fns/updateProfileById";
 import { updateUserSubscriptionFields } from "./fns/updateUserSubscriptionFields";
+import { updateUserAiCreditsFields } from "./fns/updateUserAiCreditsFields";
 
 const Users = {
   create: createUser,
@@ -27,7 +29,9 @@ const Users = {
     findByStripeCustomerId: findUserByStripeCustomerId,
     findManyPaginated,
     persist: persistUser,
+    updateProfileById,
     updateSubscriptionFields: updateUserSubscriptionFields,
+    updateAiCreditsFields: updateUserAiCreditsFields,
     consumeAiCredit,
   },
 };

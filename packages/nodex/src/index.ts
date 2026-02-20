@@ -2,6 +2,7 @@ export {
   useMindMapState,
   layoutMindMapNodes,
   wrapTextAtWords,
+  applyBranchColorsToNodes,
 } from "./state/mindMap";
 export {
   useMindMapHistory,

@@ -9,6 +9,11 @@ function startOfNextMonthUtc(from: Date): Date {
   );
 }
 
+/** Sem data de expiração (ano 9999) = créditos infinitos (não decrementa). */
+function hasNoExpiration(resetAt: Date | null): boolean {
+  return resetAt != null && resetAt.getUTCFullYear() >= 9999;
+}
+
 type ConsumeAiCreditInput = {
   userId: string;
 };
@@ -16,8 +21,9 @@ type ConsumeAiCreditInput = {
 type ConsumeAiCreditResponse = void;
 
 /**
- * Consome 1 crédito de IA do usuário. Se o período mensal passou, reseta os
- * créditos conforme o plano. Dispara erro se não houver créditos.
+ * Consome 1 crédito de IA do usuário. Se não tiver data de expiração (créditos
+ * infinitos), não decrementa. Se tiver expiração, renova o período se passou e
+ * decrementa 1. Dispara erro se não houver créditos (só quando há expiração).
  */
 export async function consumeAiCredit({
   userId,
@@ -36,15 +42,21 @@ export async function consumeAiCredit({
       throw new UserNotFound();
     }
 
-    const limits = getPlanLimits(user.stripe_price_id);
     const now = new Date();
     const resetAt = user.ai_credits_reset_at
       ? new Date(user.ai_credits_reset_at)
       : null;
 
+    // Sem data de expiração = créditos infinitos: não decrementa.
+    if (hasNoExpiration(resetAt)) {
+      return;
+    }
+
+    const limits = getPlanLimits(user.stripe_price_id);
     let credits = user.ai_credits;
     let newResetAt = resetAt;
 
+    // Período passou: renova créditos e data de reset.
     if (!resetAt || now >= resetAt) {
       credits = limits.ai_credits_per_month;
       newResetAt = startOfNextMonthUtc(now);

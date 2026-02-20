@@ -62,6 +62,8 @@ interface UseMindMapState {
   getFlatNodes: () => MindMapNode[];
   getCentralNode: () => MindMapNode | null;
   getSelectedNode: () => MindMapNode | null;
+  /** Applies palette by branch: each direct child of central gets colors[i], all its descendants get the same color. */
+  applySegmentColors: (colors: string[]) => void;
 }
 
 const createId = () => `${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
@@ -157,6 +159,47 @@ const cloneNodes = (nodes: MindMapNode[]): MindMapNode[] =>
     isVisible: node.isVisible,
     childrens: cloneNodes(node.childrens),
   }));
+
+/**
+ * Applies branch colors: each direct child of the central node gets colors[i],
+ * and all descendants of that child keep the same color.
+ */
+export function applyBranchColorsToNodes(
+  nodes: MindMapNode[],
+  colors: string[],
+): MindMapNode[] {
+  if (!colors?.length) return nodes;
+
+  const cloneWithBranchColor = (
+    node: MindMapNode,
+    branchColor: string | null,
+  ): MindMapNode => {
+    const effectiveColor = branchColor ?? node.style.color;
+    return {
+      ...node,
+      style: { ...node.style, color: effectiveColor },
+      childrens: node.childrens.map((child, i) => {
+        const childBranchColor =
+          node.type === "central" ? colors[i % colors.length] : branchColor;
+        return cloneWithBranchColor(child, childBranchColor);
+      }),
+    };
+  };
+
+  return nodes.map((root) => cloneWithBranchColor(root, null));
+}
+
+function branchColorsEqual(a: MindMapNode[], b: MindMapNode[]): boolean {
+  if (a.length !== b.length) return false;
+  const walk = (x: MindMapNode[], y: MindMapNode[]): boolean => {
+    for (let i = 0; i < x.length; i++) {
+      if (x[i].style.color !== y[i].style.color) return false;
+      if (!walk(x[i].childrens, y[i].childrens)) return false;
+    }
+    return true;
+  };
+  return walk(a, b);
+}
 
 const PLACEHOLDER_W = 120;
 const PLACEHOLDER_H = 40;
@@ -727,6 +770,13 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
       isVisible: true,
       childrens: [],
     };
+  },
+  applySegmentColors: (colors) => {
+    if (!colors?.length) return;
+    const current = get().nodes;
+    const next = applyBranchColorsToNodes(current, colors);
+    if (branchColorsEqual(current, next)) return;
+    set({ nodes: next });
   },
 }));
 

@@ -13,6 +13,8 @@ import {
   type CreateUserRequestBody,
 } from "@/services/users/createUserRequest";
 import { getUserRequest, type User } from "@/services/users/getUserRequest";
+import { updateUserPasswordRequest } from "@/services/users/updateUserPasswordRequest";
+import { updateUserRequest } from "@/services/users/updateUserRequest";
 import { toast } from "sonner";
 
 export const userQueryKey = ["user"] as const;
@@ -51,6 +53,24 @@ interface CreateUserMutationResult {
 }
 
 interface LogoutMutationResult {
+  success: boolean;
+}
+
+interface UpdateUserRequestBody {
+  name?: string;
+  email?: string;
+}
+
+interface UpdateUserPasswordRequestBody {
+  current_password: string;
+  new_password: string;
+}
+
+interface UpdateUserMutationResult {
+  success: boolean;
+}
+
+interface UpdateUserPasswordMutationResult {
   success: boolean;
 }
 
@@ -121,6 +141,38 @@ async function logoutMutationFn(): Promise<LogoutMutationResult> {
   return { success: true };
 }
 
+async function updateUserMutationFn(
+  payload: UpdateUserRequestBody,
+): Promise<UpdateUserMutationResult> {
+  const response = await updateUserRequest(payload);
+
+  if (response.status !== 204) {
+    toast.error(
+      response.error?.message ?? "Não foi possível atualizar seu perfil.",
+      { action: response.error?.action },
+    );
+    return { success: false };
+  }
+
+  return { success: true };
+}
+
+async function updateUserPasswordMutationFn(
+  payload: UpdateUserPasswordRequestBody,
+): Promise<UpdateUserPasswordMutationResult> {
+  const response = await updateUserPasswordRequest(payload);
+
+  if (response.status !== 204) {
+    toast.error(
+      response.error?.message ?? "Não foi possível alterar a senha.",
+      { action: response.error?.action },
+    );
+    return { success: false };
+  }
+
+  return { success: true };
+}
+
 export function useUser() {
   const queryClient = useQueryClient();
 
@@ -165,6 +217,25 @@ export function useUser() {
     },
   });
 
+  const updateUserMutation = useMutation({
+    mutationFn: updateUserMutationFn,
+    onSuccess: (result) => {
+      if (result.success) {
+        queryClient.invalidateQueries({ queryKey: userQueryKey });
+        toast.success("Perfil atualizado.");
+      }
+    },
+  });
+
+  const updateUserPasswordMutation = useMutation({
+    mutationFn: updateUserPasswordMutationFn,
+    onSuccess: (result) => {
+      if (result.success) {
+        toast.success("Senha alterada com sucesso.");
+      }
+    },
+  });
+
   const me = userQuery.data;
   const user = me?.user ?? null;
   const features = me?.features ?? [];
@@ -202,6 +273,30 @@ export function useUser() {
     });
   }, [logoutMutation]);
 
+  const updateUser = useCallback(
+    async (
+      payload: UpdateUserRequestBody,
+    ): Promise<UpdateUserMutationResult> => {
+      return updateUserMutation.mutateAsync(payload).catch((error) => {
+        toast.error(extractUnexpectedErrorMessage(error));
+        return { success: false };
+      });
+    },
+    [updateUserMutation],
+  );
+
+  const updateUserPassword = useCallback(
+    async (
+      payload: UpdateUserPasswordRequestBody,
+    ): Promise<UpdateUserPasswordMutationResult> => {
+      return updateUserPasswordMutation.mutateAsync(payload).catch((error) => {
+        toast.error(extractUnexpectedErrorMessage(error));
+        return { success: false };
+      });
+    },
+    [updateUserPasswordMutation],
+  );
+
   return {
     user,
     features,
@@ -211,8 +306,12 @@ export function useUser() {
     login,
     createUser,
     logout,
+    updateUser,
+    updateUserPassword,
     isLoggingIn: loginUserMutation.isPending,
     isCreatingUser: createUserMutation.isPending,
     isLoggingOut: logoutMutation.isPending,
+    isUpdatingUser: updateUserMutation.isPending,
+    isUpdatingUserPassword: updateUserPasswordMutation.isPending,
   };
 }

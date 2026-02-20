@@ -11,6 +11,10 @@ import {
   type OrganizationInvitePreview,
 } from "@/services/organizations/listOrganizationInvitesRequest";
 import {
+  createOrganizationRequest,
+  type CreateOrganizationRequestBody,
+} from "@/services/organizations/createOrganizationRequest";
+import {
   listUserOrganizationsRequest,
   type OrganizationPreview,
 } from "@/services/organizations/listUserOrganizationsRequest";
@@ -58,6 +62,11 @@ interface UpdateOrganizationInviteMutationResult {
 
 interface SwitchOrganizationContextMutationResult {
   success: boolean;
+}
+
+interface CreateOrganizationMutationResult {
+  success: boolean;
+  organizationId?: string;
 }
 
 interface UpdateOrganizationInviteMutationPayload {
@@ -142,6 +151,35 @@ async function rejectOrganizationInviteMutationFn(
 
   return {
     success: true,
+  };
+}
+
+async function createOrganizationMutationFn(
+  payload: CreateOrganizationRequestBody,
+): Promise<CreateOrganizationMutationResult> {
+  const response = await createOrganizationRequest(payload);
+
+  if (response.status !== 201) {
+    toast.error(
+      response.error?.message ?? "Não foi possível criar a organização.",
+      {
+        action: response.error?.action,
+      },
+    );
+
+    return {
+      success: false,
+    };
+  }
+
+  const organizationId =
+    response.data && "organization_id" in response.data
+      ? response.data.organization_id
+      : undefined;
+
+  return {
+    success: true,
+    organizationId,
   };
 }
 
@@ -237,6 +275,22 @@ export function useOrganizations(params: UseOrganizationsParams = {}) {
     },
   });
 
+  const createOrganizationMutation = useMutation({
+    mutationFn: createOrganizationMutationFn,
+    onSuccess: (result) => {
+      if (!result.success) {
+        return;
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: organizationsQueryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: organizationInvitesQueryKey,
+      });
+    },
+  });
+
   const switchOrganizationContextMutation = useMutation({
     mutationFn: switchOrganizationContextMutationFn,
     onSuccess: (result) => {
@@ -315,6 +369,23 @@ export function useOrganizations(params: UseOrganizationsParams = {}) {
     [rejectOrganizationInviteMutation],
   );
 
+  const createOrganization = useCallback(
+    async (
+      payload: CreateOrganizationRequestBody,
+    ): Promise<CreateOrganizationMutationResult> => {
+      return createOrganizationMutation
+        .mutateAsync(payload)
+        .catch((error) => {
+          toast.error(extractUnexpectedErrorMessage(error));
+
+          return {
+            success: false,
+          };
+        });
+    },
+    [createOrganizationMutation],
+  );
+
   const switchOrganizationContext = useCallback(
     async (
       payload: SwitchOrganizationContextRequestBody,
@@ -339,10 +410,12 @@ export function useOrganizations(params: UseOrganizationsParams = {}) {
     isLoadingOrganizationInvites: invitesQuery.isPending,
     refetchOrganizations: organizationsQuery.refetch,
     refetchOrganizationInvites: invitesQuery.refetch,
+    createOrganization,
     createOrganizationInvite,
     acceptOrganizationInvite,
     rejectOrganizationInvite,
     switchOrganizationContext,
+    isCreatingOrganization: createOrganizationMutation.isPending,
     isCreatingOrganizationInvite: createOrganizationInviteMutation.isPending,
     isAcceptingOrganizationInvite: acceptOrganizationInviteMutation.isPending,
     isRejectingOrganizationInvite: rejectOrganizationInviteMutation.isPending,

@@ -1,7 +1,12 @@
 import { db } from "@/src/infra/database/pool";
-import { getPlanMemberFeatures } from "@/src/models/subscription/planConfig";
+import {
+  getPlanLimits,
+  getPlanMemberFeatures,
+} from "@/src/models/subscription/planConfig";
 import { findMembersByUserId } from "./findMembersByUserId";
 import { persistMember } from "./persistMember";
+
+const CREATE_ORGANIZATION_FEATURE = "create:organization" as const;
 
 type UpdateMembersFeaturesForUserInput = {
   userId: string;
@@ -14,7 +19,16 @@ export async function updateMembersFeaturesForUser({
   userId,
   stripePriceId,
 }: UpdateMembersFeaturesForUserInput): Promise<UpdateMembersFeaturesForUserResponse> {
-  const planFeatures = getPlanMemberFeatures(stripePriceId);
+  let planFeatures = getPlanMemberFeatures(stripePriceId);
+  const limits = getPlanLimits(stripePriceId);
+
+  if (
+    limits.max_organizations_create > 0 &&
+    !planFeatures.includes(CREATE_ORGANIZATION_FEATURE)
+  ) {
+    planFeatures = [...planFeatures, CREATE_ORGANIZATION_FEATURE];
+  }
+
   const { members } = await findMembersByUserId({ userId });
 
   const ownerOrgIds = new Set(
