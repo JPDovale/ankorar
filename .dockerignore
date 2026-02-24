@@ -1,0 +1,33 @@
+# Git e IDE
+.git
+.gitignore
+.cursor
+.vscode
+*.md
+!apps/ankorar-api/README.md
+
+# Dependências (instaladas no stage deps)
+node_modules
+**/node_modules
+
+# Build outputs locais
+**/build
+**/dist
+**/.turbo
+
+# Testes e cobertura
+**/*.spec.ts
+**/*.test.ts
+**/vitest.config*
+**/coverage
+
+# Env local (segredos no deploy)
+.env
+.env.*
+!.env.example
+
+# Outros
+**/infra/docker-compose*
+**/.husky
+**/logs
+*.log
