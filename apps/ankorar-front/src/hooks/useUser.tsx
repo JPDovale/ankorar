@@ -248,7 +248,7 @@ export function useUser() {
     async (payload: LoginRequestBody): Promise<LoginMutationResult> => {
       return loginUserMutation.mutateAsync(payload).catch((error) => {
         toast.error(extractUnexpectedErrorMessage(error));
-        return { success: false, user: null };
+        return { success: false, user: null, features: [] };
       });
     },
     [loginUserMutation],

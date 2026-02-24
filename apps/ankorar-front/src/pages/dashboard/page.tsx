@@ -22,7 +22,6 @@ import {
   BarChart,
   Cell,
   Legend,
-  Line,
   LineChart,
   Pie,
   PieChart,
@@ -473,8 +472,8 @@ export function DashboardPage() {
                         />
                         <YAxis width={32} stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
                         <Tooltip
-                          labelFormatter={formatDate}
-                          formatter={(value: number) => [formatUsd(value, openAi.currency), "Custo"]}
+                          labelFormatter={(label) => formatDate(String(label ?? ""))}
+                          formatter={(value: number | undefined) => [formatUsd(value ?? 0, openAi.currency), "Custo"]}
                           contentStyle={{
                             borderRadius: "var(--radius-lg)",
                             border: "1px solid var(--border)",
@@ -523,7 +522,7 @@ export function DashboardPage() {
                     />
                     <YAxis width={32} stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
                     <Tooltip
-                      labelFormatter={formatDate}
+                      labelFormatter={(label) => formatDate(String(label ?? ""))}
                       contentStyle={{
                         borderRadius: "var(--radius-lg)",
                         border: "1px solid var(--border)",
@@ -577,15 +576,15 @@ export function DashboardPage() {
                       outerRadius={100}
                       strokeWidth={3}
                       stroke="var(--card)"
-                      label={({ status, count }) => `${STATUS_LABEL[status] ?? status}: ${count}`}
+                      label={(props: { name?: string; value?: number }) => `${STATUS_LABEL[props.name ?? ""] ?? props.name}: ${props.value ?? 0}`}
                     >
                       {sub.by_status.map((entry) => (
                         <Cell key={entry.status} fill={STATUS_COLOR[entry.status] ?? "#71717a"} />
                       ))}
                     </Pie>
                     <Tooltip
-                      formatter={(value: number) => [value, "Assinaturas"]}
-                      labelFormatter={(label) => STATUS_LABEL[label] ?? label}
+                      formatter={(value: number | undefined) => [value ?? 0, "Assinaturas"]}
+                      labelFormatter={(label) => STATUS_LABEL[String(label ?? "")] ?? String(label ?? "")}
                       contentStyle={{
                         borderRadius: "var(--radius-lg)",
                         border: "1px solid var(--border)",
@@ -632,7 +631,7 @@ export function DashboardPage() {
                     />
                     <YAxis type="category" dataKey="plan_name" width={60} stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
                     <Tooltip
-                      formatter={(value: number) => [formatMrr(value), "MRR"]}
+                      formatter={(value: number | undefined) => [formatMrr(value ?? 0), "MRR"]}
                       contentStyle={{
                         borderRadius: "var(--radius-lg)",
                         border: "1px solid var(--border)",

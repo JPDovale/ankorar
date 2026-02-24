@@ -24,6 +24,7 @@ export function ActivateAccountPage() {
       setErrorMessage("Link de ativação inválido.");
       return;
     }
+    const id: string = tokenId;
 
     let cancelled = false;
 
@@ -31,14 +32,14 @@ export function ActivateAccountPage() {
       setStatus("loading");
       setErrorMessage("");
 
-      let promise = activationPromises.get(tokenId);
+      let promise = activationPromises.get(id);
       if (!promise) {
-        promise = activateAccountRequest(tokenId);
-        activationPromises.set(tokenId, promise);
+        promise = activateAccountRequest(id);
+        activationPromises.set(id, promise);
       }
 
       const response = await promise;
-      activationPromises.delete(tokenId);
+      activationPromises.delete(id);
 
       if (cancelled) return;
 

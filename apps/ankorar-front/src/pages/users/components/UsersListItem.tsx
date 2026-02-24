@@ -21,7 +21,7 @@ export function UsersListItem({
       <td className="px-4 py-3">
         <Link
           to={`/users/${user.id}`}
-          onClick={(e) => {
+          onClick={() => {
             onSelect();
           }}
           className="block font-medium text-zinc-900 hover:text-violet-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50 rounded"
@@ -46,7 +46,7 @@ export function UsersListItem({
       <td className="px-4 py-3 text-right">
         <Link
           to={`/users/${user.id}`}
-          onClick={(e) => onSelect()}
+          onClick={() => onSelect()}
           className="inline-flex items-center justify-center rounded-md text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50"
           aria-label={`Ver detalhes de ${user.name}`}
         >

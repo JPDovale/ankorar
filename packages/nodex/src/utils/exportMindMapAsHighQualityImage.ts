@@ -109,8 +109,6 @@ function drawNode(
   const w = getNodeWrapper(node);
   const x = w.left;
   const y = w.top;
-  const width = w.width;
-  const height = w.height;
   const innerX = x + node.style.wrapperPadding;
   const innerY = y + node.style.wrapperPadding;
   const innerW = node.style.w;

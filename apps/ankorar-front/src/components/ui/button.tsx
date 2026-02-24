@@ -33,13 +33,29 @@ const buttonVariants = cva(
 );
 
 type ButtonProps = React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants>;
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  };
 
-function Button({ className, variant, size, type = "button", ...props }: ButtonProps) {
+function Button({
+  className,
+  variant,
+  size,
+  type = "button",
+  asChild = false,
+  ...props
+}: ButtonProps) {
+  const computedClassName = cn(buttonVariants({ variant, size, className }));
+  if (asChild && props.children) {
+    const child = React.Children.only(props.children) as React.ReactElement<{ className?: string }>;
+    return React.cloneElement(child, {
+      className: cn(computedClassName, child.props?.className),
+    });
+  }
   return (
     <button
       type={type}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={computedClassName}
       {...props}
     />
   );

@@ -117,7 +117,7 @@ export function UserDetailContent() {
     "—";
 
   function openSubscriptionDialog() {
-    setSelectedPriceId(user.stripe_price_id ?? null);
+    setSelectedPriceId(user!.stripe_price_id ?? null);
     setSubscriptionDialogOpen(true);
   }
 
@@ -128,8 +128,8 @@ export function UserDetailContent() {
   }
 
   function openAiCreditsDialog() {
-    setAiCreditsInput(user.ai_credits);
-    setNeverExpireInput(isNeverExpire(user.ai_credits_reset_at));
+    setAiCreditsInput(user!.ai_credits);
+    setNeverExpireInput(isNeverExpire(user!.ai_credits_reset_at));
     setAiCreditsDialogOpen(true);
   }
 
