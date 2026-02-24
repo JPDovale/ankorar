@@ -4,11 +4,12 @@ Por padrão, no monorepo os apps (ex.: ankorar-front) usam o pacote **local** vi
 
 Se quiser que o **build de produção** use a versão **publicada no npm** (em vez do workspace):
 
-1. No comando de **install** do seu pipeline (Vercel, Docker, etc.), rode antes do `pnpm install`:
+1. No comando de **install** do pipeline (Vercel, Docker, etc.), use **apenas**:
    ```bash
-   node scripts/use-published-nodex.js && pnpm install --frozen-lockfile
+   node scripts/use-published-nodex.js
    ```
-2. O script consulta o registry e define `pnpm.overrides["@ankorar/nodex"]` para a última versão publicada, então o `pnpm install` resolve o pacote pelo npm.
+   (rode na **raiz do monorepo**.) O script aplica o override e já roda `pnpm install` internamente (sem `--frozen-lockfile`). **Não** use `pnpm install --frozen-lockfile` no mesmo passo.
+2. O script consulta o registry, define `pnpm.overrides["@ankorar/nodex"]` e atualiza o lockfile; o build usa o pacote do npm.
 
 **Resumo:**
 - **Dev**: sempre workspace (pacote local).

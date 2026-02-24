@@ -3,18 +3,21 @@
  * Opcional: use a versão publicada de @ankorar/nodex no npm em vez do workspace.
  * Útil no build de produção (ex.: Vercel) quando quiser que os apps usem o pacote publicado.
  *
- * Uso: node scripts/use-published-nodex.js
- * Depois: pnpm install --frozen-lockfile (ou seu comando de install).
+ * Uso: na raiz do monorepo: node scripts/use-published-nodex.js
  *
- * O script adiciona pnpm.overrides["@ankorar/nodex"] com a última versão do npm
- * no package.json da raiz. Não commite o package.json após rodar localmente;
- * em CI use apenas no comando de install (ex.: node scripts/use-published-nodex.js && pnpm install).
+ * O script aplica o override, depois roda "pnpm install" na raiz (sem
+ * --frozen-lockfile) para atualizar o lockfile. Em CI/Vercel use só este
+ * comando no Install (não use --frozen-lockfile).
+ *
+ * Não commite o package.json nem o pnpm-lock.yaml após rodar localmente.
  */
 
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 
-const rootPackagePath = path.join(__dirname, "..", "package.json");
+const rootDir = path.join(__dirname, "..");
+const rootPackagePath = path.join(rootDir, "package.json");
 
 async function getPublishedVersion() {
   const res = await fetch("https://registry.npmjs.org/@ankorar/nodex/latest");
@@ -35,6 +38,8 @@ async function main() {
   pkg.pnpm.overrides["@ankorar/nodex"] = version;
   fs.writeFileSync(rootPackagePath, JSON.stringify(pkg, null, 2) + "\n");
   console.log(`Override @ankorar/nodex -> ${version}`);
+  console.log("Rodando pnpm install na raiz (sem --frozen-lockfile)...");
+  execSync("pnpm install", { cwd: rootDir, stdio: "inherit" });
 }
 
 main().catch((err) => {
