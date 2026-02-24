@@ -38,8 +38,8 @@ async function main() {
   pkg.pnpm.overrides["@ankorar/nodex"] = version;
   fs.writeFileSync(rootPackagePath, JSON.stringify(pkg, null, 2) + "\n");
   console.log(`Override @ankorar/nodex -> ${version}`);
-  console.log("Rodando pnpm install na raiz (sem --frozen-lockfile)...");
-  execSync("pnpm install", { cwd: rootDir, stdio: "inherit" });
+  console.log("Rodando pnpm install na raiz (--no-frozen-lockfile)...");
+  execSync("pnpm install --no-frozen-lockfile", { cwd: rootDir, stdio: "inherit" });
 }
 
 main().catch((err) => {
