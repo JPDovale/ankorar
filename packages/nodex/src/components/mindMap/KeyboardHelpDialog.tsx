@@ -1,15 +1,37 @@
+import type { CSSProperties } from "react";
 import { useCallback } from "react";
 import { useMindMapState } from "../../state/mindMap";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { type KeyBind, rootKeyBinds } from "../../config/rootKeyBinds";
 import { cn } from "../../lib/utils";
 
-interface KeyboardHelpDialogProps {
-  className?: string;
+export interface KeyboardHelpDialogStyleSlots {
+  /** Modal content (dialog panel) */
+  contentClassName?: string;
+  contentStyle?: CSSProperties;
+  /** Title ("Atalhos de teclado") */
+  titleClassName?: string;
+  /** Description paragraph below title */
+  descriptionClassName?: string;
+  /** Each shortcut row */
+  itemClassName?: string;
+  /** Shortcut key badge (e.g. "Ctrl + Enter") */
+  shortcutKeyClassName?: string;
+  /** Shortcut description text */
+  shortcutDescriptionClassName?: string;
 }
 
+export interface KeyboardHelpDialogProps
+  extends KeyboardHelpDialogStyleSlots {}
+
 export function KeyboardHelpDialog({
-  className,
+  contentClassName,
+  contentStyle,
+  titleClassName,
+  descriptionClassName,
+  itemClassName,
+  shortcutKeyClassName,
+  shortcutDescriptionClassName,
 }: KeyboardHelpDialogProps = {}) {
   const helpOpen = useMindMapState((state) => state.helpOpen);
   const setHelpOpen = useMindMapState((state) => state.setHelpOpen);
@@ -33,12 +55,22 @@ export function KeyboardHelpDialog({
       <DialogContent
         className={cn(
           "h-[520px] max-w-[520px] border-slate-200 bg-white flex flex-col",
-          className,
+          contentClassName,
         )}
+        style={contentStyle}
       >
         <DialogHeader className="gap-1">
-          <DialogTitle className="text-lg">Atalhos de teclado</DialogTitle>
-          <p className="text-sm text-slate-500">
+          <DialogTitle
+            className={cn("text-lg", titleClassName)}
+          >
+            Atalhos de teclado
+          </DialogTitle>
+          <p
+            className={cn(
+              "text-sm text-slate-500",
+              descriptionClassName,
+            )}
+          >
             Comandos para navegar, editar e controlar o mapa mental.
           </p>
         </DialogHeader>
@@ -46,12 +78,25 @@ export function KeyboardHelpDialog({
           {shortcuts.map((shortcut) => (
             <div
               key={shortcut.shortCut}
-              className="flex items-start justify-between gap-4 border-b border-slate-100 pb-2 text-sm last:border-none last:pb-0"
+              className={cn(
+                "flex items-start justify-between gap-4 border-b border-slate-100 pb-2 text-sm last:border-none last:pb-0",
+                itemClassName,
+              )}
             >
-              <span className="rounded-md min-w-fit bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">
+              <span
+                className={cn(
+                  "rounded-md min-w-fit bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700",
+                  shortcutKeyClassName,
+                )}
+              >
                 {shortcut.shortCut}
               </span>
-              <span className="text-right text-slate-600">
+              <span
+                className={cn(
+                  "text-right text-slate-600",
+                  shortcutDescriptionClassName,
+                )}
+              >
                 {shortcut.description}
               </span>
             </div>

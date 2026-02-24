@@ -75,19 +75,19 @@ export const rootKeyBinds: { [x: string]: KeyBind } = {
   "Ctrl+=": {
     description: "Aumenta o zoom.",
     shortCut: "Ctrl + =",
-    handler: () => handleZoomByKeyBind(0.1),
+    handler: () => handleZoomByKeyBind(0.06),
     skipOnEditing: false,
   },
   "Ctrl++": {
     description: "Aumenta o zoom.",
     shortCut: "Ctrl + +",
-    handler: () => handleZoomByKeyBind(0.1),
+    handler: () => handleZoomByKeyBind(0.06),
     skipOnEditing: false,
   },
   "Ctrl+-": {
     description: "Diminui o zoom.",
     shortCut: "Ctrl + -",
-    handler: () => handleZoomByKeyBind(-0.1),
+    handler: () => handleZoomByKeyBind(-0.06),
     skipOnEditing: false,
   },
   "Alt+ArrowLeft": {

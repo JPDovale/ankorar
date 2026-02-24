@@ -36,6 +36,8 @@ interface UseMindMapState {
   readOnly: boolean;
 
   offset: MindMapPos;
+  isPanning: boolean;
+  setPanning: (value: boolean) => void;
 
   clampScale: (nextScale: number) => number;
   setScale: (nextScale: number) => void;
@@ -64,6 +66,9 @@ interface UseMindMapState {
   getSelectedNode: () => MindMapNode | null;
   /** Applies palette by branch: each direct child of central gets colors[i], all its descendants get the same color. */
   applySegmentColors: (colors: string[]) => void;
+  /** Default text color for newly created nodes (Tab/Enter). When null, uses "#0f172a". */
+  newNodesTextColor: string | null;
+  setNewNodesTextColor: (color: string | null) => void;
 }
 
 const createId = () => `${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
@@ -508,6 +513,8 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
 
   nodes: [],
   offset: { x: 0, y: 0 },
+  isPanning: false,
+  setPanning: (value) => set({ isPanning: value }),
 
   findNode: (nodeId) => {
     const { getFlatNodes } = get();
@@ -748,6 +755,7 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
     set({ nodes: layoutMindMapNodes(nextNodes) });
   },
   makeChildNode: (node: MindMapNode) => {
+    const defaultTextColor = get().newNodesTextColor ?? "#0f172a";
     return {
       id: createId(),
       pos: { x: 0, y: 0 },
@@ -762,7 +770,7 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
         isBold: false,
         isItalic: false,
         fontSize: 14,
-        textColor: "#0f172a",
+        textColor: defaultTextColor,
         backgroundColor: "transparent",
         textAlign: "left",
       },
@@ -771,6 +779,8 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
       childrens: [],
     };
   },
+  newNodesTextColor: null,
+  setNewNodesTextColor: (color) => set({ newNodesTextColor: color }),
   applySegmentColors: (colors) => {
     if (!colors?.length) return;
     const current = get().nodes;

@@ -9,32 +9,15 @@ export const getUserRoute = Route.create({
   description: "Returns the user info from the access token",
   response: getUserResponses,
   preHandler: [Route.canRequest("read:session")],
-  handler: async (request, reply, { modules }) => {
-    const payload = request.context.user;
-    const token = request.context.refresh_token;
-    const orgId = request.context.organization.id;
-    const memberId = request.context.member.id;
-
-    const { Sessions } = modules.session;
-    const { Controller } = modules.webserver;
-
-    const { accessToken, refreshToken } = await Sessions.refresh({
-      token,
-    });
-
-    Controller.setSessionCookies({
-      refreshToken: refreshToken.token,
-      accessToken: accessToken.token,
-      orgId,
-      memberId,
-      reply,
-    });
+  handler: async (request, reply) => {
+    const user = request.context.user;
+    const features = request.context.member.features;
 
     return reply.status(200).send({
       status: 200,
       data: {
-        user: payload,
-        features: request.context.member.features,
+        user,
+        features,
       },
     });
   },

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { MindMapNode } from "../../state/mindMap";
 import { useLayoutEffect, useMemo, useRef } from "react";
 import { useMindMapState } from "../../state/mindMap";
@@ -6,12 +7,22 @@ import { useMindMapNode } from "../../hooks/mindMap/useMindMapNode";
 import { useShallow } from "zustand/react/shallow";
 import { cn } from "../../lib/utils";
 
-type ImageNodeProps = {
+interface ImageNodeProps {
   node: MindMapNode;
   className?: string;
-};
+  style?: CSSProperties;
+  /** Caixa do conteúdo (imagem ou input URL) */
+  contentClassName?: string;
+  contentStyle?: CSSProperties;
+}
 
-export function ImageNode({ node, className }: ImageNodeProps) {
+export function ImageNode({
+  node,
+  className,
+  style,
+  contentClassName,
+  contentStyle,
+}: ImageNodeProps) {
   const { node: logicalNode } = useMindMapNode({ nodeId: node.id });
 
   const { selectedNodeId, editingNodeId, setEditingNode, readOnly } =
@@ -163,6 +174,7 @@ export function ImageNode({ node, className }: ImageNodeProps) {
         transform: `translate(${node.pos.x}px, ${node.pos.y}px)`,
         width: node.style.w + node.style.wrapperPadding * 2,
         height: node.style.h + node.style.wrapperPadding * 2,
+        ...style,
       }}
     >
       <div
@@ -175,18 +187,20 @@ export function ImageNode({ node, className }: ImageNodeProps) {
             node.style.isBold ? "font-semibold" : "font-medium",
             node.style.isItalic ? "italic" : "not-italic",
             isEditing ? "select-text" : "select-none",
+            contentClassName,
           )}
           style={{
+            ...contentStyle,
             width: node.style.w,
             height: node.style.h,
             borderColor: node.style.color,
-            color: node.style.textColor,
-            backgroundColor: node.style.backgroundColor,
             textAlign: node.style.textAlign,
             boxShadow:
               selectedNodeId === node.id
                 ? `0 0 0 2px ${node.style.color}`
                 : undefined,
+            color: node.style.textColor,
+            backgroundColor: node.style.backgroundColor,
           }}
           onMouseDown={onMouseDown}
           onDoubleClick={onDoubleClick}

@@ -41,11 +41,14 @@ export async function updateMembersFeaturesForUser({
   );
 
   for (const member of members) {
-    const features =
-      ownerOrgIds.has(member.org_id)
-        ? [...planFeatures, "create:organization_invite"]
-        : [...planFeatures];
-    member.features = features;
+    const featuresSet = new Set([
+      ...(member.features ?? []),
+      ...planFeatures,
+    ]);
+    if (ownerOrgIds.has(member.org_id)) {
+      featuresSet.add("create:organization_invite");
+    }
+    member.features = [...featuresSet];
     await persistMember({ member });
   }
 }

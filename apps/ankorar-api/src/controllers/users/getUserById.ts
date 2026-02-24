@@ -31,9 +31,9 @@ export const getUserByIdRoute = Route.create({
           updated_at: user.updated_at,
           subscription_status: user.subscription_status,
           stripe_price_id: user.stripe_price_id,
-          stripe_customer_id: user.stripe_customer_id,
-          ai_credits: user.ai_credits,
-          ai_credits_reset_at: user.ai_credits_reset_at,
+          stripe_customer_id: user.stripe_customer_id ?? null,
+          ai_credits: user.ai_credits ?? 0,
+          ai_credits_reset_at: user.ai_credits_reset_at ?? null,
         },
       },
     });

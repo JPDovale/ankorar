@@ -17,11 +17,7 @@ import {
 import { ApplicationError } from "../../errors/ApplicationError";
 import { InternalServerError } from "../../errors/InternalServerError";
 import { FastifyTypedInstance } from "../../http/types/fastify";
-import {
-  AppModuleClass,
-  AppModules,
-  setActiveModules,
-} from "./Modules";
+import { AppModuleClass, AppModules, setActiveModules } from "./Modules";
 
 type ControllerConvertOptions = {
   log: "never" | "all";
@@ -164,9 +160,7 @@ export class Server {
     this.opts.origin = origin;
   }
 
-  convertRoutes(
-    opts: ControllerConvertInputOptions = { log: this.opts.log },
-  ) {
+  convertRoutes(opts: ControllerConvertInputOptions = { log: this.opts.log }) {
     if (this.didConvertRoutes) {
       return;
     }
@@ -187,7 +181,7 @@ export class Server {
     this.didConvertRoutes = true;
   }
 
-  async listen(port = 9090) {
+  async listen(port = 9090, host = "0.0.0.0") {
     this.convertRoutes();
     await this.app.ready();
 
@@ -195,16 +189,16 @@ export class Server {
       this.app.swagger();
     }
 
-    await this.app.listen({ port });
+    await this.app.listen({ host, port });
 
     if (this.opts.log === "all") {
-      const origin = this.opts.origin ?? `http://localhost:${port}`;
+      const origin = `http://${host}:${port}`;
       console.log(`\n[✓] ${this.name} running in ${origin}`);
     }
   }
 
-  async run(port = 9090) {
-    await this.listen(port);
+  async run(port = 9090, host = "0.0.0.0") {
+    await this.listen(port, host);
   }
 
   async close() {
@@ -257,7 +251,9 @@ export class Server {
         request.log.error(logPayload, "ApplicationError");
         // Garante que o erro apareça no terminal (request.log pode não estar visível)
         const causeStr =
-          err.cause instanceof Error ? err.cause.message : String(err.cause ?? "");
+          err.cause instanceof Error
+            ? err.cause.message
+            : String(err.cause ?? "");
         console.error("\n[ERROR]", err.name, err.statusCode, err.message);
         console.error("  cause:", causeStr);
         if (err.details != null) {
@@ -268,7 +264,9 @@ export class Server {
         const errorBody = err.toJson();
         if (isDev && (err.statusCode === 502 || err.statusCode === 422)) {
           const causeDesc =
-            err.cause instanceof Error ? err.cause.message : String(err.cause ?? "");
+            err.cause instanceof Error
+              ? err.cause.message
+              : String(err.cause ?? "");
           (errorBody as Record<string, unknown>).cause = causeDesc;
           if (err.details != null) {
             (errorBody as Record<string, unknown>).details = err.details;

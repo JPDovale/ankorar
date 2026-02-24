@@ -1,5 +1,8 @@
 import { PlanLimitExceeded } from "@/src/infra/errors/PlanLimitExceeded";
-import { getPlanLimits, getPlanMemberFeatures } from "@/src/models/subscription/planConfig";
+import {
+  getPlanLimits,
+  getPlanMemberFeatures,
+} from "@/src/models/subscription/planConfig";
 import { Route } from "@/src/infra/shared/entities/Route";
 import {
   createOrganizationBody,
@@ -37,7 +40,7 @@ export const createOrganizationRoute = Route.create({
     });
 
     const planFeatures = getPlanMemberFeatures(user.stripe_price_id);
-    const { member } = await Members.create({
+    await Members.create({
       user_id: user.id,
       org_id: organization.id,
       features: [...planFeatures, "create:organization_invite"],

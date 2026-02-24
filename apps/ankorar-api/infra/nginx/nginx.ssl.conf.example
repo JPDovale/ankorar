@@ -1,0 +1,27 @@
+# SSL – usar depois do script: cert.pem e key.pem em /etc/nginx/ssl/
+# 1. docker cp infra/nginx/nginx.ssl.conf.example ankorar-prod-nginx:/etc/nginx/conf.d/ssl.conf
+# 2. docker exec ankorar-prod-nginx nginx -s reload
+# (Opcional) Redirect 80->443: editar default.conf e trocar o location / por: return 301 https://$host$request_uri;
+
+server {
+    listen 443 ssl;
+    server_name _;
+
+    ssl_certificate     /etc/nginx/ssl/cert.pem;
+    ssl_certificate_key /etc/nginx/ssl/key.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+
+    location / {
+        proxy_pass http://ankorar_api;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}

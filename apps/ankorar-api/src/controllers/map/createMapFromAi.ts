@@ -3,7 +3,10 @@ import { getPlanLimits } from "@/src/models/subscription/planConfig";
 import { Route } from "@/src/infra/shared/entities/Route";
 import { JsonValue } from "@/src/models/map/Maps/Map";
 import { buildMindMapPrompt } from "@/src/models/map/Maps/fns/buildMindMapPrompt";
-import { deepenAllLeafNodes } from "@/src/models/map/Maps/fns/deepenAllLeafNodes";
+import {
+  deepenAllLeafNodes,
+  type DeepenAllLeafNodesDeps,
+} from "@/src/models/map/Maps/fns/deepenAllLeafNodes";
 import { normalizeMindMapNodesFromAi } from "@/src/models/map/Maps/fns/normalizeMindMapNodesFromAi";
 import {
   createMapFromAiBody,
@@ -64,7 +67,7 @@ export const createMapFromAiRoute = Route.create({
     let content = normalizedNodes as JsonValue[];
 
     content = await deepenAllLeafNodes(content, {
-      generateJson: OpenAi.generateJson,
+      generateJson: OpenAi.generateJson as DeepenAllLeafNodesDeps["generateJson"],
       client: modules.openai.client,
     });
 

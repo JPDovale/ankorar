@@ -2,30 +2,22 @@
   "$schema": "https://www.schemastore.org/tsconfig",
   "display": "Node 24",
   "_version": "24.0.0",
-
   "compilerOptions": {
-    "lib": [
-      "es2024",
-      "ESNext.Array",
-      "ESNext.Collection",
-      "ESNext.Iterator",
-      "ESNext.Promise"
-    ],
-    "module": "nodenext",
+    "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator", "ESNext.Promise"],
     "target": "es2024",
-
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node16",
-
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "isolatedModules": true,
     "baseUrl": "./",
     "paths": {
       "@/*": ["./*"]
     },
-
     "types": ["@types/node", "vitest/globals"]
   },
-  "exclude": ["node_modules", "build"],
-  "types": ["@types/node", "vitest/globals"]
+  "exclude": ["node_modules", "build"]
 }

@@ -39,6 +39,7 @@ const availableFeatures = [
   // LIBRARIES
   "read:library",
   "create:library",
+  "create:library:other",
   "connect:library",
 
   // SUBSCRIPTION
@@ -64,6 +65,7 @@ const organizationApiKeyFeatures = [
   "unlike:map:other", // descurtir mapa de membro
   "read:library",
   "create:library",
+  "create:library:other",
 ] as const;
 
 export { availableFeatures, organizationApiKeyFeatures };

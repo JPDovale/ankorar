@@ -32,14 +32,17 @@ export const createLibraryRoute = Route.create({
       }
     }
 
-    await Libraries.create({
+    const { library } = await Libraries.create({
       organization_id: organization.id,
       name: request.body.name,
     });
 
-    return reply.status(201).send({
-      status: 201,
-      data: null,
-    });
+    return reply
+      .header("X-Library-Id", library.id)
+      .status(201)
+      .send({
+        status: 201,
+        data: null,
+      });
   },
 });

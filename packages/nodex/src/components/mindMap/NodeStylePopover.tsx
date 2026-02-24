@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { type MindMapNodeFontSize, useMindMapState } from "../../state/mindMap";
 import { Popover, PopoverAnchor, PopoverContent } from "../ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
@@ -21,11 +22,76 @@ import { useMindMapNode } from "../../hooks/mindMap/useMindMapNode";
 import { useMindMapNodeEditorContext } from "../../contexts/MindMapNodeEditorContext";
 import { cn } from "../../lib/utils";
 
-interface NodeStylePopoverProps {
-  className?: string;
+/** Opção de cor para o seletor (valor hex ou "transparent"; label opcional) */
+export interface NodeStylePopoverColorOption {
+  value: string;
+  label?: string;
 }
 
-export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
+/** Slots para estilizar a barra de edição dos nós (ex.: integrar com tema da aplicação) */
+export interface NodeStylePopoverStyleSlots {
+  /** Classe da barra de edição (wrapper) */
+  className?: string;
+  /** Conteúdo do popover (painel flutuante) */
+  contentClassName?: string;
+  contentStyle?: CSSProperties;
+  /** Botões da barra (ações customizadas, ícone de imagem, etc.) */
+  buttonClassName?: string;
+  buttonStyle?: CSSProperties;
+  /** Itens do toggle (B, I, H1, alinhamento, etc.) */
+  toggleItemClassName?: string;
+  /** Trigger dos selects (cor texto, cor fundo) */
+  selectTriggerClassName?: string;
+  /** Conteúdo dropdown dos selects */
+  selectContentClassName?: string;
+  /** Cores para o texto das células. Quando fornecido, substitui a lista padrão. */
+  textColors?: NodeStylePopoverColorOption[];
+  /** Cores para o fundo das células. Quando fornecido, substitui a lista padrão. Pode incluir "transparent". */
+  backgroundColors?: NodeStylePopoverColorOption[];
+}
+
+const DEFAULT_TEXT_COLORS: NodeStylePopoverColorOption[] = [
+  { value: "#0f172a", label: "Preto" },
+  { value: "#1f2937", label: "Cinza" },
+  { value: "#991b1b", label: "Vermelho" },
+  { value: "#9a3412", label: "Laranja" },
+  { value: "#a16207", label: "Amarelo" },
+  { value: "#166534", label: "Verde" },
+  { value: "#1e40af", label: "Azul" },
+  { value: "#3730a3", label: "Indigo" },
+  { value: "#6b21a8", label: "Roxo" },
+  { value: "#9d174d", label: "Rosa" },
+];
+
+const DEFAULT_BACKGROUND_COLORS: NodeStylePopoverColorOption[] = [
+  { value: "transparent", label: "Sem fundo" },
+  { value: "#fca5a5", label: "Vermelho" },
+  { value: "#fdba74", label: "Laranja" },
+  { value: "#fde047", label: "Amarelo" },
+  { value: "#86efac", label: "Verde" },
+  { value: "#93c5fd", label: "Azul" },
+  { value: "#a5b4fc", label: "Indigo" },
+  { value: "#d8b4fe", label: "Roxo" },
+  { value: "#f9a8d4", label: "Rosa" },
+  { value: "#e2e8f0", label: "Neutro" },
+];
+
+interface NodeStylePopoverProps extends NodeStylePopoverStyleSlots {}
+
+export function NodeStylePopover({
+  className,
+  contentClassName,
+  contentStyle,
+  buttonClassName,
+  buttonStyle,
+  toggleItemClassName,
+  selectTriggerClassName,
+  selectContentClassName,
+  textColors,
+  backgroundColors,
+}: NodeStylePopoverProps = {}) {
+  const textColorList = textColors ?? DEFAULT_TEXT_COLORS;
+  const backgroundColorList = backgroundColors ?? DEFAULT_BACKGROUND_COLORS;
   const { customButtons } = useMindMapNodeEditorContext();
   const { zenMode, scale, offset, selectedNodeId, readOnly } = useMindMapState(
     useShallow((state) => ({
@@ -39,7 +105,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
 
   const { node: selectedNode } = useMindMapNode({ nodeId: selectedNodeId });
 
-  if (!selectedNode || zenMode || selectedNode.type === "central" || readOnly) {
+  if (!selectedNode || zenMode || readOnly) {
     return null;
   }
 
@@ -91,7 +157,9 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
         className={cn(
           "w-auto border-slate-200 bg-white/90 p-1 shadow-sm backdrop-blur",
           className,
+          contentClassName,
         )}
+        style={contentStyle}
         data-nodex-ui
         onPointerDown={(event) => {
           event.stopPropagation();
@@ -102,7 +170,11 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <button
               key={btn.key}
               type="button"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"
+              className={cn(
+                "inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50",
+                buttonClassName,
+              )}
+              style={buttonStyle}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -144,6 +216,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <ToggleGroupItem
               value="t14"
               aria-label="Texto"
+              className={toggleItemClassName}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -153,6 +226,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <ToggleGroupItem
               value="h24"
               aria-label="H1"
+              className={toggleItemClassName}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -162,6 +236,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <ToggleGroupItem
               value="h20"
               aria-label="H2"
+              className={toggleItemClassName}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -171,6 +246,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <ToggleGroupItem
               value="h18"
               aria-label="H3"
+              className={toggleItemClassName}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -180,6 +256,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <ToggleGroupItem
               value="h16"
               aria-label="H4"
+              className={toggleItemClassName}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -213,6 +290,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <ToggleGroupItem
               value="bold"
               aria-label="Negrito"
+              className={toggleItemClassName}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -222,6 +300,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <ToggleGroupItem
               value="italic"
               aria-label="Italico"
+              className={toggleItemClassName}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -251,6 +330,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <ToggleGroupItem
               value="start"
               aria-label="Alinhar à esquerda"
+              className={toggleItemClassName}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -260,6 +340,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <ToggleGroupItem
               value="center"
               aria-label="Centralizar"
+              className={toggleItemClassName}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -269,6 +350,7 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
             <ToggleGroupItem
               value="end"
               aria-label="Alinhar à direita"
+              className={toggleItemClassName}
               onPointerDown={(event) => {
                 event.stopPropagation();
               }}
@@ -278,7 +360,11 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
           </ToggleGroup>
           <button
             type="button"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"
+            className={cn(
+              "inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50",
+              buttonClassName,
+            )}
+            style={buttonStyle}
             onPointerDown={(event) => {
               event.stopPropagation();
             }}
@@ -305,7 +391,10 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
               <SelectTrigger
                 size="sm"
                 hideIcon
-                className="min-h-8 min-w-8 max-w-8 max-h-8 gap-10 border-slate-200 bg-white p-0 z-50 flex overflow-hidden border-r-0 rounded-tr-none rounded-br-none"
+                className={cn(
+                  "min-h-8 min-w-8 max-w-8 max-h-8 gap-10 border-slate-200 bg-white p-0 z-50 flex overflow-hidden border-r-0 rounded-tr-none rounded-br-none",
+                  selectTriggerClassName,
+                )}
                 style={{ color: selectedNode.style.textColor }}
                 data-nodex-ui
                 aria-label="Cor do texto"
@@ -317,92 +406,25 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
                 align="end"
                 side="bottom"
                 sideOffset={6}
-                className="z-50 -left-3.5"
+                className={cn("z-50 -left-3.5", selectContentClassName)}
                 data-nodex-ui
                 onPointerDown={(event) => {
                   event.stopPropagation();
                 }}
               >
-                <SelectItem
-                  value="#0f172a"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#0f172a" }}>Preto</span>
-                </SelectItem>
-                <SelectItem
-                  value="#1f2937"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#1f2937" }}>Cinza</span>
-                </SelectItem>
-                <SelectItem
-                  value="#991b1b"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#991b1b" }}>Vermelho</span>
-                </SelectItem>
-                <SelectItem
-                  value="#9a3412"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#9a3412" }}>Laranja</span>
-                </SelectItem>
-                <SelectItem
-                  value="#a16207"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#a16207" }}>Amarelo</span>
-                </SelectItem>
-                <SelectItem
-                  value="#166534"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#166534" }}>Verde</span>
-                </SelectItem>
-                <SelectItem
-                  value="#1e40af"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#1e40af" }}>Azul</span>
-                </SelectItem>
-                <SelectItem
-                  value="#3730a3"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#3730a3" }}>Indigo</span>
-                </SelectItem>
-                <SelectItem
-                  value="#6b21a8"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#6b21a8" }}>Roxo</span>
-                </SelectItem>
-                <SelectItem
-                  value="#9d174d"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#9d174d" }}>Rosa</span>
-                </SelectItem>
+                {textColorList.map((opt) => (
+                  <SelectItem
+                    key={opt.value}
+                    value={opt.value}
+                    onPointerDown={(event) => {
+                      event.stopPropagation();
+                    }}
+                  >
+                    <span style={{ color: opt.value }}>
+                      {opt.label ?? opt.value}
+                    </span>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Select
@@ -414,7 +436,10 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
               <SelectTrigger
                 size="sm"
                 hideIcon
-                className="min-h-8 min-w-8 max-w-8 max-h-8 gap-10 border-slate-200 bg-white p-0 z-50 flex overflow-hidden rounded-tl-none rounded-bl-none"
+                className={cn(
+                  "min-h-8 min-w-8 max-w-8 max-h-8 gap-10 border-slate-200 bg-white p-0 z-50 flex overflow-hidden rounded-tl-none rounded-bl-none",
+                  selectTriggerClassName,
+                )}
                 style={{ color: selectedNode.style.textColor }}
                 data-nodex-ui
                 aria-label="Cor de fundo"
@@ -426,92 +451,31 @@ export function NodeStylePopover({ className }: NodeStylePopoverProps = {}) {
                 align="end"
                 side="bottom"
                 sideOffset={6}
-                className="z-50 -left-3.5"
+                className={cn("z-50 -left-3.5", selectContentClassName)}
                 data-nodex-ui
                 onPointerDown={(event) => {
                   event.stopPropagation();
                 }}
               >
-                <SelectItem
-                  value="transparent"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span className="text-slate-500">Sem fundo</span>
-                </SelectItem>
-                <SelectItem
-                  value="#fca5a5"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#991b1b" }}>Vermelho</span>
-                </SelectItem>
-                <SelectItem
-                  value="#fdba74"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#9a3412" }}>Laranja</span>
-                </SelectItem>
-                <SelectItem
-                  value="#fde047"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#a16207" }}>Amarelo</span>
-                </SelectItem>
-                <SelectItem
-                  value="#86efac"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#166534" }}>Verde</span>
-                </SelectItem>
-                <SelectItem
-                  value="#93c5fd"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#1e40af" }}>Azul</span>
-                </SelectItem>
-                <SelectItem
-                  value="#a5b4fc"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#3730a3" }}>Indigo</span>
-                </SelectItem>
-                <SelectItem
-                  value="#d8b4fe"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#6b21a8" }}>Roxo</span>
-                </SelectItem>
-                <SelectItem
-                  value="#f9a8d4"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#9d174d" }}>Rosa</span>
-                </SelectItem>
-                <SelectItem
-                  value="#e2e8f0"
-                  onPointerDown={(event) => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <span style={{ color: "#1f2937" }}>Neutro</span>
-                </SelectItem>
+                {backgroundColorList.map((opt) => (
+                  <SelectItem
+                    key={opt.value}
+                    value={opt.value}
+                    onPointerDown={(event) => {
+                      event.stopPropagation();
+                    }}
+                  >
+                    {opt.value === "transparent" ? (
+                      <span className="text-slate-500">
+                        {opt.label ?? "Sem fundo"}
+                      </span>
+                    ) : (
+                      <span style={{ color: opt.value }}>
+                        {opt.label ?? opt.value}
+                      </span>
+                    )}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

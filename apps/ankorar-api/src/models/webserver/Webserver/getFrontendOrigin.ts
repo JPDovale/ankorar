@@ -17,7 +17,7 @@ export function getFrontendOrigin(
   }
 
   if (["development", "test"].includes(process.env.NODE_ENV ?? "")) {
-    return "http://localhost:5173";
+    return "http://localhost:5597";
   }
 
   return "https://ankorar.com";

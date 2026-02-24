@@ -3,7 +3,8 @@ import { dateModule } from "../../../date/DateModule";
 import { AuthTokenPayload, AuthTokenType } from "../types";
 import { jwtAlgorithm } from "./jwtAlgorithm";
 import { normalizeKey } from "./normalizeKey";
-import { JwtPayload, VerifyOptions, verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import type { JwtPayload, VerifyOptions } from "jsonwebtoken";
 
 type VerifyTokenInput = {
   token: string;
@@ -31,7 +32,7 @@ export function verifyToken({
   }
 
   try {
-    const decoded = verify(token, publicKey, options);
+    const decoded = jwt.verify(token, publicKey, options);
     if (typeof decoded === "string") {
       throw new SessionExpired();
     }

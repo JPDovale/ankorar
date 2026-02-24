@@ -6,5 +6,11 @@ export async function createApiKeyForOrganization({
 }: {
   organization: Organization;
 }) {
-  return cryptoModule.ApiKeys.createForOrganization({ organization });
+  const result = await cryptoModule.ApiKeys.createForOrganization({
+    organization,
+  });
+  if (!result.ok) {
+    throw new Error(JSON.stringify(result.validation.error));
+  }
+  return { text: result.text };
 }

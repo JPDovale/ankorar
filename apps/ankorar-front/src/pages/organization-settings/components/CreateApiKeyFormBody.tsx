@@ -32,6 +32,7 @@ function featureLabel(feature: string): string {
     "unlike:map:other": "Descurtir mapa de membro",
     "read:library": "Ler biblioteca",
     "create:library": "Criar biblioteca",
+    "create:library:other": "Criar biblioteca para o dono",
     "connect:library": "Conectar biblioteca",
     "read:plans": "Ler planos",
     "read:subscription": "Ler assinatura",

@@ -45,7 +45,8 @@ export async function injectAuthenticatedWithApiKey({
   const subscriptionActive =
     owner.subscription_status != null &&
     ACTIVE_SUBSCRIPTION_STATUSES.includes(owner.subscription_status);
-  const planIsIntegration = getPlanSlug(owner.stripe_price_id) === "integration";
+  const planIsIntegration =
+    getPlanSlug(owner.stripe_price_id) === "integration";
 
   if (!subscriptionActive || !planIsIntegration) {
     throw new PermissionDenied({

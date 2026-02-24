@@ -31,6 +31,26 @@ export function createServerInstance(
     name: "Ankorar API",
     opts: {
       log: opts.log,
+      cors: {
+        origin: "*",
+        credentials: true,
+        methods: ["POST", "GET", "OPTIONS", "PATCH", "DELETE", "PUT"],
+        allowedHeaders: [
+          "Content-Type",
+          "Authorization",
+          "Accept",
+          "X-Api-Key",
+          "X-Library-Id",
+        ],
+        exposedHeaders: [
+          "X-Page",
+          "x-Pages",
+          "x-Per-page",
+          "x-Next-page",
+          "x-Total",
+          "X-Location",
+        ],
+      },
     },
     controllerConversor: Server.fastifyControllerConversor,
   });

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import type { MindMapNode } from "../../state/mindMap";
 import { useMindMapState } from "../../state/mindMap";
@@ -125,11 +126,30 @@ export function getMineMapProjection(
   return { nodesToRender, viewportRect };
 }
 
-interface MineMapProps {
+/** Slots para estilizar o MineMap (minimapa) e suas partes internas */
+export interface MineMapStyleSlots {
+  /** Container raiz do minimapa */
   className?: string;
+  style?: CSSProperties;
+  /** Elemento SVG do mapa */
+  svgClassName?: string;
+  svgStyle?: CSSProperties;
+  /** Cor da borda do quadro do mapa (SVG rect stroke). Default: #e2e8f0 */
+  borderStrokeColor?: string;
+  /** Cor da borda do retângulo de viewport. Default: #0f172a30 */
+  viewportStrokeColor?: string;
 }
 
-export function MineMap({ className }: MineMapProps = {}) {
+interface MineMapProps extends MineMapStyleSlots {}
+
+export function MineMap({
+  className,
+  style,
+  svgClassName,
+  svgStyle,
+  borderStrokeColor = "#e2e8f0",
+  viewportStrokeColor = "#0f172a30",
+}: MineMapProps = {}) {
   const { nodes, offset, scale, zenMode } = useMindMapState(
     useShallow((state) => ({
       nodes: state.nodes,
@@ -171,12 +191,15 @@ export function MineMap({ className }: MineMapProps = {}) {
         "pointer-events-none absolute bottom-4 right-4 z-50 transition-all duration-150 rounded-xl border border-slate-200 bg-white/50 p-2 shadow-sm backdrop-blur data-[zen=true]:opacity-0 data-[zen=true]:scale-90 opacity-100 scale-100",
         className,
       )}
+      style={style}
     >
       <svg
         width={MAP_WIDTH}
         height={MAP_HEIGHT}
         viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
         aria-hidden="true"
+        className={svgClassName}
+        style={svgStyle}
       >
         <rect
           x={0.5}
@@ -185,7 +208,7 @@ export function MineMap({ className }: MineMapProps = {}) {
           height={MAP_HEIGHT - 1}
           rx={10}
           fill="transparent"
-          stroke="#e2e8f0"
+          stroke={borderStrokeColor}
         />
         {nodesToRender.map((node) => (
           <circle
@@ -203,7 +226,7 @@ export function MineMap({ className }: MineMapProps = {}) {
             width={viewportRect.w}
             height={viewportRect.h}
             fill="transparent"
-            stroke="#0f172a30"
+            stroke={viewportStrokeColor}
             strokeWidth={1}
             rx={4}
           />

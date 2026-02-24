@@ -74,7 +74,7 @@ export async function deepenAllLeafNodes(
     return content;
   }
 
-  const roots = content.filter((c): c is TreeNode => isTreeNode(c));
+  const roots = content.filter(isTreeNode) as TreeNode[];
   if (roots.length === 0) return content;
 
   const clonedRoots = roots.map((r) => deepCloneNode(r));
@@ -99,7 +99,7 @@ export async function deepenAllLeafNodes(
   for (const { node, newChildren } of results) {
     if (newChildren.length > 0) {
       const existing = Array.isArray(node.childrens) ? node.childrens : [];
-      node.childrens = [...existing, ...newChildren];
+      node.childrens = [...existing, ...newChildren] as TreeNode[];
     }
   }
 

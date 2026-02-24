@@ -1,0 +1,37 @@
+# Produção: Nginx (round-robin) + 2 instâncias da API (sem DB)
+# Uso: docker compose -f infra/docker-compose.prod.yaml -p ankorar-prod up -d
+#
+# Defina DATABASE_URL (e demais envs da API) no .env ou no ambiente.
+# HTTPS: instale os certs dentro do container em /etc/nginx/ssl/ (cert.pem + key.pem); o volume ankorar_prod_ssl persiste.
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: ankorar-prod-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - ankorar-api-1
+      - ankorar-api-2
+    restart: unless-stopped
+
+  ankorar-api-1:
+    image: jpdv/ankorar-api:latest
+    container_name: ankorar-prod-api-1
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL}
+    restart: unless-stopped
+
+  ankorar-api-2:
+    image: jpdv/ankorar-api:latest
+    container_name: ankorar-prod-api-2
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL}
+    restart: unless-stopped

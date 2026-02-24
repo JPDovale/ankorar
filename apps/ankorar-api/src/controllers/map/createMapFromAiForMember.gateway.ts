@@ -30,6 +30,6 @@ export const createMapFromAiForMemberResponses = {
 };
 
 export const createMapFromAiForMemberBody = z.object({
-  description: z.string().min(1).max(10000).trim(),
+  description: z.string().min(1).max(120_000).trim(),
   title: z.string().min(1).max(256).trim().optional(),
 });

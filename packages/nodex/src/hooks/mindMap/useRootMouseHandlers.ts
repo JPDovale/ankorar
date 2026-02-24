@@ -34,7 +34,7 @@ export function useRootMouseHandlers({ rootRef }: UseRootMouseHandlersProps) {
       setEditingNode: state.setEditingNode,
       selectedNodeId: state.selectedNodeId,
       helpOpen: state.helpOpen,
-    }))
+    })),
   );
   const isDraggingRef = useRef(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -44,7 +44,7 @@ export function useRootMouseHandlers({ rootRef }: UseRootMouseHandlersProps) {
   const onWheel = (event: WheelReactEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (helpOpen) return;
-    const zoomSpeed = event.ctrlKey ? 0.0015 : 0.0015;
+    const zoomSpeed = event.ctrlKey ? 0.0005 : 0.0005;
     const zoomDelta = -event.deltaY * zoomSpeed;
     const nextScale = clampScale(scale + zoomDelta);
     if (nextScale === scale) {

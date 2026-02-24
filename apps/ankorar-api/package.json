@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "pnpm services:up && pnpm services:wait:database && pnpm migrate:latest && pnpm start:dev",
     "build": "tsc --noEmit",
+    "build:prod": "prisma generate && tsup src/index.ts --format esm --out-dir ./build --no-splitting --no-dts",
+    "start": "node build/index.js",
     "lint": "pnpm lint:prettier:check && pnpm lint:eslint:check .",
     "start:dev": "tsx watch --include \"./src/**/*.ts\" --exclude \"./src/**/*.spec.ts\" --env-file=./.env ./src/index.ts",
     "test:e2e:watch": "pnpm services:up && pnpm services:wait:database && vitest run --config ./vitest.config.e2e.ts --watch",
@@ -21,11 +23,17 @@
     "lint:prettier:fix": "prettier --write .",
     "lint:eslint:check": "eslint",
     "lint:eslint:fix": "eslint --fix",
-    "migrate:latest": "prisma migrate dev"
+    "migrate:latest": "prisma migrate dev",
+    "docker:build": "bash scripts/deploy/docker-build.sh",
+    "docker:push": "bash scripts/deploy/docker-push.sh",
+    "deploy:docker": "bash scripts/deploy/docker-deploy.sh",
+    "prod:up": "docker compose -f ./infra/docker-compose.prod.yaml -p ankorar-prod up -d",
+    "prod:down": "docker compose -f ./infra/docker-compose.prod.yaml -p ankorar-prod down"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "type": "module",
   "packageManager": "pnpm@10.27.0",
   "dependencies": {
     "@fastify/cors": "11.2.0",

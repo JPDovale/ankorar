@@ -42,7 +42,7 @@ export async function findMapDetailsByIdAndMemberId({
     content: mapOnDb.content as JsonValue[],
     created_at: mapOnDb.created_at,
     updated_at: mapOnDb.updated_at,
-    can_edit: false,
+    can_edit: true,
     likes_count: likesCount,
     liked_by_me: false,
   });

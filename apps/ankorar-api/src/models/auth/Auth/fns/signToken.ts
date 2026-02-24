@@ -1,4 +1,5 @@
-import { SignOptions, sign } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import type { SignOptions } from "jsonwebtoken";
 import { getExpiresInSeconds } from "./getExpiresInSeconds";
 import { jwtAlgorithm } from "./jwtAlgorithm";
 import { normalizeKey } from "./normalizeKey";
@@ -35,7 +36,7 @@ export function signToken({
     options.audience = process.env.JWT_AUDIENCE;
   }
 
-  const token = sign({ email, type }, privateKey, options);
+  const token = jwt.sign({ email, type }, privateKey, options);
 
   return {
     token,

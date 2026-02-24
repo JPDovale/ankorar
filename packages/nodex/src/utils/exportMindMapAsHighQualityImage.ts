@@ -229,10 +229,14 @@ export type ExportImageOptions = {
   scale?: number;
   /** Optional filename for download (without extension). */
   filename?: string;
+  /** Background color of the exported image (e.g. "white", "#1e293b"). Defaults to "#f8fafc". */
+  exportBackgroundColor?: string;
 };
 
 export type CreateMindMapCanvasOptions = {
   scale?: number;
+  /** Background color of the exported canvas. Defaults to "#f8fafc". */
+  exportBackgroundColor?: string;
 };
 
 /**
@@ -271,7 +275,8 @@ export function createMindMapExportCanvas(
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
 
-  ctx.fillStyle = "#f8fafc";
+  const backgroundColor = options.exportBackgroundColor ?? "#f8fafc";
+  ctx.fillStyle = backgroundColor;
   ctx.fillRect(0, 0, canvasW, canvasH);
 
   ctx.save();
@@ -298,6 +303,7 @@ export function exportMindMapAsHighQualityImage(
   const filename = options.filename ?? `mind-map-${Date.now()}`;
   const canvas = createMindMapExportCanvas(nodes, {
     scale: options.scale,
+    exportBackgroundColor: options.exportBackgroundColor,
   });
   if (!canvas) return Promise.resolve();
 

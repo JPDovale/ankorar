@@ -2,7 +2,7 @@ import { Route } from "@/src/infra/shared/entities/Route";
 import { createCustomerPortalSessionResponses } from "./createCustomerPortalSession.gateway";
 
 const FRONTEND_URL =
-  process.env.FRONTEND_URL ?? "http://localhost:5173";
+  process.env.FRONTEND_URL ?? "http://localhost:5597";
 
 export const createCustomerPortalSessionRoute = Route.create({
   path: "/v1/customer-portal/session",

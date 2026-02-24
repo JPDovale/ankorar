@@ -25,7 +25,7 @@ export const getUserSubscriptionRoute = Route.create({
         max_libraries: limits.max_libraries,
         ai_credits_per_month: limits.ai_credits_per_month,
       },
-      ai_credits: user.ai_credits,
+      ai_credits: user.ai_credits ?? 0,
       ai_credits_reset_at: user.ai_credits_reset_at
         ? user.ai_credits_reset_at.toISOString()
         : null,

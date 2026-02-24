@@ -3,6 +3,7 @@ import { Library } from "../Library";
 
 type FindLibraryPreviewsDataByOrganizationIdInput = {
   organizationId: string;
+  libraryIds?: string[];
 };
 
 type LibraryPreviewMapItemData = {
@@ -23,11 +24,15 @@ type FindLibraryPreviewsDataByOrganizationIdResponse = {
 
 export async function findLibraryPreviewsDataByOrganizationId({
   organizationId,
+  libraryIds,
 }: FindLibraryPreviewsDataByOrganizationIdInput): Promise<FindLibraryPreviewsDataByOrganizationIdResponse> {
   const librariesOnDb = await db.library.findMany({
     where: {
       organization_id: organizationId,
       deleted_at: null,
+      ...(libraryIds != null && libraryIds.length > 0
+        ? { id: { in: libraryIds } }
+        : {}),
     },
     orderBy: {
       created_at: "desc",

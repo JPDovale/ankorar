@@ -5,7 +5,7 @@ import {
 } from "./createCheckoutSession.gateway";
 
 const FRONTEND_URL =
-  process.env.FRONTEND_URL ?? "http://localhost:5173";
+  process.env.FRONTEND_URL ?? "http://localhost:5597";
 
 export const createCheckoutSessionRoute = Route.create({
   path: "/v1/checkout/session",

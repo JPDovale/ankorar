@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { MindMapNode } from "../../state/mindMap";
 import { useRef } from "react";
 import { useMindMapState } from "../../state/mindMap";
@@ -7,12 +8,22 @@ import { useMindMapNode } from "../../hooks/mindMap/useMindMapNode";
 import { useMindMapNodeEditor } from "../../hooks/mindMap/useMindMapNodeEditor";
 import { cn } from "../../lib/utils";
 
-type DefaultNodeProps = {
+interface DefaultNodeProps {
   node: MindMapNode;
   className?: string;
-};
+  style?: CSSProperties;
+  /** Caixa do conteúdo (retângulo com texto) */
+  contentClassName?: string;
+  contentStyle?: CSSProperties;
+}
 
-export function DefaultNode({ node, className }: DefaultNodeProps) {
+export function DefaultNode({
+  node,
+  className,
+  style,
+  contentClassName,
+  contentStyle,
+}: DefaultNodeProps) {
   const { node: logicalNode } = useMindMapNode({ nodeId: node.id });
 
   if (!logicalNode) return;
@@ -48,6 +59,7 @@ export function DefaultNode({ node, className }: DefaultNodeProps) {
         transform: `translate(${node.pos.x}px, ${node.pos.y}px)`,
         width: node.style.w + node.style.wrapperPadding * 2,
         height: node.style.h + node.style.wrapperPadding * 2,
+        ...style,
       }}
     >
       <div
@@ -58,22 +70,24 @@ export function DefaultNode({ node, className }: DefaultNodeProps) {
           className={cn(
             "flex items-center justify-center rounded-xl text-slate-900 data-[bold=true]:font-semibold data-[italic=true]:italic",
             editingNodeId === node.id ? "select-text" : "select-none",
+            contentClassName,
           )}
           data-bold={node.style.isBold}
           data-italic={node.style.isItalic}
           style={{
+            ...contentStyle,
             width: node.style.w,
             height: node.style.h,
             padding: `${node.style.padding.y}px ${node.style.padding.x}px`,
             borderColor: node.style.color,
             fontSize: node.style.fontSize,
-            color: node.style.textColor,
-            backgroundColor: node.style.backgroundColor,
             textAlign: node.style.textAlign,
             boxShadow:
               selectedNodeId === node.id
                 ? `0 0 0 2px ${node.style.color}`
                 : undefined,
+            color: node.style.textColor,
+            backgroundColor: node.style.backgroundColor,
           }}
           onMouseDown={onMouseDown}
           onDoubleClick={onDoubleClick}

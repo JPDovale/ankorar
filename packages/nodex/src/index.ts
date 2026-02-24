@@ -29,23 +29,42 @@ export {
 } from "./utils/exportMindMapAsPdf";
 export { useMindMapHistoryDebounce } from "./hooks/mindMap/useMindMapHistoryDebounce";
 
-export { Background } from "./components/mindMap/Background";
-export { Board } from "./components/mindMap/Board";
+export { Background, type BackgroundProps } from "./components/mindMap/Background";
+export {
+  Board,
+  type BoardProps,
+  type BoardStyleSlots,
+} from "./components/mindMap/Board";
 export { CentalNode } from "./components/mindMap/CentalNode";
 export { DefaultNode } from "./components/mindMap/DefaultNode";
-export { Header as MindMapHeader } from "./components/mindMap/Header";
+export {
+  Header as MindMapHeader,
+  type HeaderProps,
+  type HeaderStyleSlots,
+} from "./components/mindMap/Header";
 export {
   SaveStatusIndicator,
   type MindMapSaveStatus,
 } from "./components/mindMap/SaveStatusIndicator";
 export { ImageNode } from "./components/mindMap/ImageNode";
-export { KeyboardHelpDialog } from "./components/mindMap/KeyboardHelpDialog";
-export { MineMap } from "./components/mindMap/MineMap";
-export { NodeStylePopover } from "./components/mindMap/NodeStylePopover";
+export {
+  KeyboardHelpDialog,
+  type KeyboardHelpDialogProps,
+  type KeyboardHelpDialogStyleSlots,
+} from "./components/mindMap/KeyboardHelpDialog";
+export {
+  MineMap,
+  type MineMapStyleSlots,
+} from "./components/mindMap/MineMap";
+export {
+  NodeStylePopover,
+  type NodeStylePopoverColorOption,
+  type NodeStylePopoverStyleSlots,
+} from "./components/mindMap/NodeStylePopover";
 export { Nodes } from "./components/mindMap/Nodes";
 export { Nodex } from "./components/mindMap/Nodex";
 export { Segments } from "./components/mindMap/Segments";
-export { ZenCard } from "./components/mindMap/ZenCard";
+export { ZenCard, type ZenCardProps } from "./components/mindMap/ZenCard";
 
 export type {
   MindMapNode,

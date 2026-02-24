@@ -6,6 +6,7 @@ import { getMapsLikesInfo } from "@/src/models/map/Maps/fns/getMapsLikesInfo";
 type FindLibraryPreviewsByOrganizationIdInput = {
   organizationId: string;
   memberId: string;
+  libraryIds?: string[];
 };
 
 type FindLibraryPreviewsByOrganizationIdResponse = {
@@ -15,9 +16,11 @@ type FindLibraryPreviewsByOrganizationIdResponse = {
 export async function findLibraryPreviewsByOrganizationId({
   organizationId,
   memberId,
+  libraryIds,
 }: FindLibraryPreviewsByOrganizationIdInput): Promise<FindLibraryPreviewsByOrganizationIdResponse> {
   const { libraries } = await findLibraryPreviewsDataByOrganizationId({
     organizationId,
+    libraryIds,
   });
 
   const allMapIds = libraries.flatMap(({ maps }) => maps.map((m) => m.id));

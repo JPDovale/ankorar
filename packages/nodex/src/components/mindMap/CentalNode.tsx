@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { MindMapNode } from "../../state/mindMap";
 import { useRef } from "react";
 import { useMindMapState } from "../../state/mindMap";
@@ -7,12 +8,22 @@ import { useMindMapNode } from "../../hooks/mindMap/useMindMapNode";
 import { useMindMapNodeEditor } from "../../hooks/mindMap/useMindMapNodeEditor";
 import { cn } from "../../lib/utils";
 
-type CentalNodeProps = {
+interface CentalNodeProps {
   node: MindMapNode;
   className?: string;
-};
+  style?: CSSProperties;
+  /** Caixa do conteúdo (círculo com texto) */
+  contentClassName?: string;
+  contentStyle?: CSSProperties;
+}
 
-export function CentalNode({ node, className }: CentalNodeProps) {
+export function CentalNode({
+  node,
+  className,
+  style,
+  contentClassName,
+  contentStyle,
+}: CentalNodeProps) {
   const { editingNodeId, selectedNodeId, readOnly } = useMindMapState(
     useShallow((state) => ({
       selectedNodeId: state.selectedNodeId,
@@ -38,6 +49,7 @@ export function CentalNode({ node, className }: CentalNodeProps) {
         transform: `translate(${node.pos.x}px, ${node.pos.y}px)`,
         width: node.style.w + node.style.wrapperPadding * 2,
         height: node.style.h + node.style.wrapperPadding * 2,
+        ...style,
       }}
       onMouseDown={onMouseDown}
       onDoubleClick={onDoubleClick}
@@ -52,20 +64,22 @@ export function CentalNode({ node, className }: CentalNodeProps) {
           className={cn(
             "flex items-center justify-center rounded-full border border-slate-300 bg-white text-slate-900 shadow-sm data-[bold=true]:font-bold data-[italic=true]:italic",
             editingNodeId === node.id ? "select-text" : "select-none",
+            contentClassName,
           )}
           style={{
+            ...contentStyle,
             width: node.style.w,
             height: node.style.h,
             padding: `${node.style.padding.y}px ${node.style.padding.x}px`,
             borderColor: node.style.color,
             fontSize: node.style.fontSize,
-            color: node.style.textColor,
-            backgroundColor: node.style.backgroundColor,
             textAlign: node.style.textAlign,
             boxShadow:
               selectedNodeId === node.id
                 ? `0 0 0 3px ${node.style.color}`
                 : undefined,
+            color: node.style.textColor,
+            backgroundColor: node.style.backgroundColor,
           }}
           onDoubleClick={onDoubleClick}
         >
