@@ -32,7 +32,7 @@ export function createServerInstance(
     opts: {
       log: opts.log,
       cors: {
-        origin: "*",
+        origin: true, // aceita qualquer origem (reflete o Origin do request; necessário com credentials)
         credentials: true,
         methods: ["POST", "GET", "OPTIONS", "PATCH", "DELETE", "PUT"],
         allowedHeaders: [
