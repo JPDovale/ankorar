@@ -27,7 +27,7 @@ export function UserProfileSection({
         <div className="space-y-1">
           <h2
             id="user-profile-title"
-            className="text-sm font-semibold text-navy-900"
+            className="text-sm font-semibold text-navy-900 dark:text-ds-white transition-colors duration-200"
           >
             Perfil
           </h2>

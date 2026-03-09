@@ -31,11 +31,11 @@ export function OrganizationIdentitySection({
         <div className="space-y-1">
           <h2
             id="organization-identity-title"
-            className="text-sm font-semibold text-zinc-900"
+            className="text-sm font-semibold text-zinc-900 dark:text-ds-white transition-colors duration-200"
           >
             Identidade
           </h2>
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-zinc-500 dark:text-navy-300 transition-colors duration-200">
             Nome exibido para o time nos ambientes internos.
           </p>
         </div>
@@ -49,7 +49,7 @@ export function OrganizationIdentitySection({
         <InputRoot disabled={isSubmittingIdentity}>
           <label
             htmlFor="organization-settings-name"
-            className="text-xs font-medium text-zinc-600"
+            className="text-xs font-medium text-zinc-600 dark:text-navy-300"
           >
             Nome da organizacao
           </label>
@@ -57,7 +57,7 @@ export function OrganizationIdentitySection({
           <InputBox
             data-disabled={isSubmittingIdentity}
             data-has-error={Boolean(organizationNameErrorMessage)}
-            className="mt-1 h-10 border-zinc-300 bg-white transition-colors focus-within:border-violet-400"
+            className="mt-1 h-10 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-navy-700/70 dark:bg-navy-900 dark:focus-within:border-amber-300"
           >
             <Input
               id="organization-settings-name"

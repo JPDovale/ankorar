@@ -27,18 +27,18 @@ export function LibraryCard({ library, ownMapIds }: LibraryCardProps) {
   const linkedMapsSummaryText = `${linkedMaps.length} mapa${linkedMaps.length === 1 ? "" : "s"}`;
 
   return (
-    <article className="group relative overflow-hidden rounded-2xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/60 transition-all duration-200 hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] hover:ring-zinc-200/80">
+    <article className="group relative overflow-hidden rounded-2xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/60 transition-all duration-200 hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] hover:ring-zinc-200/80 dark:bg-navy-900 dark:ring-navy-700/70 dark:hover:ring-navy-600">
       <div className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-3">
-            <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600 ring-1 ring-violet-200/50">
+            <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600 ring-1 ring-violet-200/50 dark:bg-violet-400/10 dark:text-violet-300 dark:ring-violet-500/30">
               <LibraryBig className="size-5" />
             </span>
             <div className="min-w-0 space-y-1">
-              <p className="truncate text-sm font-semibold text-zinc-900">
+              <p className="truncate text-sm font-semibold text-zinc-900 dark:text-navy-100">
                 {library.name}
               </p>
-              <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-500">
+              <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-500 dark:text-navy-300">
                 <CalendarClock className="size-3 shrink-0" aria-hidden />
                 {libraryLastActivityLabel}
               </span>
@@ -46,7 +46,7 @@ export function LibraryCard({ library, ownMapIds }: LibraryCardProps) {
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
-            <span className="rounded-lg bg-zinc-100/80 px-2.5 py-1 text-[10px] font-semibold tabular-nums text-zinc-600 ring-1 ring-zinc-200/50">
+            <span className="rounded-lg bg-zinc-100/80 px-2.5 py-1 text-[10px] font-semibold tabular-nums text-zinc-600 ring-1 ring-zinc-200/50 dark:bg-navy-800 dark:text-navy-300 dark:ring-navy-700/60">
               {linkedMapsSummaryText}
             </span>
 
@@ -55,7 +55,7 @@ export function LibraryCard({ library, ownMapIds }: LibraryCardProps) {
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="size-8 shrink-0 rounded-lg text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800"
+                  className="size-8 shrink-0 rounded-lg text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800 dark:text-navy-300 dark:hover:bg-navy-800/70 dark:hover:text-navy-100"
                   aria-label={cardActionsLabel}
                 >
                   <MoreVertical className="size-3.5 shrink-0" />
@@ -64,13 +64,13 @@ export function LibraryCard({ library, ownMapIds }: LibraryCardProps) {
               <PopoverContent
                 align="end"
                 sideOffset={10}
-                className="z-30 w-60 border-zinc-200/80 p-0 shadow-[0_4px_12px_rgba(0,0,0,0.06)]"
+                className="z-30 w-60 border-zinc-200/80 bg-ds-surface-elevated p-0 shadow-[0_4px_12px_rgba(0,0,0,0.06)] dark:border-navy-700/60 dark:bg-navy-900"
               >
-                <div className="border-b border-zinc-200/80 bg-zinc-50/80 px-3 py-2.5">
-                  <p className="truncate text-sm font-semibold text-zinc-900">
+                <div className="border-b border-zinc-200/80 bg-zinc-50/80 px-3 py-2.5 dark:border-navy-700/60 dark:bg-navy-800/70">
+                  <p className="truncate text-sm font-semibold text-zinc-900 dark:text-ds-white">
                     {library.name}
                   </p>
-                  <p className="mt-0.5 text-[11px] text-zinc-500">
+                  <p className="mt-0.5 text-[11px] text-zinc-500 dark:text-navy-300">
                     Ações da biblioteca
                   </p>
                 </div>
@@ -78,7 +78,7 @@ export function LibraryCard({ library, ownMapIds }: LibraryCardProps) {
                 <div className="space-y-0.5 p-1.5">
                   <Button
                     variant="ghost"
-                    className="h-9 w-full justify-between gap-2 rounded-lg px-2.5 text-xs font-medium text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700"
+                    className="h-9 w-full justify-between gap-2 rounded-lg px-2.5 text-xs font-medium text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700 dark:text-navy-300 dark:hover:bg-navy-800/70 dark:hover:text-navy-100"
                     disabled
                   >
                     <span className="inline-flex items-center gap-2">
@@ -94,7 +94,7 @@ export function LibraryCard({ library, ownMapIds }: LibraryCardProps) {
         </div>
       </div>
 
-      <div className="border-t border-zinc-200/60 bg-zinc-50/40 px-4 pb-4 pt-3">
+      <div className="border-t border-zinc-200/60 bg-zinc-50/40 px-4 pb-4 pt-3 dark:border-navy-700/60 dark:bg-navy-800/40">
         <LibraryMapsMosaic
           maps={linkedMaps}
           emptyText="Nenhum mapa vinculado nesta biblioteca."

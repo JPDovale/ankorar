@@ -32,10 +32,10 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 const STATUS_STYLE: Record<string, string> = {
-  active: "bg-ds-success/15 text-ds-success border-ds-success/25",
-  trialing: "bg-amber-400/15 text-amber-700 border-amber-400/25",
-  past_due: "bg-ds-warning/15 text-amber-700 border-ds-warning/25",
-  canceled: "bg-navy-100 text-text-muted border-navy-200",
+  active: "bg-ds-success/15 text-ds-success border-ds-success/25 dark:bg-emerald-400/10 dark:text-emerald-300 dark:border-emerald-500/35",
+  trialing: "bg-amber-400/15 text-amber-700 border-amber-400/25 dark:bg-amber-400/10 dark:text-amber-300 dark:border-amber-500/35",
+  past_due: "bg-ds-warning/15 text-amber-700 border-ds-warning/25 dark:bg-amber-400/10 dark:text-amber-300 dark:border-amber-500/35",
+  canceled: "bg-navy-100 text-text-muted border-navy-200 dark:bg-navy-800 dark:text-navy-300 dark:border-navy-700",
 };
 
 function SubscriptionPageSkeleton() {
@@ -87,7 +87,7 @@ export function SubscriptionPage() {
   return (
     <section className="mx-auto max-w-2xl space-y-10 px-4 py-12 sm:px-6">
       <header className="space-y-3 text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-navy-900 sm:text-4xl">
+        <h1 className="text-3xl font-bold tracking-tight text-navy-900 dark:text-ds-white sm:text-4xl">
           Sua assinatura, seu controle
         </h1>
         <p className="text-base text-text-secondary sm:text-lg">
@@ -98,15 +98,15 @@ export function SubscriptionPage() {
       </header>
 
       {hasSubscription ? (
-        <Card className="overflow-hidden border-0 shadow-xl">
-          <div className="border-b border-navy-200/40 bg-navy-50/40 px-6 py-4">
+        <Card className="overflow-hidden border-0 shadow-xl dark:bg-navy-900">
+          <div className="border-b border-navy-200/40 bg-navy-50/40 px-6 py-4 dark:border-navy-700/60 dark:bg-navy-800/70">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-amber-400/15 text-amber-600">
+                <div className="flex size-10 items-center justify-center rounded-xl bg-amber-400/15 text-amber-600 dark:text-amber-300">
                   <CreditCard className="size-5" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl font-semibold text-navy-900">
+                  <CardTitle className="text-xl font-semibold text-navy-900 dark:text-ds-white">
                     {activePlanName ?? "Plano ativo"}
                   </CardTitle>
                   <CardDescription className="text-text-secondary">
@@ -125,33 +125,33 @@ export function SubscriptionPage() {
           </div>
           <CardContent className="space-y-6 px-6 py-6">
             <ul className="grid gap-3 sm:grid-cols-2">
-              <li className="flex items-center gap-3 rounded-lg bg-navy-50/50 p-3 text-sm text-navy-800">
+              <li className="flex items-center gap-3 rounded-lg bg-navy-50/50 p-3 text-sm text-navy-800 dark:bg-navy-800/70 dark:text-navy-100">
                 <CheckCircle2 className="size-5 shrink-0 text-ds-success" />
                 <span>Acesso completo a mapas e bibliotecas</span>
               </li>
-              <li className="flex items-center gap-3 rounded-lg bg-navy-50/50 p-3 text-sm text-navy-800">
-                <Zap className="size-5 shrink-0 text-amber-500" />
+              <li className="flex items-center gap-3 rounded-lg bg-navy-50/50 p-3 text-sm text-navy-800 dark:bg-navy-800/70 dark:text-navy-100">
+                <Zap className="size-5 shrink-0 text-amber-500 dark:text-amber-300" />
                 <span>Recursos premium sem limite</span>
               </li>
-              <li className="flex items-center gap-3 rounded-lg bg-navy-50/50 p-3 text-sm text-navy-800">
-                <ShieldCheck className="size-5 shrink-0 text-amber-500" />
+              <li className="flex items-center gap-3 rounded-lg bg-navy-50/50 p-3 text-sm text-navy-800 dark:bg-navy-800/70 dark:text-navy-100">
+                <ShieldCheck className="size-5 shrink-0 text-amber-500 dark:text-amber-300" />
                 <span>Pagamento seguro e renovação automática</span>
               </li>
-              <li className="flex items-center gap-3 rounded-lg bg-navy-50/50 p-3 text-sm text-navy-800">
-                <Sparkles className="size-5 shrink-0 text-amber-500" />
+              <li className="flex items-center gap-3 rounded-lg bg-navy-50/50 p-3 text-sm text-navy-800 dark:bg-navy-800/70 dark:text-navy-100">
+                <Sparkles className="size-5 shrink-0 text-amber-500 dark:text-amber-300" />
                 <span>Novidades liberadas para você primeiro</span>
               </li>
             </ul>
             {nextBilling && (
-              <div className="flex items-center gap-2 rounded-lg border border-navy-200/60 bg-navy-50/50 px-4 py-3 text-sm text-text-secondary">
+              <div className="flex items-center gap-2 rounded-lg border border-navy-200/60 bg-navy-50/50 px-4 py-3 text-sm text-text-secondary dark:border-navy-700/60 dark:bg-navy-800/70">
                 <Calendar className="size-4 shrink-0 text-text-muted" />
                 <span>
-                  Próxima cobrança: <strong className="text-navy-900">{nextBilling}</strong>
+                  Próxima cobrança: <strong className="text-navy-900 dark:text-ds-white">{nextBilling}</strong>
                 </span>
               </div>
             )}
           </CardContent>
-          <CardFooter className="border-t border-navy-200/40 px-6 py-4">
+          <CardFooter className="border-t border-navy-200/40 px-6 py-4 dark:border-navy-700/60">
             <Button
               size="lg"
               className="gap-2 font-medium shadow-sm"
@@ -173,12 +173,12 @@ export function SubscriptionPage() {
           </CardFooter>
         </Card>
       ) : (
-        <Card className="overflow-hidden border-0 shadow-xl">
-          <div className="border-b border-navy-200/40 bg-amber-50/50 px-6 py-6 text-center">
-            <div className="mx-auto mb-3 flex size-14 items-center justify-center rounded-2xl bg-amber-400/15 text-amber-600">
+        <Card className="overflow-hidden border-0 shadow-xl dark:bg-navy-900">
+          <div className="border-b border-navy-200/40 bg-amber-50/50 px-6 py-6 text-center dark:border-navy-700/60 dark:bg-amber-400/8">
+            <div className="mx-auto mb-3 flex size-14 items-center justify-center rounded-2xl bg-amber-400/15 text-amber-600 dark:text-amber-300">
               <Sparkles className="size-7" />
             </div>
-            <CardTitle className="text-2xl font-bold text-navy-900">
+            <CardTitle className="text-2xl font-bold text-navy-900 dark:text-ds-white">
               Eleve seu uso com um plano
             </CardTitle>
             <CardDescription className="mt-2 max-w-md mx-auto text-base text-text-secondary">
@@ -187,7 +187,7 @@ export function SubscriptionPage() {
             </CardDescription>
           </div>
           <CardContent className="space-y-4 px-6 py-6">
-            <ul className="space-y-3 text-sm text-navy-800">
+            <ul className="space-y-3 text-sm text-navy-800 dark:text-navy-100">
               <li className="flex items-center gap-3">
                 <CheckCircle2 className="size-5 shrink-0 text-ds-success" />
                 Mapas e camadas sem limite — crie e compartilhe à vontade
@@ -202,7 +202,7 @@ export function SubscriptionPage() {
               </li>
             </ul>
           </CardContent>
-          <CardFooter className="border-t border-navy-200/40 px-6 py-5">
+          <CardFooter className="border-t border-navy-200/40 px-6 py-5 dark:border-navy-700/60">
             <Link to="/pricing" className="w-full sm:w-auto">
               <Button size="lg" className="w-full gap-2 font-medium shadow-md sm:w-auto">
                 Ver planos e preços

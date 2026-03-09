@@ -36,7 +36,7 @@ export function HomePendingAiMapCard({ pending }: HomePendingAiMapCardProps) {
       data-pending-ai
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      className="group relative overflow-hidden rounded-2xl bg-white text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/60 transition-all duration-200 data-[pending-ai]:ring-violet-200/70 data-[pending-ai]:ring-2 data-[pending-ai]:hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] data-[pending-ai]:hover:ring-violet-200/80"
+      className="group relative overflow-hidden rounded-2xl bg-white text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/60 transition-all duration-200 data-[pending-ai]:ring-violet-200/70 data-[pending-ai]:ring-2 data-[pending-ai]:hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] data-[pending-ai]:hover:ring-violet-200/80 dark:bg-navy-900 dark:ring-navy-700/70 dark:data-[pending-ai]:ring-violet-500/35 dark:data-[pending-ai]:hover:ring-violet-400/45"
       aria-label={
         isLoading
           ? "Gerando mapa com IA..."
@@ -70,8 +70,8 @@ export function HomePendingAiMapCard({ pending }: HomePendingAiMapCardProps) {
           )}
         </div>
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/40">
-            <span className="text-xs font-medium text-zinc-600">
+          <div className="absolute inset-0 flex items-center justify-center bg-white/40 dark:bg-navy-950/45">
+            <span className="text-xs font-medium text-zinc-600 dark:text-navy-200">
               Gerando mapa...
             </span>
           </div>
@@ -80,10 +80,10 @@ export function HomePendingAiMapCard({ pending }: HomePendingAiMapCardProps) {
 
       <div className="flex flex-col gap-3 p-3.5">
         <header className="min-w-0 space-y-1">
-          <p className="truncate text-sm font-semibold text-zinc-900">
+          <p className="truncate text-sm font-semibold text-zinc-900 dark:text-navy-100">
             {displayTitle}
           </p>
-          <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-500">
+          <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-500 dark:text-navy-300">
             {isLoading ? (
               <>
                 <LoaderCircle className="size-3 shrink-0 animate-spin" aria-hidden />
@@ -100,7 +100,7 @@ export function HomePendingAiMapCard({ pending }: HomePendingAiMapCardProps) {
 
         <footer className="flex items-center justify-between gap-2">
           <span
-            className="inline-flex size-7 shrink-0 items-center justify-center rounded-lg bg-zinc-100/80 text-zinc-500 ring-1 ring-zinc-200/50"
+            className="inline-flex size-7 shrink-0 items-center justify-center rounded-lg bg-zinc-100/80 text-zinc-500 ring-1 ring-zinc-200/50 dark:bg-navy-800/80 dark:text-navy-300 dark:ring-navy-700/60"
             aria-hidden
           >
             <Map className="size-3.5 shrink-0" />

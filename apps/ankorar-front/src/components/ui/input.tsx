@@ -28,8 +28,8 @@ function InputBox({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "group rounded-lg border border-navy-200/80 bg-white flex gap-2.5 px-4 items-center",
-        "focus-within:ring-2 focus-within:ring-amber-400/50 focus-within:ring-offset-2 focus-within:ring-offset-ds-surface focus-within:bg-amber-50/30",
+        "group rounded-lg border border-navy-200/80 bg-white flex gap-2.5 px-4 items-center dark:border-navy-700/70 dark:bg-navy-900",
+        "focus-within:ring-2 focus-within:ring-amber-400/50 focus-within:ring-offset-2 focus-within:ring-offset-ds-surface focus-within:bg-amber-50/30 dark:focus-within:ring-amber-300/35 dark:focus-within:ring-offset-navy-900 dark:focus-within:bg-navy-800/70",
         "data-[disabled=true]:opacity-40 data-[disabled=true]:cursor-not-allowed",
         "data-[has-error=true]:border-ds-danger/50 data-[has-error=true]:focus-within:ring-2 data-[has-error=true]:focus-within:ring-ds-danger/15",
         className
@@ -78,8 +78,8 @@ const Textarea = React.forwardRef<
     ref={ref}
     data-slot="input"
     className={cn(
-      "w-full bg-white border border-navy-200/80 rounded-md py-2.5 px-3.5 text-sm text-text-primary placeholder:text-text-muted outline-none resize-y min-h-[80px] transition-colors",
-      "focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 focus:bg-amber-50/30",
+      "w-full bg-white border border-navy-200/80 rounded-md py-2.5 px-3.5 text-sm text-text-primary placeholder:text-text-muted outline-none resize-y min-h-[80px] transition-colors dark:border-navy-700/70 dark:bg-navy-900",
+      "focus:border-amber-400 focus:ring-2 focus:ring-amber-400/25 focus:bg-amber-50/30 dark:focus:border-amber-300 dark:focus:ring-amber-300/25 dark:focus:bg-navy-800/70",
       "disabled:opacity-40 disabled:cursor-not-allowed",
       className
     )}

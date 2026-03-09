@@ -23,10 +23,10 @@ export function LibrariesPageHeader({
   return (
     <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="space-y-1">
-        <h1 className="text-xl font-semibold tracking-tight text-zinc-900">
+        <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-ds-white transition-colors duration-200">
           Bibliotecas
         </h1>
-        <p className="text-xs text-zinc-500">{librariesSummaryText}</p>
+        <p className="text-xs text-zinc-500 dark:text-navy-300 transition-colors duration-200">{librariesSummaryText}</p>
       </div>
 
       <Can feature="create:library">

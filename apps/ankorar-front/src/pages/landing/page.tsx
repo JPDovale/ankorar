@@ -68,11 +68,11 @@ export function LandingPage() {
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link
             to="/"
-            className="flex h-10 items-center gap-2 rounded-lg px-1 transition-colors hover:bg-amber-50/50"
+            className="flex h-10 items-center gap-2 rounded-lg px-1 transition-colors hover:bg-amber-50/50 dark:hover:bg-navy-800/60"
           >
-            <AnkorarLogoMark className="size-5 shrink-0 text-amber-600" />
-            <span className="text-lg font-bold leading-none tracking-tight text-navy-900">
-              Anko<span className="text-amber-600">rar</span>
+            <AnkorarLogoMark className="size-5 shrink-0 text-amber-600 dark:text-amber-400" />
+            <span className="text-lg font-bold leading-none tracking-tight text-navy-900 dark:text-ds-white">
+              Anko<span className="text-amber-600 dark:text-amber-400">rar</span>
             </span>
           </Link>
           <nav className="flex items-center gap-2">
@@ -110,13 +110,13 @@ export function LandingPage() {
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-4 pt-16 pb-20 sm:px-6 sm:pt-24 sm:pb-28">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-50 px-4 py-1.5 text-sm font-medium text-amber-700">
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-50 px-4 py-1.5 text-sm font-medium text-amber-700 dark:border-amber-300/35 dark:bg-amber-300/10 dark:text-amber-200">
             <Sparkles className="size-4" />
             Mapas mentais que organizam ideias
           </div>
-          <h1 className="mt-6 text-4xl font-bold tracking-tight text-navy-900 sm:text-5xl lg:text-6xl">
+          <h1 className="mt-6 text-4xl font-bold tracking-tight text-navy-900 dark:text-ds-white sm:text-5xl lg:text-6xl">
             Organize ideias.{" "}
-            <span className="text-amber-600">Tome decisões melhores.</span>
+            <span className="text-amber-600 dark:text-amber-400">Tome decisões melhores.</span>
           </h1>
           <p className="mt-5 text-lg text-text-secondary sm:text-xl">
             Crie mapas mentais, bibliotecas e projetos em um só lugar. Comece
@@ -151,10 +151,10 @@ export function LandingPage() {
           </ul>
         </div>
         {/* Stats */}
-        <div className="mx-auto mt-16 flex max-w-3xl flex-wrap justify-center gap-x-12 gap-y-6 border-t border-navy-200/40 pt-12">
+        <div className="mx-auto mt-16 flex max-w-3xl flex-wrap justify-center gap-x-12 gap-y-6 border-t border-navy-200/40 pt-12 dark:border-navy-700/60">
           {STATS.map(({ value, label }) => (
             <div key={label} className="text-center">
-              <div className="text-2xl font-bold text-navy-900 sm:text-3xl">
+              <div className="text-2xl font-bold text-navy-900 dark:text-ds-white sm:text-3xl">
                 {value}
               </div>
               <div className="mt-0.5 text-sm text-text-muted">{label}</div>
@@ -164,9 +164,9 @@ export function LandingPage() {
       </section>
 
       {/* Features */}
-      <section className="border-y border-navy-200/40 bg-ds-surface-elevated py-16 sm:py-20">
+      <section className="border-y border-navy-200/40 bg-ds-surface-elevated py-16 sm:py-20 dark:border-navy-700/60">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="text-center text-2xl font-bold text-navy-900 sm:text-3xl">
+          <h2 className="text-center text-2xl font-bold text-navy-900 dark:text-ds-white sm:text-3xl">
             Tudo que você precisa para organizar ideias
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-text-secondary">
@@ -176,12 +176,12 @@ export function LandingPage() {
             {FEATURES.map(({ icon: Icon, title, description }) => (
               <div
                 key={title}
-                className="rounded-2xl border border-navy-200/50 bg-ds-surface p-6 shadow-sm transition-shadow hover:shadow-md"
+                className="rounded-2xl border border-navy-200/50 bg-ds-surface p-6 shadow-sm transition-shadow hover:shadow-md dark:border-navy-700/60 dark:bg-navy-900"
               >
-                <div className="flex size-12 items-center justify-center rounded-xl bg-amber-400/15 text-amber-600">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-amber-400/15 text-amber-600 dark:text-amber-300">
                   <Icon className="size-6" />
                 </div>
-                <h3 className="mt-4 font-semibold text-navy-900">{title}</h3>
+                <h3 className="mt-4 font-semibold text-navy-900 dark:text-navy-100">{title}</h3>
                 <p className="mt-2 text-sm text-text-secondary">{description}</p>
               </div>
             ))}
@@ -190,9 +190,9 @@ export function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="border-b border-navy-200/40 py-16 sm:py-20">
+      <section className="border-b border-navy-200/40 py-16 sm:py-20 dark:border-navy-700/60">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="text-center text-2xl font-bold text-navy-900 sm:text-3xl">
+          <h2 className="text-center text-2xl font-bold text-navy-900 dark:text-ds-white sm:text-3xl">
             Quem já usa recomenda
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-text-secondary">
@@ -202,9 +202,9 @@ export function LandingPage() {
             {TESTIMONIALS.map((t) => (
               <div
                 key={t.name}
-                className="relative rounded-2xl border border-navy-200/50 bg-ds-surface-elevated p-6 shadow-sm"
+                className="relative rounded-2xl border border-navy-200/50 bg-ds-surface-elevated p-6 shadow-sm dark:border-navy-700/60 dark:bg-navy-900"
               >
-                <Quote className="absolute right-4 top-4 size-8 text-amber-100" />
+                <Quote className="absolute right-4 top-4 size-8 text-amber-100 dark:text-amber-300/20" />
                 <div className="mb-3 flex gap-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <Star
@@ -214,15 +214,15 @@ export function LandingPage() {
                     />
                   ))}
                 </div>
-                <p className="text-sm leading-relaxed text-navy-800">
+                <p className="text-sm leading-relaxed text-navy-800 dark:text-navy-100">
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className="mt-4 flex items-center gap-3">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-400/20 text-sm font-semibold text-amber-700">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-400/20 text-sm font-semibold text-amber-700 dark:text-amber-300">
                     {t.initials}
                   </div>
                   <div>
-                    <div className="font-semibold text-navy-900">{t.name}</div>
+                    <div className="font-semibold text-navy-900 dark:text-navy-100">{t.name}</div>
                     <div className="text-xs text-text-muted">{t.role}</div>
                   </div>
                 </div>
@@ -265,20 +265,20 @@ export function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-navy-200/40 bg-ds-surface-elevated py-10">
+      <footer className="border-t border-navy-200/40 bg-ds-surface-elevated py-10 dark:border-navy-700/60">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-4 sm:flex-row sm:px-6">
           <div className="flex items-center gap-2">
-            <AnkorarLogoMark className="size-5 shrink-0 text-amber-600" />
-            <span className="font-bold text-navy-900">Anko<span className="text-amber-600">rar</span></span>
+            <AnkorarLogoMark className="size-5 shrink-0 text-amber-600 dark:text-amber-400" />
+            <span className="font-bold text-navy-900 dark:text-ds-white">Anko<span className="text-amber-600 dark:text-amber-400">rar</span></span>
           </div>
           <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-sm text-text-secondary">
-            <Link to="/pricing" className="hover:text-navy-900">
+            <Link to="/pricing" className="hover:text-navy-900 dark:hover:text-navy-100">
               Preços
             </Link>
-            <Link to="/login" className="hover:text-navy-900">
+            <Link to="/login" className="hover:text-navy-900 dark:hover:text-navy-100">
               Entrar
             </Link>
-            <Link to="/register" className="hover:text-navy-900">
+            <Link to="/register" className="hover:text-navy-900 dark:hover:text-navy-100">
               Criar conta
             </Link>
           </nav>

@@ -27,10 +27,10 @@ export function UsersPageContent() {
   return (
     <section className="space-y-6">
       <header className="space-y-1">
-        <h1 className="text-xl font-semibold tracking-tight text-zinc-900">
+        <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-ds-white transition-colors duration-200">
           Usuários
         </h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-zinc-500 dark:text-navy-300 transition-colors duration-200">
           {summaryText}. Status de assinatura por usuário.
         </p>
       </header>

@@ -87,19 +87,19 @@ export function UserDetailContent() {
       <section className="space-y-6">
         <Link
           to="/users"
-          className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900"
+        className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-navy-300 dark:hover:text-navy-100"
         >
           <ArrowLeft className="size-4" />
           Voltar à listagem
         </Link>
         <div
-          className="rounded-xl border border-amber-200/80 bg-amber-50/80 px-6 py-8 text-center"
+          className="rounded-xl border border-amber-200/80 bg-amber-50/80 px-6 py-8 text-center dark:border-amber-500/35 dark:bg-amber-400/10"
           role="alert"
         >
-          <p className="text-sm font-medium text-amber-800">
+          <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
             Usuário não encontrado ou erro ao carregar.
           </p>
-          <p className="mt-1 text-xs text-amber-700">
+          <p className="mt-1 text-xs text-amber-700 dark:text-amber-300">
             O usuário pode não existir ou você não tem permissão.
           </p>
         </div>
@@ -144,47 +144,47 @@ export function UserDetailContent() {
     <section className="space-y-6">
       <Link
         to="/users"
-        className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50 rounded"
+        className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/40 rounded dark:text-navy-300 dark:hover:text-navy-100"
       >
         <ArrowLeft className="size-4" />
         Voltar à listagem
       </Link>
 
       <header className="flex flex-wrap items-center gap-4">
-        <div className="flex size-12 items-center justify-center rounded-xl bg-violet-500/10 text-violet-700 font-semibold">
+        <div className="flex size-12 items-center justify-center rounded-xl bg-amber-400/15 text-amber-700 font-semibold dark:bg-amber-400/15 dark:text-amber-300">
           {user.name.charAt(0).toUpperCase()}
         </div>
         <div className="space-y-0.5">
-          <h1 className="text-xl font-semibold tracking-tight text-zinc-900">
+          <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-ds-white">
             {user.name}
           </h1>
-          <p className="text-sm text-zinc-500">{user.email}</p>
+          <p className="text-sm text-zinc-500 dark:text-navy-300">{user.email}</p>
         </div>
       </header>
 
-      <div className="rounded-xl border border-zinc-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.06)] overflow-hidden">
-        <dl className="divide-y divide-zinc-100">
+      <div className="rounded-xl border border-zinc-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.06)] overflow-hidden dark:border-navy-700/60 dark:bg-navy-900">
+        <dl className="divide-y divide-zinc-100 dark:divide-navy-800">
           <div className="px-6 py-4">
-            <dt className="text-xs font-medium text-zinc-500">ID</dt>
-            <dd className="mt-1 text-sm font-mono text-zinc-900">{user.id}</dd>
+            <dt className="text-xs font-medium text-zinc-500 dark:text-navy-300">ID</dt>
+            <dd className="mt-1 text-sm font-mono text-zinc-900 dark:text-navy-100">{user.id}</dd>
           </div>
           <div className="px-6 py-4">
-            <dt className="text-xs font-medium text-zinc-500">E-mail</dt>
-            <dd className="mt-1 text-sm text-zinc-900">{user.email}</dd>
+            <dt className="text-xs font-medium text-zinc-500 dark:text-navy-300">E-mail</dt>
+            <dd className="mt-1 text-sm text-zinc-900 dark:text-navy-100">{user.email}</dd>
           </div>
           <div className="px-6 py-4">
-            <dt className="text-xs font-medium text-zinc-500">Criado em</dt>
-            <dd className="mt-1 text-sm text-zinc-900">
+            <dt className="text-xs font-medium text-zinc-500 dark:text-navy-300">Criado em</dt>
+            <dd className="mt-1 text-sm text-zinc-900 dark:text-navy-100">
               {formatDate(user.created_at)}
             </dd>
           </div>
           <div className="px-6 py-4">
-            <dt className="text-xs font-medium text-zinc-500">
+            <dt className="text-xs font-medium text-zinc-500 dark:text-navy-300">
               Status da assinatura
             </dt>
             <dd className="mt-1 flex flex-wrap items-center gap-2">
               <span
-                className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium data-[subscription=active]:bg-emerald-500/15 data-[subscription=active]:text-emerald-800 data-[subscription=trialing]:bg-violet-500/15 data-[subscription=trialing]:text-violet-800 data-[subscription=past_due]:bg-amber-500/15 data-[subscription=past_due]:text-amber-800 data-[subscription=canceled]:bg-zinc-500/15 data-[subscription=canceled]:text-zinc-700 data-[subscription=none]:bg-zinc-100 data-[subscription=none]:text-zinc-600"
+                className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium data-[subscription=active]:bg-emerald-500/15 data-[subscription=active]:text-emerald-800 data-[subscription=trialing]:bg-amber-500/15 data-[subscription=trialing]:text-amber-800 data-[subscription=past_due]:bg-amber-500/15 data-[subscription=past_due]:text-amber-800 data-[subscription=canceled]:bg-zinc-500/15 data-[subscription=canceled]:text-zinc-700 data-[subscription=none]:bg-zinc-100 data-[subscription=none]:text-zinc-600 dark:data-[subscription=active]:bg-emerald-400/10 dark:data-[subscription=active]:text-emerald-300 dark:data-[subscription=trialing]:bg-amber-400/10 dark:data-[subscription=trialing]:text-amber-300 dark:data-[subscription=past_due]:bg-amber-400/10 dark:data-[subscription=past_due]:text-amber-300 dark:data-[subscription=canceled]:bg-navy-700/60 dark:data-[subscription=canceled]:text-navy-200 dark:data-[subscription=none]:bg-navy-700/60 dark:data-[subscription=none]:text-navy-300"
                 data-subscription={user.subscription_status ?? "none"}
               >
                 {subscriptionLabel}
@@ -203,23 +203,23 @@ export function UserDetailContent() {
           </div>
           {user.stripe_customer_id && (
             <div className="px-6 py-4">
-              <dt className="text-xs font-medium text-zinc-500">
+              <dt className="text-xs font-medium text-zinc-500 dark:text-navy-300">
                 Stripe Customer ID
               </dt>
-              <dd className="mt-1 text-sm font-mono text-zinc-700 break-all">
+              <dd className="mt-1 text-sm font-mono text-zinc-700 break-all dark:text-navy-200">
                 {user.stripe_customer_id}
               </dd>
             </div>
           )}
           <div className="px-6 py-4">
-            <dt className="text-xs font-medium text-zinc-500">Créditos de IA</dt>
+            <dt className="text-xs font-medium text-zinc-500 dark:text-navy-300">Créditos de IA</dt>
             <dd className="mt-1 flex flex-wrap items-center gap-2">
-              <span className="text-sm text-zinc-900">{user.ai_credits}</span>
+              <span className="text-sm text-zinc-900 dark:text-navy-100">{user.ai_credits}</span>
               {user.ai_credits_reset_at ? (
                 isNeverExpire(user.ai_credits_reset_at) ? (
-                  <span className="text-xs text-zinc-500">Não expira</span>
+                  <span className="text-xs text-zinc-500 dark:text-navy-300">Não expira</span>
                 ) : (
-                  <span className="text-xs text-zinc-500">
+                  <span className="text-xs text-zinc-500 dark:text-navy-300">
                     Reset em {formatDate(user.ai_credits_reset_at)}
                   </span>
                 )
@@ -240,7 +240,7 @@ export function UserDetailContent() {
       </div>
 
       <Dialog open={subscriptionDialogOpen} onOpenChange={setSubscriptionDialogOpen}>
-        <DialogContent className="max-h-[85vh] overflow-hidden flex flex-col sm:max-w-md">
+        <DialogContent className="max-h-[85vh] overflow-hidden flex flex-col border-border bg-ds-surface-elevated sm:max-w-md dark:bg-navy-900">
           <DialogHeader>
             <DialogTitle>Assinatura manual</DialogTitle>
             <DialogDescription>
@@ -254,15 +254,15 @@ export function UserDetailContent() {
               onClick={() => setSelectedPriceId(null)}
               className={`w-full rounded-lg border px-4 py-3 text-left text-sm transition-colors ${
                 selectedPriceId === null
-                  ? "border-violet-500 bg-violet-500/10 text-violet-800"
-                  : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-900"
+                  ? "border-amber-500 bg-amber-400/12 text-amber-800 dark:border-amber-400 dark:bg-amber-400/12 dark:text-amber-300"
+                  : "border-zinc-200 bg-ds-surface-elevated hover:bg-muted/60 text-zinc-900 dark:border-navy-700 dark:bg-navy-900 dark:hover:bg-navy-800/70 dark:text-navy-100"
               }`}
             >
               <span className="font-medium">Sem assinatura (grátis)</span>
-              <p className="mt-0.5 text-zinc-500">Limites do plano grátis</p>
+              <p className="mt-0.5 text-zinc-500 dark:text-navy-300">Limites do plano grátis</p>
             </button>
             {plansLoading ? (
-              <div className="flex items-center justify-center py-6 text-zinc-500">
+              <div className="flex items-center justify-center py-6 text-zinc-500 dark:text-navy-300">
                 <Loader2 className="size-5 animate-spin" />
               </div>
             ) : (
@@ -273,12 +273,12 @@ export function UserDetailContent() {
                   onClick={() => setSelectedPriceId(plan.price_id)}
                   className={`w-full rounded-lg border px-4 py-3 text-left text-sm transition-colors ${
                     selectedPriceId === plan.price_id
-                      ? "border-violet-500 bg-violet-500/10 text-violet-800"
-                      : "border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-900"
+                      ? "border-amber-500 bg-amber-400/12 text-amber-800 dark:border-amber-400 dark:bg-amber-400/12 dark:text-amber-300"
+                      : "border-zinc-200 bg-ds-surface-elevated hover:bg-muted/60 text-zinc-900 dark:border-navy-700 dark:bg-navy-900 dark:hover:bg-navy-800/70 dark:text-navy-100"
                   }`}
                 >
                   <span className="font-medium">{plan.name}</span>
-                  <p className="mt-0.5 text-zinc-600">
+                  <p className="mt-0.5 text-zinc-600 dark:text-navy-300">
                     {formatPrice(plan.amount)} / {formatInterval(plan.interval)}
                   </p>
                 </button>
@@ -312,7 +312,7 @@ export function UserDetailContent() {
       </Dialog>
 
       <Dialog open={aiCreditsDialogOpen} onOpenChange={setAiCreditsDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="border-border bg-ds-surface-elevated sm:max-w-md dark:bg-navy-900">
           <DialogHeader>
             <DialogTitle>Créditos de IA</DialogTitle>
             <DialogDescription>
@@ -332,12 +332,12 @@ export function UserDetailContent() {
                 }
               />
             </div>
-            <label className="flex items-center gap-2 cursor-pointer">
+            <label className="flex items-center gap-2 cursor-pointer text-zinc-900 dark:text-navy-100">
               <input
                 type="checkbox"
                 checked={neverExpireInput}
                 onChange={(e) => setNeverExpireInput(e.target.checked)}
-                className="rounded border-zinc-300 text-violet-600 focus:ring-violet-500"
+                className="rounded border-zinc-300 text-amber-600 focus:ring-amber-500 dark:border-navy-600 dark:bg-navy-900"
               />
               <span className="text-sm font-medium">Não expirar</span>
             </label>

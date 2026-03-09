@@ -39,10 +39,10 @@ export function OrganizationSettingsPageContent() {
   return (
     <section className="space-y-8">
       <header className="space-y-1">
-        <h1 className="text-xl font-semibold tracking-tight text-zinc-900">
+        <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-ds-white transition-colors duration-200">
           Configuracoes
         </h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-zinc-500 dark:text-navy-300 transition-colors duration-200">
           Gerencie identidade, integracoes e acessos da organizacao.
         </p>
       </header>
@@ -91,7 +91,7 @@ export function OrganizationSettingsPageContent() {
         {!can("update:organization") &&
           !can("read:api_key") &&
           !can("read:organization_members") && (
-            <p className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50/50 px-4 py-8 text-center text-sm text-zinc-500">
+            <p className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50/50 px-4 py-8 text-center text-sm text-zinc-500 dark:border-navy-700/60 dark:bg-navy-900/60 dark:text-navy-300">
               Você não tem permissão para ver nenhuma configuração nesta
               organização.
             </p>

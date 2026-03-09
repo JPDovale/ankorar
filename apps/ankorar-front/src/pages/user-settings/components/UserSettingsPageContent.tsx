@@ -16,7 +16,7 @@ export function UserSettingsPageContent() {
   return (
     <section className="space-y-8">
       <header className="space-y-1">
-        <h1 className="text-xl font-semibold tracking-tight text-navy-900">
+        <h1 className="text-xl font-semibold tracking-tight text-navy-900 dark:text-ds-white transition-colors duration-200">
           Minha conta
         </h1>
         <p className="text-sm text-text-muted">

@@ -19,11 +19,11 @@ export function HomePageHeader() {
 
   return (
     <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div className="space-y-1">
-        <h1 className="text-xl font-semibold tracking-tight text-navy-900">
+      <div className="space-y-1 transition-colors duration-200">
+        <h1 className="text-xl font-semibold tracking-tight text-navy-900 transition-colors duration-200 dark:text-ds-white">
           Mapas mentais
         </h1>
-        <p className="text-xs text-text-muted">{mapsSummaryText}</p>
+        <p className="text-xs text-text-muted transition-colors duration-200">{mapsSummaryText}</p>
       </div>
 
       <div className="flex sm:items-center sm:justify-end">

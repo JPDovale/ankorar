@@ -70,9 +70,9 @@ export function OrganizationSwitcher() {
           <PopoverContent
             align="start"
             sideOffset={8}
-            className="w-[340px] overflow-hidden border-navy-200/50 bg-ds-surface-elevated p-0"
+            className="w-[340px] overflow-hidden border-navy-200/50 bg-ds-surface-elevated p-0 dark:border-navy-700/60 dark:bg-navy-900"
           >
-            <div className="border-b border-navy-200/40 bg-navy-50/80 px-3 py-2">
+            <div className="border-b border-navy-200/40 bg-navy-50/80 px-3 py-2 dark:border-navy-700/60 dark:bg-navy-800/70">
               <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-muted">
                 Organizações
               </p>
@@ -85,12 +85,12 @@ export function OrganizationSwitcher() {
               onSelectOrganization={handleSelectOrganization}
             />
 
-            <div className="border-t border-navy-200/40 px-2 py-2">
+            <div className="border-t border-navy-200/40 px-2 py-2 dark:border-navy-700/60">
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="w-full justify-start gap-2 text-navy-800"
+                className="w-full justify-start gap-2 text-navy-800 dark:text-navy-100 dark:hover:bg-navy-800/70"
                 onClick={() => setCreateOrganizationDialogOpen(true)}
                 disabled={!canCreateOrganization}
               >
@@ -105,7 +105,7 @@ export function OrganizationSwitcher() {
             </div>
 
             {isLoadingInvites && (
-              <div className="border-t border-navy-200/40 px-3 py-2">
+              <div className="border-t border-navy-200/40 px-3 py-2 dark:border-navy-700/60">
                 <div className="space-y-1">
                   <Skeleton className="h-3 w-32 rounded-md" />
                   <Skeleton className="h-8 w-full rounded-md" />

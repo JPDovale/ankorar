@@ -21,16 +21,16 @@ export function LibrariesListSection({
   return (
     <>
       {isEmptyState && (
-        <Card className="border-dashed border-zinc-300/80 bg-zinc-50/50">
+        <Card className="border-dashed border-zinc-300/80 bg-zinc-50/50 dark:border-navy-700/60 dark:bg-navy-900/60">
           <CardContent className="flex flex-col items-center gap-4 px-4 py-12 text-center">
-            <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-zinc-200/80 bg-white shadow-sm">
-              <LibraryBig className="size-5 text-zinc-600" />
+            <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-zinc-200/80 bg-white shadow-sm dark:border-navy-700 dark:bg-navy-900">
+              <LibraryBig className="size-5 text-zinc-600 dark:text-navy-300" />
             </span>
             <div className="space-y-1">
-              <p className="text-sm font-semibold text-zinc-900">
+              <p className="text-sm font-semibold text-zinc-900 dark:text-ds-white">
                 Nenhuma biblioteca criada ainda
               </p>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-zinc-500 dark:text-navy-300">
                 Crie bibliotecas para estruturar os mapas da organização.
               </p>
             </div>

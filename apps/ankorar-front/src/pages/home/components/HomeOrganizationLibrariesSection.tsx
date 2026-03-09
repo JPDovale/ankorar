@@ -24,7 +24,7 @@ export function HomeOrganizationLibrariesSection() {
           <LibraryBig className="mr-1 size-3" />
           Bibliotecas da organização
         </Badge>
-        <h2 className="text-lg font-semibold tracking-tight text-navy-900">
+        <h2 className="text-lg font-semibold tracking-tight text-navy-900 dark:text-ds-white">
           Mapas vinculados por biblioteca
         </h2>
         <p className="text-xs text-text-muted">
@@ -33,13 +33,13 @@ export function HomeOrganizationLibrariesSection() {
       </header>
 
       {!hasLibraries && (
-        <div className="rounded-xl border border-dashed border-navy-200/80 bg-navy-50/60 px-4 py-10">
+        <div className="rounded-xl border border-dashed border-navy-200/80 bg-navy-50/60 px-4 py-10 dark:border-navy-700/60 dark:bg-navy-900/60">
           <div className="mx-auto flex max-w-md flex-col items-center gap-3 text-center">
-            <span className="inline-flex size-11 items-center justify-center rounded-2xl border border-navy-200/60 bg-ds-surface-elevated shadow-sm">
-              <LibraryBig className="size-5 text-amber-600" />
+            <span className="inline-flex size-11 items-center justify-center rounded-2xl border border-navy-200/60 bg-ds-surface-elevated shadow-sm dark:border-navy-700/60 dark:bg-navy-900">
+              <LibraryBig className="size-5 text-amber-600 dark:text-amber-300" />
             </span>
             <div className="space-y-1">
-              <p className="text-sm font-semibold text-navy-900">
+              <p className="text-sm font-semibold text-navy-900 dark:text-ds-white">
                 Nenhuma biblioteca criada na organização
               </p>
               <p className="text-xs text-text-muted">
@@ -49,7 +49,7 @@ export function HomeOrganizationLibrariesSection() {
             </div>
             <Link
               to="/libraries"
-              className="inline-flex h-9 min-w-56 items-center justify-center gap-2 rounded-lg bg-amber-400 px-5 text-sm font-medium text-navy-950 shadow-[0_1px_2px_rgba(13,27,42,0.12)] transition-colors hover:bg-amber-300"
+              className="inline-flex h-9 min-w-56 items-center justify-center gap-2 rounded-lg bg-amber-400 px-5 text-sm font-medium text-navy-950 shadow-[0_1px_2px_rgba(13,27,42,0.12)] transition-colors hover:bg-amber-300 dark:bg-amber-500 dark:hover:bg-amber-400"
             >
               <LibraryBig className="size-4" />
               Ir para bibliotecas
@@ -59,7 +59,7 @@ export function HomeOrganizationLibrariesSection() {
       )}
 
       {hasLibraries && !hasLibrariesWithMaps && (
-        <div className="rounded-xl border border-dashed border-navy-200/80 bg-navy-50/60 px-4 py-8">
+        <div className="rounded-xl border border-dashed border-navy-200/80 bg-navy-50/60 px-4 py-8 dark:border-navy-700/60 dark:bg-navy-900/60">
           <p className="text-center text-sm text-text-muted">
             Nenhuma biblioteca com mapas vinculados no momento.
           </p>
@@ -82,10 +82,10 @@ export function HomeOrganizationLibrariesSection() {
               return (
                 <article key={library.id} className="space-y-2">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="truncate text-sm font-semibold text-navy-900">
+                    <p className="truncate text-sm font-semibold text-navy-900 dark:text-ds-white">
                       {library.name}
                     </p>
-                    <span className="shrink-0 rounded-lg border border-navy-200/60 bg-navy-100/80 px-2 py-0.5 text-[10px] font-semibold text-navy-700">
+                    <span className="shrink-0 rounded-lg border border-navy-200/60 bg-navy-100/80 px-2 py-0.5 text-[10px] font-semibold text-navy-700 dark:border-navy-700/60 dark:bg-navy-800/70 dark:text-navy-200">
                       {libraryLinkedMapsText}
                     </span>
                   </div>

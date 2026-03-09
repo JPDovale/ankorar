@@ -19,7 +19,7 @@ export function SideBarBrand({
   return (
     <div
       className={cn(
-        "flex h-16 items-center gap-2 border-b border-navy-200/40",
+        "flex h-16 items-center gap-2 border-b border-navy-200/40 dark:border-navy-700/50",
         collapsed ? "justify-center px-0" : "justify-between px-2.5",
       )}
     >
@@ -27,14 +27,14 @@ export function SideBarBrand({
         <NavLink
           to="/home"
           className={cn(
-            "flex min-w-0 items-center gap-2 rounded-lg px-1 py-1 transition-colors hover:bg-amber-50/50",
+            "flex min-w-0 items-center gap-2 rounded-lg px-1 py-1 transition-colors hover:bg-amber-50/50 dark:hover:bg-navy-800/60",
             collapsed && "justify-center gap-0 px-0",
           )}
         >
-          <AnkorarLogoMark className="size-5 shrink-0 text-amber-600" />
+          <AnkorarLogoMark className="size-5 shrink-0 text-amber-600 dark:text-amber-400" />
           <div className="group-data-[collapsed=true]:hidden">
-            <p className="text-sm font-bold leading-none tracking-tight text-navy-900">
-              Anko<span className="text-amber-600">rar</span>
+            <p className="text-sm font-bold leading-none tracking-tight text-navy-900 dark:text-ds-white">
+              Anko<span className="text-amber-600 dark:text-amber-400">rar</span>
             </p>
           </div>
         </NavLink>
@@ -44,7 +44,7 @@ export function SideBarBrand({
         <Button
           variant="ghost"
           size="icon"
-          className="size-7 shrink-0 rounded-md text-text-muted hover:bg-navy-100/80 hover:text-navy-900 group-data-[collapsed=true]:mx-auto"
+          className="size-7 shrink-0 rounded-md text-text-muted hover:bg-navy-100/80 hover:text-navy-900 dark:hover:bg-navy-800/70 dark:hover:text-ds-white group-data-[collapsed=true]:mx-auto"
           onClick={toggleCollapsed}
           aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}
         >

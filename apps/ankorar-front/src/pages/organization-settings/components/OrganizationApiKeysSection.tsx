@@ -35,11 +35,11 @@ export function OrganizationApiKeysSection({
         <div className="space-y-1">
           <h2
             id="organization-api-keys-title"
-            className="text-sm font-semibold text-zinc-900"
+            className="text-sm font-semibold text-zinc-900 dark:text-ds-white transition-colors duration-200"
           >
             Chaves de API
           </h2>
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-zinc-500 dark:text-navy-300 transition-colors duration-200">
             Gerencie chaves para integracoes com sistemas externos.
           </p>
         </div>
@@ -65,25 +65,25 @@ export function OrganizationApiKeysSection({
 
       <div className="mt-4">
         {hasApiKeys && (
-          <div className="overflow-hidden rounded-lg border border-zinc-200">
+          <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-navy-700/60">
             <table className="w-full text-sm" aria-label="Chaves de API">
               <thead>
-                <tr className="border-b border-zinc-200 bg-zinc-50/80">
-                  <th className="px-4 py-2.5 text-left text-xs font-medium text-zinc-500">
+                <tr className="border-b border-zinc-200 bg-zinc-50/80 dark:border-navy-700/60 dark:bg-navy-800/60">
+                  <th className="px-4 py-2.5 text-left text-xs font-medium text-zinc-500 dark:text-navy-300">
                     Chave
                   </th>
-                  <th className="hidden px-4 py-2.5 text-left text-xs font-medium text-zinc-500 md:table-cell">
+                  <th className="hidden px-4 py-2.5 text-left text-xs font-medium text-zinc-500 dark:text-navy-300 md:table-cell">
                     Ambiente
                   </th>
-                  <th className="px-4 py-2.5 text-left text-xs font-medium text-zinc-500">
+                  <th className="px-4 py-2.5 text-left text-xs font-medium text-zinc-500 dark:text-navy-300">
                     Status
                   </th>
-                  <th className="px-4 py-2.5 text-right text-xs font-medium text-zinc-500">
+                  <th className="px-4 py-2.5 text-right text-xs font-medium text-zinc-500 dark:text-navy-300">
                     <span className="sr-only">Acoes</span>
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100">
+              <tbody className="divide-y divide-zinc-100 dark:divide-navy-800">
                 {apiKeys.map((apiKey) => (
                   <OrganizationSettingsApiKeyItem
                     key={apiKey.id}
@@ -98,11 +98,11 @@ export function OrganizationApiKeysSection({
         )}
 
         {!hasApiKeys && (
-          <div className="rounded-lg border border-dashed border-zinc-300 px-4 py-8 text-center">
-            <p className="text-sm font-medium text-zinc-700">
+          <div className="rounded-lg border border-dashed border-zinc-300 px-4 py-8 text-center dark:border-navy-700/60">
+            <p className="text-sm font-medium text-zinc-700 dark:text-navy-100">
               Nenhuma chave cadastrada
             </p>
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="mt-1 text-sm text-zinc-500 dark:text-navy-300">
               Gere uma chave para iniciar integracoes.
             </p>
           </div>

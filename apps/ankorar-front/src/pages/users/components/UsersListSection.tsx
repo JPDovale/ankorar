@@ -42,13 +42,13 @@ export function UsersListSection({
   if (isError) {
     return (
       <div
-        className="rounded-xl border border-amber-200/80 bg-amber-50/80 px-6 py-8 text-center"
+        className="rounded-xl border border-amber-200/80 bg-amber-50/80 px-6 py-8 text-center dark:border-amber-500/35 dark:bg-amber-400/10"
         role="alert"
       >
-        <p className="text-sm font-medium text-amber-800">
+        <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
           Não foi possível carregar os usuários.
         </p>
-        <p className="mt-1 text-xs text-amber-700">
+        <p className="mt-1 text-xs text-amber-700 dark:text-amber-300">
           Tente recarregar a página.
         </p>
       </div>
@@ -64,7 +64,7 @@ export function UsersListSection({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h2
           id="users-list-title"
-          className="text-sm font-semibold text-zinc-900"
+          className="text-sm font-semibold text-zinc-900 dark:text-ds-white"
         >
           Listagem
         </h2>
@@ -72,7 +72,7 @@ export function UsersListSection({
           className="flex items-center gap-2"
           aria-label="Paginação da listagem de usuários"
         >
-          <span className="text-xs text-zinc-500">
+          <span className="text-xs text-zinc-500 dark:text-navy-300">
             Página {page} de {totalPages}
             {total > 0 && ` · ${total} no total`}
           </span>
@@ -101,44 +101,44 @@ export function UsersListSection({
 
       {empty && (
         <div
-          className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50/50 px-6 py-12 text-center"
+          className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50/50 px-6 py-12 text-center dark:border-navy-700/60 dark:bg-navy-900/60"
           data-state="empty"
         >
-          <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-zinc-200/80 bg-white shadow-sm">
-            <Users className="size-6 text-zinc-500" />
+          <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-zinc-200/80 bg-white shadow-sm dark:border-navy-700 dark:bg-navy-900">
+            <Users className="size-6 text-zinc-500 dark:text-navy-300" />
           </span>
-          <p className="mt-4 text-sm font-medium text-zinc-700">
+          <p className="mt-4 text-sm font-medium text-zinc-700 dark:text-navy-100">
             Nenhum usuário na plataforma
           </p>
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-zinc-500 dark:text-navy-300">
             A listagem aparecerá aqui quando houver usuários.
           </p>
         </div>
       )}
 
       {!empty && (
-        <div className="overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.06)]">
+        <div className="overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.06)] dark:border-navy-700/60 dark:bg-navy-900">
           <table
             className="w-full text-sm"
             aria-label="Usuários da plataforma"
           >
             <thead>
-              <tr className="border-b border-zinc-200/80 bg-zinc-50/80">
-                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500">
+              <tr className="border-b border-zinc-200/80 bg-zinc-50/80 dark:border-navy-700/60 dark:bg-navy-800/70">
+                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 dark:text-navy-300">
                   Nome
                 </th>
-                <th className="hidden px-4 py-3 text-left text-xs font-medium text-zinc-500 sm:table-cell">
+                <th className="hidden px-4 py-3 text-left text-xs font-medium text-zinc-500 dark:text-navy-300 sm:table-cell">
                   E-mail
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500">
+                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 dark:text-navy-300">
                   Assinatura
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-zinc-500">
+                <th className="px-4 py-3 text-right text-xs font-medium text-zinc-500 dark:text-navy-300">
                   <span className="sr-only">Abrir</span>
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100">
+            <tbody className="divide-y divide-zinc-100 dark:divide-navy-800">
               {users.map((user) => (
                 <UsersListItem
                   key={user.id}

@@ -71,7 +71,7 @@ export function MapPreviewCard({
       data-density={density}
       onClick={handleCardClick}
       onKeyDown={handleCardKeyDown}
-      className="group relative cursor-pointer overflow-hidden rounded-2xl bg-white text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/60 transition-all duration-200 hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] hover:ring-zinc-200/80 data-[variant=embedded]:rounded-xl data-[variant=embedded]:bg-zinc-50/80 data-[variant=embedded]:shadow-none data-[variant=embedded]:ring-0 data-[variant=embedded]:hover:bg-zinc-100/80"
+      className="group relative cursor-pointer overflow-hidden rounded-2xl bg-white text-left shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/60 transition-all duration-200 hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.08)] hover:ring-zinc-200/80 dark:bg-navy-900 dark:ring-navy-700/70 dark:hover:ring-navy-600 data-[variant=embedded]:rounded-xl data-[variant=embedded]:bg-zinc-50/80 data-[variant=embedded]:shadow-none data-[variant=embedded]:ring-0 data-[variant=embedded]:hover:bg-zinc-100/80 dark:data-[variant=embedded]:bg-navy-800/80 dark:data-[variant=embedded]:hover:bg-navy-800"
       aria-label={`${map.title}, ${actionLabel}`}
     >
       {/* Preview area — snapshot do mapa sobre o fundo antigo, ou só o fundo */}
@@ -123,10 +123,10 @@ export function MapPreviewCard({
 
       <div className="flex flex-col gap-3 p-3.5 group-data-[density=compact]:gap-2.5 group-data-[density=compact]:p-3">
         <header className="min-w-0 space-y-1">
-          <p className="truncate text-sm font-semibold text-zinc-900 group-data-[density=compact]:text-xs">
+          <p className="truncate text-sm font-semibold text-zinc-900 dark:text-navy-100 group-data-[density=compact]:text-xs">
             {map.title}
           </p>
-          <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-500 group-data-[density=compact]:text-[10px]">
+          <span className="inline-flex items-center gap-1.5 text-[11px] text-zinc-500 dark:text-navy-300 group-data-[density=compact]:text-[10px]">
             <CalendarClock className="size-3 shrink-0" aria-hidden />
             {mapLastActivityLabel}
           </span>
@@ -134,7 +134,7 @@ export function MapPreviewCard({
 
         <footer className="flex items-center justify-between gap-2">
           <span
-            className="inline-flex size-7 shrink-0 items-center justify-center rounded-lg bg-zinc-100/80 text-zinc-500 ring-1 ring-zinc-200/50 group-data-[variant=embedded]:bg-white/90"
+            className="inline-flex size-7 shrink-0 items-center justify-center rounded-lg bg-zinc-100/80 text-zinc-500 ring-1 ring-zinc-200/50 dark:bg-navy-800/80 dark:text-navy-300 dark:ring-navy-700/60 group-data-[variant=embedded]:bg-white/90 dark:group-data-[variant=embedded]:bg-navy-700/80"
             aria-hidden
           >
             <Map className="size-3.5 shrink-0" />
@@ -155,7 +155,7 @@ export function MapPreviewCard({
             )}
             {showLikesCountOnly && (
               <span
-                className="inline-flex items-center gap-1 text-xs text-zinc-500 tabular-nums"
+                className="inline-flex items-center gap-1 text-xs text-zinc-500 dark:text-navy-300 tabular-nums"
                 aria-label={`${likesCount} like${likesCount === 1 ? "" : "s"}`}
               >
                 <Heart className="size-3.5 shrink-0" fill="none" aria-hidden />

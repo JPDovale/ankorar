@@ -53,10 +53,10 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 const STATUS_COLOR: Record<string, string> = {
-  active: "#10b981",
-  trialing: "#8b5cf6",
-  past_due: "#f59e0b",
-  canceled: "#71717a",
+  active: "var(--chart-2)",
+  trialing: "var(--chart-1)",
+  past_due: "var(--chart-4)",
+  canceled: "var(--muted-foreground)",
 };
 
 function formatMrr(cents: number): string {
@@ -231,23 +231,23 @@ export function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card className="group relative overflow-hidden border-0 bg-card/90 shadow-lg shadow-black/5 ring-1 ring-border/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/5 hover:ring-emerald-500/20 rounded-2xl">
+          <Card className="group relative overflow-hidden border-0 bg-card/90 shadow-lg shadow-black/5 ring-1 ring-border/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/5 hover:ring-primary/20 rounded-2xl">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">MRR</CardTitle>
-              <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-600">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-chart-2/20 text-[var(--chart-2)]">
                 <TrendingUp className="size-5" aria-hidden />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold tabular-nums tracking-tight text-emerald-700">{mr ? formatMrr(mr.total_mrr_cents) : "—"}</div>
+              <div className="text-2xl font-bold tabular-nums tracking-tight text-[var(--chart-2)]">{mr ? formatMrr(mr.total_mrr_cents) : "—"}</div>
               <p className="mt-1 text-xs text-muted-foreground">Receita recorrente mensal</p>
             </CardContent>
           </Card>
 
-          <Card className="group relative overflow-hidden border-0 bg-card/90 shadow-lg shadow-black/5 ring-1 ring-border/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-amber-500/5 hover:ring-amber-500/20 rounded-2xl">
+          <Card className="group relative overflow-hidden border-0 bg-card/90 shadow-lg shadow-black/5 ring-1 ring-border/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/5 hover:ring-primary/20 rounded-2xl">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Churn</CardTitle>
-              <div className="flex size-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-600">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-chart-4/20 text-[var(--chart-4)]">
                 <TrendingDown className="size-5" aria-hidden />
               </div>
             </CardHeader>
@@ -403,10 +403,10 @@ export function DashboardPage() {
           ) : (
             <>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <Card className="group relative overflow-hidden border-0 bg-card/90 shadow-lg shadow-black/5 ring-1 ring-border/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/5 hover:ring-emerald-500/20 rounded-2xl">
+                <Card className="group relative overflow-hidden border-0 bg-card/90 shadow-lg shadow-black/5 ring-1 ring-border/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/5 hover:ring-primary/20 rounded-2xl">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-muted-foreground">Total (período)</CardTitle>
-                    <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-600">
+                    <div className="flex size-10 items-center justify-center rounded-xl bg-primary/15 text-primary">
                       <DollarSign className="size-5" aria-hidden />
                     </div>
                   </CardHeader>
@@ -579,7 +579,7 @@ export function DashboardPage() {
                       label={(props: { name?: string; value?: number }) => `${STATUS_LABEL[props.name ?? ""] ?? props.name}: ${props.value ?? 0}`}
                     >
                       {sub.by_status.map((entry) => (
-                        <Cell key={entry.status} fill={STATUS_COLOR[entry.status] ?? "#71717a"} />
+                        <Cell key={entry.status} fill={STATUS_COLOR[entry.status] ?? "var(--muted-foreground)"} />
                       ))}
                     </Pie>
                     <Tooltip

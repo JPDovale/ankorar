@@ -43,7 +43,7 @@ export function InviteMemberDialog({
           <InputRoot disabled={isSubmitting}>
             <label
               htmlFor="invite-member-email"
-              className="text-xs font-medium text-zinc-600"
+            className="text-xs font-medium text-zinc-600 dark:text-navy-300"
             >
               E-mail
             </label>
@@ -51,7 +51,7 @@ export function InviteMemberDialog({
             <InputBox
               data-disabled={isSubmitting}
               data-has-error={Boolean(errorMessage)}
-              className="mt-1 h-10 border-zinc-300 bg-white transition-colors focus-within:border-violet-400"
+              className="mt-1 h-10 border-zinc-300 bg-white transition-colors focus-within:border-amber-400 dark:border-navy-700/70 dark:bg-navy-900 dark:focus-within:border-amber-300"
             >
               <Input
                 id="invite-member-email"

@@ -31,7 +31,7 @@ export function UserPasswordSection({
         <div className="space-y-1">
           <h2
             id="user-password-title"
-            className="text-sm font-semibold text-navy-900"
+            className="text-sm font-semibold text-navy-900 dark:text-ds-white transition-colors duration-200"
           >
             Alterar senha
           </h2>
