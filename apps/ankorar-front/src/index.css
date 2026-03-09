@@ -219,6 +219,16 @@
   body {
     @apply bg-background text-foreground font-body;
   }
+  input,
+  textarea,
+  select {
+    color-scheme: light;
+  }
+  .dark input,
+  .dark textarea,
+  .dark select {
+    color-scheme: dark;
+  }
 }
 
 :root {

@@ -52,10 +52,10 @@ export function HomeCreateMapPopover({
       <PopoverContent
         align="end"
         sideOffset={8}
-        className="w-[22rem] border-navy-200/50 bg-ds-surface-elevated p-0"
+        className="w-[22rem] border-navy-200/50 bg-ds-surface-elevated p-0 dark:border-navy-700/60 dark:bg-navy-900"
       >
-        <div className="border-b border-navy-200/40 bg-navy-50/70 px-3.5 py-2.5">
-          <p className="text-sm font-semibold text-navy-900">
+        <div className="border-b border-navy-200/40 bg-navy-50/70 px-3.5 py-2.5 dark:border-navy-700/60 dark:bg-navy-800/70">
+          <p className="text-sm font-semibold text-navy-900 dark:text-ds-white">
             Novo mapa mental
           </p>
           <p className="mt-1 text-xs text-text-muted">
@@ -93,7 +93,7 @@ export function HomeCreateMapPopover({
                 placeholder="Ex.: Mapa com as fases do projeto: planejamento, execução, revisão e entrega"
                 maxLength={10000}
                 rows={3}
-                className="w-full resize-none rounded-lg border border-navy-200/80 bg-white px-3 py-2 text-sm text-navy-900 placeholder:text-text-muted shadow-[0_1px_2px_rgba(13,27,42,0.06)] focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+                className="w-full resize-none rounded-lg border border-navy-200/80 bg-white px-3 py-2 text-sm text-text-primary placeholder:text-text-muted shadow-[0_1px_2px_rgba(13,27,42,0.06)] focus:outline-none focus:ring-2 focus:ring-amber-400/30 dark:border-navy-700/70 dark:bg-navy-900 dark:focus:ring-amber-300/35"
               />
             </label>
           )}
@@ -111,7 +111,7 @@ export function HomeCreateMapPopover({
                 onChange={(event) => onMapTitleChange(event.target.value)}
                 placeholder={generateWithAi ? "Ex.: Projeto X" : "seg 15/02 10:30"}
                 maxLength={256}
-                className="h-9 px-0 text-sm text-navy-900 placeholder:text-text-muted"
+                className="h-9 px-0 text-sm text-text-primary placeholder:text-text-muted"
               />
             </InputBox>
           </label>

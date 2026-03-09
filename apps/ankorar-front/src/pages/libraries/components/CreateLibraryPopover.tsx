@@ -34,28 +34,30 @@ export function CreateLibraryPopover({
       <PopoverContent
         align="end"
         sideOffset={8}
-        className="w-[22rem] border-zinc-200 p-0"
+        className="w-[22rem] border-navy-200/50 bg-ds-surface-elevated p-0 dark:border-navy-700/60 dark:bg-navy-900"
       >
-        <div className="border-b border-zinc-200 bg-zinc-50/70 px-3.5 py-2.5">
-          <p className="text-sm font-semibold text-zinc-900">Nova biblioteca</p>
-          <p className="mt-1 text-xs text-zinc-500">
+        <div className="border-b border-navy-200/40 bg-navy-50/70 px-3.5 py-2.5 dark:border-navy-700/60 dark:bg-navy-800/70">
+          <p className="text-sm font-semibold text-navy-900 dark:text-ds-white">
+            Nova biblioteca
+          </p>
+          <p className="mt-1 text-xs text-text-muted">
             Crie uma biblioteca para agrupar mapas por contexto.
           </p>
         </div>
 
         <div className="space-y-2.5 px-3.5 py-3">
           <label className="space-y-1">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-muted">
               Nome da biblioteca
             </span>
-            <div className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 shadow-[0_1px_2px_rgba(16,24,40,0.06)]">
-              <BookPlus className="size-4 shrink-0 text-zinc-500" />
+            <div className="flex items-center gap-2 rounded-lg border border-navy-200/80 bg-white px-3 shadow-[0_1px_2px_rgba(16,24,40,0.06)] dark:border-navy-700/70 dark:bg-navy-900">
+              <BookPlus className="size-4 shrink-0 text-text-muted" />
               <Input
                 value={libraryName}
                 onChange={(event) => onLibraryNameChange(event.target.value)}
                 placeholder="Produto, Marketing, Pesquisa..."
                 maxLength={256}
-                className="h-9 border-0 bg-transparent px-0 text-sm text-zinc-900 placeholder:text-zinc-400"
+                className="h-9 border-0 bg-transparent px-0 text-sm text-text-primary placeholder:text-text-muted"
               />
             </div>
           </label>

@@ -50,14 +50,14 @@ export function CreateOrganizationDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border-navy-200/50 bg-ds-surface-elevated p-0 shadow-[0_1px_2px_rgba(13,27,42,0.06)] sm:max-w-[400px]">
-        <div className="rounded-t-xl border-b border-navy-200/40 bg-navy-50/80 px-6 pt-6 pb-4">
+      <DialogContent className="border-navy-200/50 bg-ds-surface-elevated p-0 shadow-[0_1px_2px_rgba(13,27,42,0.06)] dark:border-navy-700/60 dark:bg-navy-900 sm:max-w-[400px]">
+        <div className="rounded-t-xl border-b border-navy-200/40 bg-navy-50/80 px-6 pt-6 pb-4 dark:border-navy-700/60 dark:bg-navy-800/70">
           <div className="flex items-start gap-4">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-600">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-600 dark:bg-amber-400/18 dark:text-amber-300">
               <Building2 className="size-5" />
             </div>
             <DialogHeader className="gap-1.5 text-left">
-              <DialogTitle className="text-base font-semibold tracking-tight text-navy-900">
+              <DialogTitle className="text-base font-semibold tracking-tight text-navy-900 dark:text-ds-white">
                 Nova organização
               </DialogTitle>
               <DialogDescription className="text-sm text-text-secondary">
@@ -96,7 +96,7 @@ export function CreateOrganizationDialog({
             </InputBox>
           </InputRoot>
 
-          <DialogFooter className="mt-6 flex flex-row gap-2 border-t border-navy-200/40 pt-5">
+          <DialogFooter className="mt-6 flex flex-row gap-2 border-t border-navy-200/40 pt-5 dark:border-navy-700/60">
             <Button
               type="button"
               variant="outline"
