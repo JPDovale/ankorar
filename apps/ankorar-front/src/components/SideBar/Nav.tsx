@@ -39,10 +39,10 @@ export function SideBarNav() {
 
   return (
     <nav
-      className="scrollbar w-full flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-gutter:stable_both-edges] py-2 group-data-[collapsed=true]:items-center group-data-[collapsed=true]:px-0"
+      className="scrollbar flex w-full min-h-0 flex-1 flex-col overflow-y-auto px-1 py-2 group-data-[collapsed=true]:items-center group-data-[collapsed=true]:px-0"
       aria-label="Navegação principal"
     >
-      <div className="w-full pl-1 space-y-0.5 group-data-[collapsed=true]:w-8 group-data-[collapsed=true]:flex group-data-[collapsed=true]:flex-col group-data-[collapsed=true]:items-center">
+      <div className="w-full space-y-0.5 group-data-[collapsed=true]:w-8 group-data-[collapsed=true]:flex group-data-[collapsed=true]:flex-col group-data-[collapsed=true]:items-center">
         {/* Dashboard */}
         <Can feature="read:saas_dashboard">
           <NavLink
