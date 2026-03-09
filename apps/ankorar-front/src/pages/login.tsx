@@ -66,26 +66,26 @@ export function LoginPage() {
   }
 
   return (
-    <AuthScene tone="violet">
+    <AuthScene tone="amber">
       <form
         className="mt-6 flex flex-col gap-4"
         onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
       >
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
-          Use o email da sua conta para acessar seu espaco de trabalho.
+        <p className="text-sm text-text-secondary">
+          Use o email da sua conta para acessar seu espaço de trabalho.
         </p>
 
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor={emailFieldId}
-            className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             Email
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(emailErrorMessage)}
-            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
+            className="h-11"
           >
             <Input
               id={emailFieldId}
@@ -102,14 +102,14 @@ export function LoginPage() {
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor={passwordFieldId}
-            className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             Senha
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(passwordErrorMessage)}
-            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
+            className="h-11"
           >
             <Input
               id={passwordFieldId}
@@ -128,17 +128,17 @@ export function LoginPage() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="mt-2 h-11 w-full bg-violet-400 text-white hover:bg-violet-500 dark:bg-violet-400 dark:hover:bg-violet-500"
+          className="mt-2 h-11 w-full"
         >
           {isSubmitting && <LoaderCircle className="size-4 animate-spin" />}
           {submitLabel}
         </Button>
 
-        <p className="text-center text-sm text-zinc-600 dark:text-zinc-300">
+        <p className="text-center text-sm text-text-secondary">
           Ainda não tem conta?{" "}
           <Link
             to="/register"
-            className="font-semibold text-violet-400 underline-offset-4 hover:underline dark:text-violet-300"
+            className="font-semibold text-amber-600 underline-offset-4 hover:underline hover:text-amber-500"
           >
             Criar cadastro
           </Link>

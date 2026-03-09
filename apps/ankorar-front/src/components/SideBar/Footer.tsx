@@ -52,44 +52,44 @@ export function SideBarFooter() {
   }
 
   return (
-    <div className="border-t border-zinc-200/80 px-1.5 py-2.5">
+    <div className="border-t border-navy-200/40 px-1.5 py-2.5">
       <Popover>
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="flex w-full min-w-0 items-center gap-1.5 rounded-lg px-2 py-2 text-left transition-colors hover:bg-zinc-100/80 group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-1.5"
+            className="flex w-full min-w-0 items-center gap-1.5 rounded-lg px-2 py-2 text-left transition-colors hover:bg-navy-100/60 group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-1.5"
             aria-label={`Abrir ações do usuário ${userName}`}
           >
-            <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-md bg-zinc-200/80 text-[11px] font-semibold text-zinc-700">
+            <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-md bg-amber-400/20 text-[11px] font-semibold text-amber-700">
               {initials}
             </span>
             <div className="min-w-0 group-data-[collapsed=true]:hidden">
-              <p className="truncate text-[11px] font-semibold text-zinc-900">
+              <p className="truncate text-[11px] font-semibold text-navy-900">
                 {userName}
               </p>
-              <p className="truncate text-[10px] text-zinc-500">{userEmail}</p>
+              <p className="truncate text-[10px] text-text-muted">{userEmail}</p>
             </div>
           </button>
         </PopoverTrigger>
         <PopoverContent
           side="right"
-          align="start"
+          align="end"
           sideOffset={8}
-          className="w-56 p-0"
+          className="w-56 p-0 border-navy-200/50 bg-ds-surface-elevated"
         >
           <div className="p-2">
-            <p className="truncate px-2 py-1 text-xs font-semibold text-zinc-900">
+            <p className="truncate px-2 py-1 text-xs font-semibold text-navy-900">
               {userName}
             </p>
-            <p className="truncate px-2 pb-2 text-[11px] text-zinc-500">
+            <p className="truncate px-2 pb-2 text-[11px] text-text-muted">
               {userEmail}
             </p>
           </div>
-          <div className="border-t border-zinc-200/80">
+          <div className="border-t border-navy-200/40">
             <Link to="/settings">
               <Button
                 variant="ghost"
-                className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-zinc-700 hover:bg-zinc-100"
+                className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-navy-800 hover:bg-navy-100/80"
               >
                 <Settings className="size-4 shrink-0" />
                 Minha conta
@@ -99,7 +99,7 @@ export function SideBarFooter() {
               <Link to="/organizations/settings">
                 <Button
                   variant="ghost"
-                  className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-zinc-700 hover:bg-zinc-100"
+                  className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-navy-800 hover:bg-navy-100/80"
                 >
                   <Building2 className="size-4 shrink-0" />
                   Organização
@@ -108,18 +108,18 @@ export function SideBarFooter() {
             </Can>
             {isLoadingSubscription ? (
               <div className="flex h-8 items-center gap-2 px-3">
-                <LoaderCircle className="size-4 animate-spin text-zinc-400" />
-                <span className="text-[12px] text-zinc-500">Assinatura...</span>
+                <LoaderCircle className="size-4 animate-spin text-text-muted" />
+                <span className="text-[12px] text-text-muted">Assinatura...</span>
               </div>
             ) : (
               <Can feature="read:subscription">
                 <Link to="/subscription">
                   <Button
                     variant="ghost"
-                    className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-zinc-700 hover:bg-zinc-100"
+                    className="h-8 w-full justify-start gap-2 rounded-none px-3 text-[13px] font-medium text-navy-800 hover:bg-navy-100/80"
                   >
                     {hasPaidPlan ? (
-                      <CreditCard className="size-4 shrink-0 text-violet-500" />
+                      <CreditCard className="size-4 shrink-0 text-amber-600" />
                     ) : (
                       <Sparkles className="size-4 shrink-0 text-amber-500" />
                     )}
@@ -133,10 +133,10 @@ export function SideBarFooter() {
               </Can>
             )}
           </div>
-          <div className="border-t border-zinc-200/80 p-1">
+          <div className="border-t border-navy-200/40 p-1">
             <Button
               variant="ghost"
-              className="h-8 w-full justify-start gap-2 rounded-md px-2 text-[13px] text-red-600 hover:bg-red-50 hover:text-red-700"
+              className="h-8 w-full justify-start gap-2 rounded-md px-2 text-[13px] text-ds-danger hover:bg-ds-danger/10 hover:text-ds-danger"
               onClick={handleLogout}
               disabled={isLoggingOut}
             >

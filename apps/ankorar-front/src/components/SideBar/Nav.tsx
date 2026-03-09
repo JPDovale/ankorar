@@ -39,54 +39,50 @@ export function SideBarNav() {
 
   return (
     <nav
-      className="scrollbar flex min-h-0 flex-1 flex-col overflow-y-auto px-1.5 py-2"
+      className="scrollbar w-full flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-gutter:stable_both-edges] py-2 group-data-[collapsed=true]:items-center group-data-[collapsed=true]:px-0"
       aria-label="Navegação principal"
     >
-      <div className="space-y-0.5">
+      <div className="w-full pl-1 space-y-0.5 group-data-[collapsed=true]:w-8 group-data-[collapsed=true]:flex group-data-[collapsed=true]:flex-col group-data-[collapsed=true]:items-center">
         {/* Dashboard */}
         <Can feature="read:saas_dashboard">
-          <div className="rounded-md">
-            <NavLink
-              to={sideBarSections[0].to}
-              className={({ isActive }) =>
-                cn(
-                  "group/section flex items-center gap-2 rounded-md px-1.5 py-1.5 transition-colors",
-                  "group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-1",
-                  isActive || isDashboardActive
-                    ? "bg-violet-500/12 text-violet-700"
-                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
-                )
-              }
-            >
-              <DashboardIcon className="size-3.5 shrink-0" />
-              <span className="truncate text-[13px] font-medium group-data-[collapsed=true]:hidden">
-                {sideBarSections[0].label}
-              </span>
-            </NavLink>
-          </div>
+          <NavLink
+            to={sideBarSections[0].to}
+            className={({ isActive }) =>
+              cn(
+                "flex items-center gap-2 rounded-md px-1.5 py-1.5 transition-colors ",
+                "group-data-[collapsed=true]:mx-auto group-data-[collapsed=true]:size-8 group-data-[collapsed=true]:items-center group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:gap-0 group-data-[collapsed=true]:p-0",
+                isActive || isDashboardActive
+                  ? "bg-amber-400/15 text-amber-700"
+                  : "text-text-secondary hover:bg-navy-100/80 hover:text-navy-900",
+              )
+            }
+          >
+            <DashboardIcon className="size-3.5 shrink-0" />
+            <span className="truncate text-[13px] font-medium group-data-[collapsed=true]:hidden">
+              {sideBarSections[0].label}
+            </span>
+          </NavLink>
         </Can>
 
         {/* Usuários */}
         <Can feature="read:user:other">
-          <div className="rounded-md">
-            <NavLink
-              to={sideBarSections[1].to}
-              className={({ isActive }) =>
-                cn(
-                  "group/section flex items-center gap-2 rounded-md px-1.5 py-1.5 transition-colors",
-                  "group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-1",
-                  isActive || isUsersSectionActive
-                    ? "bg-violet-500/12 text-violet-700"
-                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
-                )
-              }
-            >
-              <UsersIcon className="size-3.5 shrink-0" />
-              <span className="truncate text-[13px] font-medium group-data-[collapsed=true]:hidden">
-                {sideBarSections[1].label}
-              </span>
-            </NavLink>
-          </div>
+          <NavLink
+            to={sideBarSections[1].to}
+            className={({ isActive }) =>
+              cn(
+                "flex items-center gap-2 rounded-md px-1.5 py-1.5 transition-colors",
+                "group-data-[collapsed=true]:mx-auto group-data-[collapsed=true]:size-8 group-data-[collapsed=true]:items-center group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:gap-0 group-data-[collapsed=true]:p-0",
+                isActive || isUsersSectionActive
+                  ? "bg-amber-400/15 text-amber-700"
+                  : "text-text-secondary hover:bg-navy-100/80 hover:text-navy-900",
+              )
+            }
+          >
+            <UsersIcon className="size-3.5 shrink-0" />
+            <span className="truncate text-[13px] font-medium group-data-[collapsed=true]:hidden">
+              {sideBarSections[1].label}
+            </span>
+          </NavLink>
         </Can>
 
         {/* Mapas */}
@@ -101,7 +97,7 @@ export function SideBarNav() {
           >
             {mapsList.length === 0 ? (
               <div className="py-1 pl-5 pr-2">
-                <span className="text-[11px] text-zinc-400">Nenhum mapa</span>
+                <span className="text-[11px] text-text-muted">Nenhum mapa</span>
               </div>
             ) : (
               mapsList.map((map) => (
@@ -128,7 +124,7 @@ export function SideBarNav() {
           >
             {librariesList.length === 0 ? (
               <div className="py-1 pl-5 pr-2">
-                <span className="text-[11px] text-zinc-400">
+                <span className="text-[11px] text-text-muted">
                   Nenhuma biblioteca
                 </span>
               </div>
@@ -169,15 +165,15 @@ function SideBarTreeSection({
   children,
 }: SideBarTreeSectionProps) {
   return (
-    <div className="rounded-md">
-      <div className="flex items-center gap-0.5">
+    <div className="w-full group-data-[collapsed=true]:pl-1 rounded-md group-data-[collapsed=true]:w-8">
+      <div className="flex items-center gap-0.5 group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:gap-0">
         <button
           type="button"
           onClick={(e) => {
             e.preventDefault();
             onToggle();
           }}
-          className="flex size-5 shrink-0 items-center justify-center rounded text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 group-data-[collapsed=true]:hidden"
+          className="flex size-5 shrink-0 items-center justify-center rounded text-text-muted hover:bg-navy-100/80 hover:text-navy-700 group-data-[collapsed=true]:hidden"
           aria-expanded={isOpen}
         >
           {isOpen ? (
@@ -190,11 +186,11 @@ function SideBarTreeSection({
           to={to}
           className={({ isActive }) =>
             cn(
-              "group/section flex min-w-0 flex-1 items-center gap-2 rounded-md px-1.5 py-1.5 transition-colors",
-              "group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:px-1",
+              "flex min-w-0 flex-1 items-center gap-2 rounded-md px-1.5 py-1.5 transition-colors",
+              "group-data-[collapsed=true]:mx-auto group-data-[collapsed=true]:size-8 group-data-[collapsed=true]:flex-none group-data-[collapsed=true]:items-center group-data-[collapsed=true]:justify-center group-data-[collapsed=true]:gap-0 group-data-[collapsed=true]:p-0",
               isActive || isSectionActive
-                ? "bg-violet-500/12 text-violet-700"
-                : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
+                ? "bg-amber-400/15 text-amber-700"
+                : "text-text-secondary hover:bg-navy-100/80 hover:text-navy-900",
             )
           }
         >
@@ -205,7 +201,7 @@ function SideBarTreeSection({
         </NavLink>
       </div>
       {isOpen && (
-        <div className="ml-1 space-y-0.5 border-l border-zinc-200/80 pl-2 group-data-[collapsed=true]:hidden">
+        <div className="ml-1 space-y-0.5 border-l border-navy-200/50 pl-2 group-data-[collapsed=true]:hidden">
           {children}
         </div>
       )}
@@ -235,7 +231,7 @@ function SideBarTreeLibrary({
             e.preventDefault();
             onToggle();
           }}
-          className="flex size-5 shrink-0 items-center justify-center rounded text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600"
+          className="flex size-5 shrink-0 items-center justify-center rounded text-text-muted hover:bg-navy-100/80 hover:text-navy-700"
           aria-expanded={isOpen}
         >
           {isOpen ? (
@@ -250,8 +246,8 @@ function SideBarTreeLibrary({
             cn(
               "flex min-w-0 flex-1 items-center gap-2 rounded-md px-1.5 py-1 transition-colors",
               isActive
-                ? "bg-violet-500/10 text-violet-700"
-                : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
+                ? "bg-amber-400/12 text-amber-700"
+                : "text-text-secondary hover:bg-navy-100/80 hover:text-navy-900",
             )
           }
         >
@@ -262,7 +258,7 @@ function SideBarTreeLibrary({
         </NavLink>
       </div>
       {isOpen && linkedMaps.length > 0 && (
-        <div className="ml-1 space-y-0.5 border-l border-zinc-200/80 pl-2">
+        <div className="ml-1 space-y-0.5 border-l border-navy-200/50 pl-2">
           {linkedMaps.map((map) => (
             <SideBarTreeItem
               key={map.id}
@@ -275,7 +271,7 @@ function SideBarTreeLibrary({
       )}
       {isOpen && linkedMaps.length === 0 && (
         <div className="py-1 pl-5 pr-2">
-          <span className="text-[11px] text-zinc-400">
+          <span className="text-[11px] text-text-muted">
             Nenhum mapa vinculado
           </span>
         </div>
@@ -300,12 +296,12 @@ function SideBarTreeItem({ to, label, icon: Icon }: SideBarTreeItemProps) {
           "group/item flex items-center gap-2 rounded-md px-1.5 py-1 transition-colors",
           "group-data-[collapsed=true]:hidden",
           isActive
-            ? "bg-violet-500/10 text-violet-700"
-            : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
+            ? "bg-amber-400/12 text-amber-700"
+            : "text-text-secondary hover:bg-navy-100/80 hover:text-navy-900",
         )
       }
     >
-      <Icon className="size-3 shrink-0 text-zinc-400 group-hover/item:text-zinc-600" />
+      <Icon className="size-3 shrink-0 text-text-muted group-hover/item:text-navy-700" />
       <span className="truncate text-[12px] font-medium">{label}</span>
     </NavLink>
   );

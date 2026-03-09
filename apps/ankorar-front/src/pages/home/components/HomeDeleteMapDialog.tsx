@@ -36,29 +36,29 @@ export function HomeDeleteMapDialog({
         }
       }}
     >
-      <DialogContent className="max-w-md overflow-hidden border-zinc-200 p-0">
-        <div className="border-b border-zinc-200 bg-red-50/60 px-4 py-3">
+      <DialogContent className="max-w-md overflow-hidden border-navy-200/50 p-0">
+        <div className="border-b border-navy-200/50 bg-ds-danger/5 px-4 py-3">
           <DialogHeader className="gap-1.5">
-            <span className="inline-flex size-7 items-center justify-center rounded-lg border border-red-200 bg-white text-red-600">
+            <span className="inline-flex size-7 items-center justify-center rounded-lg border border-ds-danger/30 bg-ds-surface-elevated text-ds-danger">
               <AlertTriangle className="size-4" />
             </span>
-            <DialogTitle className="text-base text-zinc-900">Excluir mapa mental</DialogTitle>
-            <DialogDescription className="text-xs text-zinc-600">
+            <DialogTitle className="text-base text-navy-900">Excluir mapa mental</DialogTitle>
+            <DialogDescription className="text-xs text-text-secondary">
               Essa ação moverá o mapa para excluído e pode impactar vínculos atuais.
             </DialogDescription>
           </DialogHeader>
         </div>
 
         <div className="space-y-2.5 px-4 py-3">
-          <div className="rounded-xl border border-red-200/80 bg-red-50/50 px-2.5 py-2">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-red-700">
+          <div className="overflow-hidden rounded-xl border border-ds-danger/20 bg-ds-danger/5 px-2.5 py-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ds-danger">
               Mapa selecionado
             </p>
-            <p className="mt-1 truncate text-sm font-medium text-zinc-900">{mapTitle}</p>
+            <p className="mt-1 break-words text-sm font-medium text-navy-900">{mapTitle}</p>
           </div>
         </div>
 
-        <DialogFooter className="border-t border-zinc-200 px-4 py-3">
+        <DialogFooter className="border-t border-navy-200/50 px-4 py-3">
           <Button
             variant="secondary"
             className="h-8 px-3 text-xs"

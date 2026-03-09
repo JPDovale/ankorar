@@ -7,14 +7,14 @@ export function Header() {
   const { collapsed, toggleCollapsed } = useSideBar();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-zinc-200/80 bg-white/90 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-navy-200/40 bg-ds-surface-elevated/95 backdrop-blur">
       <div className="flex h-16 items-center px-4 sm:px-4">
         <div className="flex items-center gap-2">
           {collapsed && (
             <Button
               variant="ghost"
               size="icon"
-              className="size-8 rounded-lg text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
+              className="size-8 rounded-lg text-text-muted hover:bg-navy-100/80 hover:text-navy-900"
               onClick={toggleCollapsed}
               aria-label="Expandir sidebar"
             >

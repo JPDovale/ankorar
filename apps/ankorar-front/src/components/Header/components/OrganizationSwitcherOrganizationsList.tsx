@@ -27,25 +27,25 @@ export function OrganizationSwitcherOrganizationsList({
             data-selected={isSelected}
             onClick={() => onSelectOrganization(organization.id)}
             disabled={isSwitchingOrganization}
-            className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-zinc-900 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60 data-[selected=true]:bg-violet-400 data-[selected=true]:text-white"
+            className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-left text-navy-900 transition-colors hover:bg-navy-100/80 disabled:cursor-not-allowed disabled:opacity-60 data-[selected=true]:bg-amber-400 data-[selected=true]:text-navy-950"
           >
             <span className="flex items-center gap-2.5">
               <span
                 data-selected={isSelected}
-                className="flex size-7 items-center justify-center rounded-md bg-zinc-200 text-[11px] font-semibold text-zinc-700 data-[selected=true]:bg-violet-500 data-[selected=true]:text-white"
+                className="flex size-7 items-center justify-center rounded-md bg-navy-100 text-[11px] font-semibold text-navy-700 data-[selected=true]:bg-amber-500 data-[selected=true]:text-navy-950"
               >
                 {organization.slug.slice(0, 2).toUpperCase()}
               </span>
               <span className="min-w-0 flex flex-col">
                 <span
                   data-selected={isSelected}
-                  className="truncate text-sm font-medium leading-tight text-zinc-900 data-[selected=true]:text-white"
+                  className="truncate text-sm font-medium leading-tight text-navy-900 data-[selected=true]:text-navy-950"
                 >
                   {organization.name}
                 </span>
                 <span
                   data-selected={isSelected}
-                  className="text-[11px] leading-tight text-zinc-500 data-[selected=true]:text-zinc-300"
+                  className="text-[11px] leading-tight text-text-muted data-[selected=true]:text-navy-800"
                 >
                   {organization.role}
                 </span>

@@ -50,20 +50,20 @@ export function CreateOrganizationDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border-zinc-200/80 bg-white p-0 shadow-[0_1px_2px_rgba(16,24,40,0.06)] sm:max-w-[400px]">
-        <div className="rounded-t-xl border-b border-zinc-100 bg-zinc-50/80 px-6 pt-6 pb-4">
+      <DialogContent className="border-navy-200/50 bg-ds-surface-elevated p-0 shadow-[0_1px_2px_rgba(13,27,42,0.06)] sm:max-w-[400px]">
+        <div className="rounded-t-xl border-b border-navy-200/40 bg-navy-50/80 px-6 pt-6 pb-4">
           <div className="flex items-start gap-4">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-violet-600">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-600">
               <Building2 className="size-5" />
             </div>
             <DialogHeader className="gap-1.5 text-left">
-              <DialogTitle className="text-base font-semibold tracking-tight text-zinc-900">
+              <DialogTitle className="text-base font-semibold tracking-tight text-navy-900">
                 Nova organização
               </DialogTitle>
-              <DialogDescription className="text-sm text-zinc-500">
+              <DialogDescription className="text-sm text-text-secondary">
                 Crie uma organização e convide pessoas. Você será o dono e poderá gerenciar membros e permissões.
                 {limitLabel != null && (
-                  <span className="mt-2 block text-xs text-zinc-400">
+                  <span className="mt-2 block text-xs text-text-muted">
                     {limitLabel}
                   </span>
                 )}
@@ -76,13 +76,13 @@ export function CreateOrganizationDialog({
           <InputRoot disabled={limitReached || isCreating}>
             <Label
               htmlFor="create-org-name"
-              className="text-xs font-medium text-zinc-600"
+              className="text-xs font-medium text-text-secondary"
             >
               Nome da organização
             </Label>
             <InputBox
               data-disabled={limitReached || isCreating}
-              className="mt-1.5 h-10 border-zinc-300 bg-white transition-colors focus-within:border-violet-400"
+              className="mt-1.5 h-10"
             >
               <Input
                 id="create-org-name"
@@ -96,12 +96,11 @@ export function CreateOrganizationDialog({
             </InputBox>
           </InputRoot>
 
-          <DialogFooter className="mt-6 flex flex-row gap-2 border-t border-zinc-100 pt-5">
+          <DialogFooter className="mt-6 flex flex-row gap-2 border-t border-navy-200/40 pt-5">
             <Button
               type="button"
               variant="outline"
               size="sm"
-              className="border-zinc-300 text-zinc-700 hover:bg-zinc-50"
               onClick={() => onOpenChange(false)}
             >
               Cancelar

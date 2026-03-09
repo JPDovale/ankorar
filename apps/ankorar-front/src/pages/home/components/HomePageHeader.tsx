@@ -20,10 +20,10 @@ export function HomePageHeader() {
   return (
     <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="space-y-1">
-        <h1 className="text-xl font-semibold tracking-tight text-zinc-900">
+        <h1 className="text-xl font-semibold tracking-tight text-navy-900">
           Mapas mentais
         </h1>
-        <p className="text-xs text-zinc-500">{mapsSummaryText}</p>
+        <p className="text-xs text-text-muted">{mapsSummaryText}</p>
       </div>
 
       <div className="flex sm:items-center sm:justify-end">

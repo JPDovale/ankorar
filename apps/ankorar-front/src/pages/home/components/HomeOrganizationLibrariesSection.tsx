@@ -24,32 +24,32 @@ export function HomeOrganizationLibrariesSection() {
           <LibraryBig className="mr-1 size-3" />
           Bibliotecas da organização
         </Badge>
-        <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
+        <h2 className="text-lg font-semibold tracking-tight text-navy-900">
           Mapas vinculados por biblioteca
         </h2>
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-text-muted">
           Mapas organizados de acordo com as bibliotecas da organização atual.
         </p>
       </header>
 
       {!hasLibraries && (
-        <div className="rounded-xl border border-dashed border-zinc-300/80 bg-zinc-50/60 px-4 py-10">
+        <div className="rounded-xl border border-dashed border-navy-200/80 bg-navy-50/60 px-4 py-10">
           <div className="mx-auto flex max-w-md flex-col items-center gap-3 text-center">
-            <span className="inline-flex size-11 items-center justify-center rounded-2xl border border-zinc-200/80 bg-white shadow-sm">
-              <LibraryBig className="size-5 text-zinc-600" />
+            <span className="inline-flex size-11 items-center justify-center rounded-2xl border border-navy-200/60 bg-ds-surface-elevated shadow-sm">
+              <LibraryBig className="size-5 text-amber-600" />
             </span>
             <div className="space-y-1">
-              <p className="text-sm font-semibold text-zinc-900">
+              <p className="text-sm font-semibold text-navy-900">
                 Nenhuma biblioteca criada na organização
               </p>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-text-muted">
                 Crie bibliotecas para separar contextos e compartilhar mapas
                 mentais com o time.
               </p>
             </div>
             <Link
               to="/libraries"
-              className="inline-flex h-9 min-w-56 items-center justify-center gap-2 rounded-lg bg-violet-400 px-5 text-sm font-medium text-white shadow-[0_1px_2px_rgba(16,24,40,0.12)] transition-colors hover:bg-violet-500"
+              className="inline-flex h-9 min-w-56 items-center justify-center gap-2 rounded-lg bg-amber-400 px-5 text-sm font-medium text-navy-950 shadow-[0_1px_2px_rgba(13,27,42,0.12)] transition-colors hover:bg-amber-300"
             >
               <LibraryBig className="size-4" />
               Ir para bibliotecas
@@ -59,8 +59,8 @@ export function HomeOrganizationLibrariesSection() {
       )}
 
       {hasLibraries && !hasLibrariesWithMaps && (
-        <div className="rounded-xl border border-dashed border-zinc-300/80 bg-zinc-50/60 px-4 py-8">
-          <p className="text-center text-sm text-zinc-500">
+        <div className="rounded-xl border border-dashed border-navy-200/80 bg-navy-50/60 px-4 py-8">
+          <p className="text-center text-sm text-text-muted">
             Nenhuma biblioteca com mapas vinculados no momento.
           </p>
         </div>
@@ -68,7 +68,7 @@ export function HomeOrganizationLibrariesSection() {
 
       {hasLibrariesWithMaps && (
         <div className="space-y-3">
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-text-muted">
             {organizationLibrariesText} • {linkedMapsText}
           </p>
 
@@ -82,10 +82,10 @@ export function HomeOrganizationLibrariesSection() {
               return (
                 <article key={library.id} className="space-y-2">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="truncate text-sm font-semibold text-zinc-900">
+                    <p className="truncate text-sm font-semibold text-navy-900">
                       {library.name}
                     </p>
-                    <span className="shrink-0 rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[10px] font-semibold text-zinc-600">
+                    <span className="shrink-0 rounded-lg border border-navy-200/60 bg-navy-100/80 px-2 py-0.5 text-[10px] font-semibold text-navy-700">
                       {libraryLinkedMapsText}
                     </span>
                   </div>
@@ -93,7 +93,7 @@ export function HomeOrganizationLibrariesSection() {
                   <div className="space-y-4">
                     {hasLikedMaps && (
                       <div className="space-y-2">
-                        <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                        <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted">
                           Mapas curtidos
                         </h3>
                         <LibraryMapsMosaic
@@ -114,7 +114,7 @@ export function HomeOrganizationLibrariesSection() {
                     )}
 
                     <div className="space-y-2">
-                      <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted">
                         Todos os mapas
                       </h3>
                       <LibraryMapsMosaic

@@ -31,11 +31,11 @@ export function UserPasswordSection({
         <div className="space-y-1">
           <h2
             id="user-password-title"
-            className="text-sm font-semibold text-zinc-900"
+            className="text-sm font-semibold text-navy-900"
           >
             Alterar senha
           </h2>
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-text-muted">
             Use uma senha forte com pelo menos 8 caracteres.
           </p>
         </div>
@@ -49,14 +49,14 @@ export function UserPasswordSection({
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor="user-settings-current-password"
-            className="text-xs font-medium text-zinc-600"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             Senha atual
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(errors.current_password)}
-            className="mt-1 h-10 border-zinc-300 bg-white transition-colors focus-within:border-violet-400"
+            className="mt-1 h-10"
           >
             <Input
               id="user-settings-current-password"
@@ -77,14 +77,14 @@ export function UserPasswordSection({
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor="user-settings-new-password"
-            className="text-xs font-medium text-zinc-600"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             Nova senha
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(errors.new_password)}
-            className="mt-1 h-10 border-zinc-300 bg-white transition-colors focus-within:border-violet-400"
+            className="mt-1 h-10"
           >
             <Input
               id="user-settings-new-password"
@@ -105,14 +105,14 @@ export function UserPasswordSection({
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor="user-settings-confirm-password"
-            className="text-xs font-medium text-zinc-600"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             Confirmar nova senha
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(errors.confirm_password)}
-            className="mt-1 h-10 border-zinc-300 bg-white transition-colors focus-within:border-violet-400"
+            className="mt-1 h-10"
           >
             <Input
               id="user-settings-confirm-password"

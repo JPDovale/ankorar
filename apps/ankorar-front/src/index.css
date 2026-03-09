@@ -1,44 +1,80 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.702 0.183 293.541);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.702 0.183 293.541);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  /* Ankorar Design System tokens */
+  --navy-950: #070f18;
+  --navy-900: #0d1b2a;
+  --navy-800: #122233;
+  --navy-700: #1a3044;
+  --navy-600: #1e3a52;
+  --navy-500: #2a4e6a;
+  --navy-400: #3d6680;
+  --navy-300: #4d7a94;
+  --navy-200: #8ba4b8;
+  --navy-100: #c5d4e0;
+  --amber-600: #a86820;
+  --amber-500: #c97b26;
+  --amber-400: #d4882a;
+  --amber-300: #e09e44;
+  --amber-200: #f0b86a;
+  --amber-100: #fbe4bc;
+  --amber-50: #fff6e8;
+  --ds-success: #3db87a;
+  --ds-warning: #e09e44;
+  --ds-danger: #e05a5a;
+  --ds-info: #4a9ecc;
+  --ds-white: #fafaf8;
+  /* Tema claro Ankorar DS (padrão da aplicação) */
+  --ds-surface: #f5efe4;
+  --ds-surface-elevated: #fafaf8;
+  --text-primary: #0d1b2a;
+  --text-secondary: #1a3044;
+  --text-muted: #2a4e6a;
+  --text-disabled: #3d6680;
+  --border-amber: rgba(212, 136, 42, 0.25);
+  --border-default: rgba(13, 27, 42, 0.12);
+  /* Ankorar DS typography */
+  --font-syne-family: "Syne", sans-serif;
+  --font-syne-mono-family: "Syne Mono", monospace;
+
+  --background: #f5efe4;
+  --foreground: #0d1b2a;
+  --card: #fafaf8;
+  --card-foreground: #0d1b2a;
+  --popover: #fafaf8;
+  --popover-foreground: #0d1b2a;
+  --primary: #d4882a;
+  --primary-foreground: #070f18;
+  --secondary: #e8e0d5;
+  --secondary-foreground: #0d1b2a;
+  --muted: #e8e0d5;
+  --muted-foreground: #2a4e6a;
+  --accent: #fbe4bc;
+  --accent-foreground: #0d1b2a;
+  --destructive: #e05a5a;
+  --destructive-foreground: #070f18;
+  --border: rgba(13, 27, 42, 0.14);
+  --input: rgba(13, 27, 42, 0.14);
+  --ring: rgba(212, 136, 42, 0.4);
+  --chart-1: #d4882a;
+  --chart-2: #3db87a;
+  --chart-3: #4a9ecc;
+  --chart-4: #e09e44;
+  --chart-5: #2a4e6a;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.702 0.183 293.541);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --font-body: "Geist", sans-serif;
+  --sidebar: #f0e9e0;
+  --sidebar-foreground: #0d1b2a;
+  --sidebar-primary: #a86820;
+  --sidebar-primary-foreground: #fafaf8;
+  --sidebar-accent: #e8e0d5;
+  --sidebar-accent-foreground: #0d1b2a;
+  --sidebar-border: rgba(13, 27, 42, 0.1);
+  --sidebar-ring: rgba(212, 136, 42, 0.3);
+  --font-body: "Syne", sans-serif;
 }
 
 .dark {
@@ -78,6 +114,39 @@
 }
 
 @theme inline {
+  /* Ankorar DS colors */
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-800: var(--navy-800);
+  --color-navy-700: var(--navy-700);
+  --color-navy-600: var(--navy-600);
+  --color-navy-500: var(--navy-500);
+  --color-navy-400: var(--navy-400);
+  --color-navy-300: var(--navy-300);
+  --color-navy-200: var(--navy-200);
+  --color-navy-100: var(--navy-100);
+  --color-ds-surface: var(--ds-surface);
+  --color-ds-surface-elevated: var(--ds-surface-elevated);
+  --color-amber-600: var(--amber-600);
+  --color-amber-500: var(--amber-500);
+  --color-amber-400: var(--amber-400);
+  --color-amber-300: var(--amber-300);
+  --color-amber-200: var(--amber-200);
+  --color-amber-100: var(--amber-100);
+  --color-amber-50: var(--amber-50);
+  --color-ds-success: var(--ds-success);
+  --color-ds-warning: var(--ds-warning);
+  --color-ds-danger: var(--ds-danger);
+  --color-ds-info: var(--ds-info);
+  --color-ds-white: var(--ds-white);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-disabled: var(--text-disabled);
+  /* Ankorar DS fonts (for font-syne / font-syne-mono utilities) */
+  --font-syne: var(--font-syne-family);
+  --font-syne-mono: var(--font-syne-mono-family);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -118,6 +187,15 @@
 }
 
 @layer base {
+  .font-syne {
+    font-family: var(--font-syne-family) !important;
+  }
+  .font-syne-mono {
+    font-family: var(--font-syne-mono-family) !important;
+  }
+}
+
+@layer base {
   * {
     @apply border-border outline-ring/50;
   }
@@ -128,10 +206,10 @@
 
 :root {
   --scrollbar-size: 4px;
-  --scrollbar-track: rgb(228 228 231 / 0.2);
-  --scrollbar-thumb: rgb(212 212 216 / 0.6);
-  --scrollbar-thumb-hover: rgb(161 161 170 / 0.85);
-  --scrollbar-thumb-active: rgb(196 181 253 / 0.9);
+  --scrollbar-track: rgba(13, 27, 42, 0.06);
+  --scrollbar-thumb: rgba(13, 27, 42, 0.2);
+  --scrollbar-thumb-hover: rgba(13, 27, 42, 0.35);
+  --scrollbar-thumb-active: rgba(212, 136, 42, 0.5);
 }
 
 .dark {
@@ -175,16 +253,17 @@
 
   /* Dashboard: fundo com grid sutil */
   .dashboard-bg {
-    background-color: oklch(0.98 0 0);
+    background-color: var(--ds-surface);
     background-image:
-      linear-gradient(to right, oklch(0.92 0 0 / 0.4) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(0.92 0 0 / 0.4) 1px, transparent 1px);
+      linear-gradient(to right, rgba(13, 27, 42, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(13, 27, 42, 0.04) 1px, transparent 1px);
     background-size: 24px 24px;
   }
   .dark .dashboard-bg {
-    background-color: oklch(0.12 0 0);
+    background-color: var(--navy-950);
     background-image:
-      linear-gradient(to right, oklch(0.25 0 0 / 0.3) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(0.25 0 0 / 0.3) 1px, transparent 1px);
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 }

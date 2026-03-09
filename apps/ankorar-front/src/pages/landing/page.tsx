@@ -1,8 +1,8 @@
+import { AnkorarLogoMark } from "@/components/AnkorarLogoMark";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import { useUser } from "@/hooks/useUser";
 import {
-  Link2,
   ArrowRight,
   MapPin,
   Zap,
@@ -62,24 +62,22 @@ export function LandingPage() {
   const { user, isLoadingUser } = useUser();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-50 via-white to-zinc-50/80">
+    <div className="min-h-screen bg-ds-surface">
       {/* Nav */}
-      <header className="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-navy-200/40 bg-ds-surface-elevated/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link
             to="/"
-            className="flex items-center gap-2 rounded-lg px-1 py-1.5 transition-colors hover:bg-zinc-50"
+            className="flex h-10 items-center gap-2 rounded-lg px-1 transition-colors hover:bg-amber-50/50"
           >
-            <span className="rounded-md border border-zinc-200 bg-zinc-100 p-1 text-zinc-700">
-              <Link2 className="size-4" />
-            </span>
-            <span className="text-lg font-semibold tracking-tight text-zinc-900">
-              Ankorar
+            <AnkorarLogoMark className="size-5 shrink-0 text-amber-600" />
+            <span className="text-lg font-bold leading-none tracking-tight text-navy-900">
+              Anko<span className="text-amber-600">rar</span>
             </span>
           </Link>
           <nav className="flex items-center gap-2">
             <Link to="/pricing">
-              <Button variant="ghost" size="sm" className="text-zinc-600">
+              <Button variant="ghost" size="sm" className="text-text-secondary">
                 Preços
               </Button>
             </Link>
@@ -112,15 +110,15 @@ export function LandingPage() {
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-4 pt-16 pb-20 sm:px-6 sm:pt-24 sm:pb-28">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-1.5 text-sm font-medium text-violet-700">
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-50 px-4 py-1.5 text-sm font-medium text-amber-700">
             <Sparkles className="size-4" />
             Mapas mentais que organizam ideias
           </div>
-          <h1 className="mt-6 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl">
+          <h1 className="mt-6 text-4xl font-bold tracking-tight text-navy-900 sm:text-5xl lg:text-6xl">
             Organize ideias.{" "}
-            <span className="text-violet-600">Tome decisões melhores.</span>
+            <span className="text-amber-600">Tome decisões melhores.</span>
           </h1>
-          <p className="mt-5 text-lg text-zinc-600 sm:text-xl">
+          <p className="mt-5 text-lg text-text-secondary sm:text-xl">
             Crie mapas mentais, bibliotecas e projetos em um só lugar. Comece
             grátis com 5 mapas — sem cartão de crédito.
           </p>
@@ -132,59 +130,59 @@ export function LandingPage() {
               </Button>
             </Link>
             <Link to="/pricing">
-              <Button size="lg" variant="outline" className="gap-2 font-medium">
+              <Button size="lg" variant="secondary" className="gap-2 font-medium">
                 Ver planos
               </Button>
             </Link>
           </div>
-          <ul className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-zinc-500">
+          <ul className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-text-muted">
             <li className="flex items-center gap-1.5">
-              <CheckCircle2 className="size-4 text-emerald-500" />
+              <CheckCircle2 className="size-4 text-ds-success" />
               Sem cartão no início
             </li>
             <li className="flex items-center gap-1.5">
-              <CheckCircle2 className="size-4 text-emerald-500" />
+              <CheckCircle2 className="size-4 text-ds-success" />
               5 mapas grátis
             </li>
             <li className="flex items-center gap-1.5">
-              <CheckCircle2 className="size-4 text-emerald-500" />
+              <CheckCircle2 className="size-4 text-ds-success" />
               Cancele quando quiser
             </li>
           </ul>
         </div>
         {/* Stats */}
-        <div className="mx-auto mt-16 flex max-w-3xl flex-wrap justify-center gap-x-12 gap-y-6 border-t border-zinc-200/80 pt-12">
+        <div className="mx-auto mt-16 flex max-w-3xl flex-wrap justify-center gap-x-12 gap-y-6 border-t border-navy-200/40 pt-12">
           {STATS.map(({ value, label }) => (
             <div key={label} className="text-center">
-              <div className="text-2xl font-bold text-zinc-900 sm:text-3xl">
+              <div className="text-2xl font-bold text-navy-900 sm:text-3xl">
                 {value}
               </div>
-              <div className="mt-0.5 text-sm text-zinc-500">{label}</div>
+              <div className="mt-0.5 text-sm text-text-muted">{label}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Features */}
-      <section className="border-y border-zinc-200/80 bg-white py-16 sm:py-20">
+      <section className="border-y border-navy-200/40 bg-ds-surface-elevated py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="text-center text-2xl font-bold text-zinc-900 sm:text-3xl">
+          <h2 className="text-center text-2xl font-bold text-navy-900 sm:text-3xl">
             Tudo que você precisa para organizar ideias
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-zinc-600">
+          <p className="mx-auto mt-3 max-w-xl text-center text-text-secondary">
             Ferramentas pensadas para criadores, estudantes e equipes.
           </p>
           <div className="mt-12 grid gap-8 sm:grid-cols-3">
             {FEATURES.map(({ icon: Icon, title, description }) => (
               <div
                 key={title}
-                className="rounded-2xl border border-zinc-200/80 bg-zinc-50/50 p-6 shadow-sm transition-shadow hover:shadow-md"
+                className="rounded-2xl border border-navy-200/50 bg-ds-surface p-6 shadow-sm transition-shadow hover:shadow-md"
               >
-                <div className="flex size-12 items-center justify-center rounded-xl bg-violet-500/15 text-violet-600">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-amber-400/15 text-amber-600">
                   <Icon className="size-6" />
                 </div>
-                <h3 className="mt-4 font-semibold text-zinc-900">{title}</h3>
-                <p className="mt-2 text-sm text-zinc-600">{description}</p>
+                <h3 className="mt-4 font-semibold text-navy-900">{title}</h3>
+                <p className="mt-2 text-sm text-text-secondary">{description}</p>
               </div>
             ))}
           </div>
@@ -192,21 +190,21 @@ export function LandingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="border-b border-zinc-200/80 py-16 sm:py-20">
+      <section className="border-b border-navy-200/40 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="text-center text-2xl font-bold text-zinc-900 sm:text-3xl">
+          <h2 className="text-center text-2xl font-bold text-navy-900 sm:text-3xl">
             Quem já usa recomenda
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-zinc-600">
+          <p className="mx-auto mt-3 max-w-xl text-center text-text-secondary">
             Criadores e equipes que organizam ideias com a Ankorar.
           </p>
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
             {TESTIMONIALS.map((t) => (
               <div
                 key={t.name}
-                className="relative rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm"
+                className="relative rounded-2xl border border-navy-200/50 bg-ds-surface-elevated p-6 shadow-sm"
               >
-                <Quote className="absolute right-4 top-4 size-8 text-violet-100" />
+                <Quote className="absolute right-4 top-4 size-8 text-amber-100" />
                 <div className="mb-3 flex gap-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <Star
@@ -216,16 +214,16 @@ export function LandingPage() {
                     />
                   ))}
                 </div>
-                <p className="text-sm leading-relaxed text-zinc-700">
+                <p className="text-sm leading-relaxed text-navy-800">
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className="mt-4 flex items-center gap-3">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-violet-500/20 text-sm font-semibold text-violet-700">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-400/20 text-sm font-semibold text-amber-700">
                     {t.initials}
                   </div>
                   <div>
-                    <div className="font-semibold text-zinc-900">{t.name}</div>
-                    <div className="text-xs text-zinc-500">{t.role}</div>
+                    <div className="font-semibold text-navy-900">{t.name}</div>
+                    <div className="text-xs text-text-muted">{t.role}</div>
                   </div>
                 </div>
               </div>
@@ -235,20 +233,19 @@ export function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-br from-violet-600 to-violet-700 px-4 py-16 sm:py-20">
+      <section className="bg-gradient-to-br from-navy-800 to-navy-900 px-4 py-16 sm:py-20">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">
+          <h2 className="text-2xl font-bold text-ds-white sm:text-3xl">
             Pronto para organizar suas ideias?
           </h2>
-          <p className="mt-3 text-violet-100">
+          <p className="mt-3 text-navy-300">
             Crie sua conta em menos de 2 minutos. Comece com 5 mapas grátis.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link to="/register">
               <Button
                 size="lg"
-                variant="secondary"
-                className="gap-2 bg-white font-semibold text-violet-700 shadow-lg hover:bg-violet-50"
+                className="gap-2 font-semibold shadow-lg"
               >
                 Criar conta grátis
                 <ArrowRight className="size-4" />
@@ -258,7 +255,7 @@ export function LandingPage() {
               <Button
                 size="lg"
                 variant="ghost"
-                className="gap-2 text-white hover:bg-white/10 hover:text-white"
+                className="gap-2 text-ds-white hover:bg-white/10 hover:text-ds-white"
               >
                 Ver planos
               </Button>
@@ -268,22 +265,20 @@ export function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-200/80 bg-white py-10">
+      <footer className="border-t border-navy-200/40 bg-ds-surface-elevated py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-4 sm:flex-row sm:px-6">
           <div className="flex items-center gap-2">
-            <span className="rounded-md border border-zinc-200 bg-zinc-100 p-1 text-zinc-700">
-              <Link2 className="size-4" />
-            </span>
-            <span className="font-semibold text-zinc-900">Ankorar</span>
+            <AnkorarLogoMark className="size-5 shrink-0 text-amber-600" />
+            <span className="font-bold text-navy-900">Anko<span className="text-amber-600">rar</span></span>
           </div>
-          <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-sm text-zinc-600">
-            <Link to="/pricing" className="hover:text-zinc-900">
+          <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-sm text-text-secondary">
+            <Link to="/pricing" className="hover:text-navy-900">
               Preços
             </Link>
-            <Link to="/login" className="hover:text-zinc-900">
+            <Link to="/login" className="hover:text-navy-900">
               Entrar
             </Link>
-            <Link to="/register" className="hover:text-zinc-900">
+            <Link to="/register" className="hover:text-navy-900">
               Criar conta
             </Link>
           </nav>

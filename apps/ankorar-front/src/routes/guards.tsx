@@ -1,15 +1,15 @@
+import { AnkorarLogoMark } from "@/components/AnkorarLogoMark";
 import { useUser } from "@/hooks/useUser";
-import { Link2 } from "lucide-react";
 import { Navigate, Outlet, useLocation } from "react-router";
 
 function AuthLoadingScreen() {
   return (
-    <main className="flex h-screen w-screen items-center justify-center bg-zinc-950 text-zinc-100">
-      <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-sm">
-        <Link2 className="h-8 w-8" />
+    <main className="flex h-screen w-screen items-center justify-center bg-ds-surface text-navy-900">
+      <div className="flex items-center gap-3 rounded-xl border border-navy-200/50 bg-ds-surface-elevated px-5 py-4 shadow-sm">
+        <AnkorarLogoMark className="size-5 shrink-0 text-amber-600" />
         <div>
-          <p className="text-sm font-semibold">ANKORAR</p>
-          <p className="text-xs text-zinc-400">Carregando sessão...</p>
+          <p className="text-sm font-bold">Anko<span className="text-amber-600">rar</span></p>
+          <p className="text-xs text-text-muted">Carregando sessão...</p>
         </div>
       </div>
     </main>

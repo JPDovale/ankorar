@@ -20,9 +20,9 @@ export function OrganizationSwitcherPendingInvites({
   onRejectInvite,
 }: OrganizationSwitcherPendingInvitesProps) {
   return (
-    <div className="border-t border-zinc-200 px-2 py-2">
+    <div className="border-t border-navy-200/40 px-2 py-2">
       <div className="px-1.5 pb-0.5">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-muted">
           Convites pendentes
         </p>
       </div>
@@ -40,13 +40,13 @@ export function OrganizationSwitcherPendingInvites({
           return (
             <div
               key={invite.id}
-              className="flex items-center justify-between gap-2 rounded-md bg-zinc-50 px-2 py-1.5"
+              className="flex items-center justify-between gap-2 rounded-md bg-navy-50/80 px-2 py-1.5"
             >
               <div className="min-w-0">
-                <p className="truncate text-sm font-medium text-zinc-900">
+                <p className="truncate text-sm font-medium text-navy-900">
                   {invite.organization.name}
                 </p>
-                <p className="truncate text-[11px] text-zinc-500">
+                <p className="truncate text-[11px] text-text-muted">
                   Convidado por {invite.invited_by_user.name}
                 </p>
               </div>

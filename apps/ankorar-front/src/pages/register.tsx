@@ -75,7 +75,7 @@ export function RegisterPage() {
 
   return (
     <AuthScene
-      tone="violet"
+      tone="amber"
       panelEyebrow="Cadastro"
       panelTitle="Comece sua conta"
       panelDescription="Preencha seus dados para criar acesso aos mapas e bibliotecas."
@@ -84,20 +84,20 @@ export function RegisterPage() {
         className="mt-6 flex flex-col gap-4"
         onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}
       >
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
-          Crie sua conta para organizar mapas, bibliotecas e conexoes em um so lugar.
+        <p className="text-sm text-text-secondary">
+          Crie sua conta para organizar mapas, bibliotecas e conexões em um só lugar.
         </p>
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor={nameFieldId}
-            className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             Nome
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(nameErrorMessage)}
-            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
+            className="h-11"
           >
             <Input
               id={nameFieldId}
@@ -113,14 +113,14 @@ export function RegisterPage() {
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor={emailFieldId}
-            className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             Email
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(emailErrorMessage)}
-            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
+            className="h-11"
           >
             <Input
               id={emailFieldId}
@@ -136,14 +136,14 @@ export function RegisterPage() {
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor={passwordFieldId}
-            className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             Senha
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(passwordErrorMessage)}
-            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
+            className="h-11"
           >
             <Input
               id={passwordFieldId}
@@ -159,14 +159,14 @@ export function RegisterPage() {
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor={confirmPasswordFieldId}
-            className="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-600 dark:text-zinc-300"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             Confirmar senha
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(confirmPasswordErrorMessage)}
-            className="h-11 border-zinc-300 bg-white transition-colors focus-within:border-violet-400 dark:border-zinc-700 dark:bg-zinc-950/60 dark:focus-within:border-violet-400"
+            className="h-11"
           >
             <Input
               id={confirmPasswordFieldId}
@@ -182,14 +182,14 @@ export function RegisterPage() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="mt-2 h-11 w-full bg-violet-400 text-white hover:bg-violet-500 dark:bg-violet-400 dark:hover:bg-violet-500"
+          className="mt-2 h-11 w-full"
         >
           {isSubmitting && <LoaderCircle className="size-4 animate-spin" />}
           {submitLabel}
         </Button>
-        <p className="text-center text-sm text-zinc-600 dark:text-zinc-300">
+        <p className="text-center text-sm text-text-secondary">
           Já possui conta?{" "}
-          <Link to="/login" className="font-semibold text-violet-400 underline-offset-4 hover:underline dark:text-violet-300">
+          <Link to="/login" className="font-semibold text-amber-600 underline-offset-4 hover:underline hover:text-amber-500">
             Fazer login
           </Link>
         </p>

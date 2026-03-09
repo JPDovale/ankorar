@@ -27,11 +27,11 @@ export function UserProfileSection({
         <div className="space-y-1">
           <h2
             id="user-profile-title"
-            className="text-sm font-semibold text-zinc-900"
+            className="text-sm font-semibold text-navy-900"
           >
             Perfil
           </h2>
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-text-muted">
             Nome e e-mail exibidos na plataforma.
           </p>
         </div>
@@ -45,14 +45,14 @@ export function UserProfileSection({
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor="user-settings-name"
-            className="text-xs font-medium text-zinc-600"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             Nome
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(errors.name)}
-            className="mt-1 h-10 border-zinc-300 bg-white transition-colors focus-within:border-violet-400"
+            className="mt-1 h-10"
           >
             <Input
               id="user-settings-name"
@@ -70,14 +70,14 @@ export function UserProfileSection({
         <InputRoot disabled={isSubmitting}>
           <label
             htmlFor="user-settings-email"
-            className="text-xs font-medium text-zinc-600"
+            className="text-xs font-bold tracking-wider uppercase text-text-secondary"
           >
             E-mail
           </label>
           <InputBox
             data-disabled={isSubmitting}
             data-has-error={Boolean(errors.email)}
-            className="mt-1 h-10 border-zinc-300 bg-white transition-colors focus-within:border-violet-400"
+            className="mt-1 h-10"
           >
             <Input
               id="user-settings-email"

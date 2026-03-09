@@ -1,6 +1,6 @@
 import { CreationActionButton } from "@/components/actions/CreationActionButton";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input, InputBox, InputIcon } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -52,13 +52,13 @@ export function HomeCreateMapPopover({
       <PopoverContent
         align="end"
         sideOffset={8}
-        className="w-[22rem] border-zinc-200 p-0"
+        className="w-[22rem] border-navy-200/50 bg-ds-surface-elevated p-0"
       >
-        <div className="border-b border-zinc-200 bg-zinc-50/70 px-3.5 py-2.5">
-          <p className="text-sm font-semibold text-zinc-900">
+        <div className="border-b border-navy-200/40 bg-navy-50/70 px-3.5 py-2.5">
+          <p className="text-sm font-semibold text-navy-900">
             Novo mapa mental
           </p>
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-text-muted">
             {generateWithAi
               ? "Descreva o conteúdo e a IA gera o mapa."
               : "Defina um nome rápido para começar a organizar ideias."}
@@ -72,19 +72,19 @@ export function HomeCreateMapPopover({
               pressed={generateWithAi}
               onPressedChange={onGenerateWithAiChange}
               aria-label="Gerar com IA"
-              className="h-8 gap-1.5 px-2.5 text-xs data-[state=on]:bg-violet-100 data-[state=on]:text-violet-800"
+              className="h-8 gap-1.5 px-2.5 text-xs data-[state=on]:bg-amber-400/15 data-[state=on]:text-amber-700"
             >
               <Sparkles className="size-3.5" />
               Gerar com IA
             </Toggle>
-            <span className="text-xs text-zinc-500 tabular-nums">
+            <span className="text-xs text-text-muted tabular-nums">
               {aiCredits} créditos restantes
             </span>
           </div>
 
           {generateWithAi && (
             <label className="space-y-1 block">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-muted">
                 Descrição do conteúdo
               </span>
               <textarea
@@ -93,25 +93,27 @@ export function HomeCreateMapPopover({
                 placeholder="Ex.: Mapa com as fases do projeto: planejamento, execução, revisão e entrega"
                 maxLength={10000}
                 rows={3}
-                className="w-full resize-none rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 shadow-[0_1px_2px_rgba(16,24,40,0.06)] focus:outline-none focus:ring-2 focus:ring-zinc-300"
+                className="w-full resize-none rounded-lg border border-navy-200/80 bg-white px-3 py-2 text-sm text-navy-900 placeholder:text-text-muted shadow-[0_1px_2px_rgba(13,27,42,0.06)] focus:outline-none focus:ring-2 focus:ring-amber-400/30"
               />
             </label>
           )}
 
           <label className="space-y-1 block">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-muted">
               {generateWithAi ? "Título do mapa (opcional)" : "Título inicial"}
             </span>
-            <div className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 shadow-[0_1px_2px_rgba(16,24,40,0.06)]">
-              <WandSparkles className="size-4 shrink-0 text-zinc-500" />
+            <InputBox className="rounded-lg px-3 shadow-[0_1px_2px_rgba(13,27,42,0.06)]">
+              <InputIcon>
+                <WandSparkles className="size-4" />
+              </InputIcon>
               <Input
                 value={mapTitle}
                 onChange={(event) => onMapTitleChange(event.target.value)}
                 placeholder={generateWithAi ? "Ex.: Projeto X" : "seg 15/02 10:30"}
                 maxLength={256}
-                className="h-9 border-0 bg-transparent px-0 text-sm text-zinc-900 placeholder:text-zinc-400"
+                className="h-9 px-0 text-sm text-navy-900 placeholder:text-text-muted"
               />
-            </div>
+            </InputBox>
           </label>
 
           <div className="flex items-center justify-end gap-2 mt-2">

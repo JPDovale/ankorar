@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/useUser";
 import {
@@ -154,37 +147,31 @@ const USE_CASES = [
 
 function PricingPageSkeleton() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white">
+    <div className="min-h-screen bg-ds-surface">
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl space-y-4 text-center">
-          <div className="mx-auto h-10 w-72 animate-pulse rounded-lg bg-zinc-200" />
-          <div className="mx-auto h-5 w-96 animate-pulse rounded bg-zinc-100" />
+          <div className="mx-auto h-10 w-72 animate-pulse rounded-lg bg-navy-200" />
+          <div className="mx-auto h-5 w-96 animate-pulse rounded bg-navy-100" />
         </div>
         <div className="mx-auto mt-12 flex max-w-2xl flex-wrap justify-center gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-6 w-32 animate-pulse rounded-full bg-zinc-100" />
+            <div key={i} className="h-6 w-32 animate-pulse rounded-full bg-navy-100" />
           ))}
         </div>
       </section>
       <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="grid gap-6 sm:grid-cols-3">
           {[1, 2, 3].map((i) => (
-            <Card key={i} className="animate-pulse overflow-hidden">
-              <CardHeader>
-                <div className="h-6 w-24 rounded bg-zinc-200" />
-                <div className="h-8 w-20 rounded bg-zinc-100" />
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {[1, 2, 3, 4].map((j) => (
-                    <div key={j} className="h-4 w-full rounded bg-zinc-100" />
-                  ))}
-                </div>
-              </CardContent>
-              <CardFooter>
-                <div className="h-10 w-full rounded-lg bg-zinc-200" />
-              </CardFooter>
-            </Card>
+            <div key={i} className="animate-pulse rounded-2xl border border-navy-200/50 bg-ds-surface-elevated p-5">
+              <div className="h-5 w-24 rounded bg-navy-200" />
+              <div className="mt-3 h-7 w-28 rounded bg-navy-100" />
+              <div className="mt-4 space-y-2">
+                {[1, 2, 3, 4].map((j) => (
+                  <div key={j} className="h-3.5 w-full rounded bg-navy-100" />
+                ))}
+              </div>
+              <div className="mt-5 h-9 w-full rounded-md bg-navy-200" />
+            </div>
           ))}
         </div>
       </section>
@@ -211,134 +198,121 @@ function PricingCard({
   const showPopular = isPopular && !isCurrentPlan;
 
   return (
-    <Card
-      className={`relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-xl ${
+    <div
+      className={cn(
+        "relative flex min-w-0 flex-col overflow-hidden rounded-2xl border p-5 transition-all duration-300 hover:shadow-lg",
         isCurrentPlan
-          ? "border-emerald-300 bg-gradient-to-b from-emerald-50/80 to-white ring-2 ring-emerald-400/50 shadow-lg"
+          ? "border-ds-success/30 bg-gradient-to-b from-ds-success/5 to-ds-surface-elevated ring-2 ring-ds-success/40 shadow-lg"
           : isPopular
-            ? "border-violet-300 bg-gradient-to-b from-violet-50/80 to-white ring-2 ring-violet-400/50 shadow-lg scale-[1.02] sm:scale-105"
-            : "border-zinc-200 bg-white shadow-md hover:border-zinc-300"
-      }`}
+            ? "border-amber-400/40 bg-gradient-to-b from-amber-50/80 to-ds-surface-elevated ring-2 ring-amber-400/40 shadow-lg scale-[1.02] sm:scale-105"
+            : "border-navy-200/50 bg-ds-surface-elevated shadow-sm hover:border-navy-300/60"
+      )}
     >
       {isCurrentPlan && (
-        <div className="absolute left-0 right-0 top-0 bg-emerald-600 py-1.5 text-center text-xs font-semibold text-white">
+        <div className="absolute inset-x-0 top-0 bg-ds-success py-1 text-center text-[11px] font-semibold text-white">
           Seu plano
         </div>
       )}
       {showPopular && (
-        <div className="absolute left-0 right-0 top-0 bg-violet-500 py-1.5 text-center text-xs font-semibold text-white">
+        <div className="absolute inset-x-0 top-0 bg-amber-500 py-1 text-center text-[11px] font-semibold text-navy-950">
           Mais popular
         </div>
       )}
-      <CardHeader className={`space-y-2 ${isCurrentPlan || isPopular ? "pt-10" : ""}`}>
-        <CardTitle className="text-xl font-bold text-zinc-900">
-          {plan.name}
-        </CardTitle>
-        <div className="flex items-baseline gap-1">
-          <span className="text-3xl font-bold tracking-tight text-zinc-900">
+
+      <div className={isCurrentPlan || isPopular ? "pt-5" : ""}>
+        <div className="text-sm font-bold text-navy-900">{plan.name}</div>
+        <div className="mt-1 flex items-baseline gap-1">
+          <span className="text-2xl font-bold tracking-tight text-navy-900">
             {formatPriceFn(plan.amount)}
           </span>
-          <span className="text-zinc-500">/{intervalLabel}</span>
+          <span className="text-xs text-text-muted">/{intervalLabel}</span>
         </div>
-        <CardDescription className="text-zinc-600">
-          Tudo que você precisa para criar e organizar mapas sem limite.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1 space-y-4">
-        <ul className="space-y-2 text-xs text-zinc-700">
-          {plan.features.map((feature, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-2 pt-0">
+      </div>
+
+      <ul className="mt-4 flex-1 space-y-1.5">
+        {(plan.features ?? []).map((feature, i) => (
+          <li key={i} className="flex items-start gap-1.5 text-xs text-navy-800">
+            <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-ds-success" />
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-4">
         {isCurrentPlan ? (
-          <Button size="lg" variant="outline" className="w-full gap-2 font-semibold" asChild>
-            <Link to="/subscription" className="flex h-10 w-full items-center justify-center gap-2">
+          <Button size="sm" variant="outline" className="w-full gap-1.5" asChild>
+            <Link to="/subscription">
               Gerenciar assinatura
-              <ArrowRight className="size-4" />
+              <ArrowRight className="size-3.5" />
             </Link>
           </Button>
         ) : (
           <>
             <Button
-              size="lg"
-              className={`w-full gap-2 font-semibold ${
-                isPopular
-                  ? "bg-violet-600 shadow-md hover:bg-violet-700"
-                  : ""
-              }`}
+              size="sm"
+              className="w-full gap-1.5"
               disabled={isPending}
               onClick={onSelect}
             >
               {isPending ? (
-                <Loader2 className="size-4 animate-spin" />
+                <Loader2 className="size-3.5 animate-spin" />
               ) : (
                 <>
                   Começar agora
-                  <ArrowRight className="size-4" />
+                  <ArrowRight className="size-3.5" />
                 </>
               )}
             </Button>
             {isPopular && (
-              <p className="text-center text-xs text-zinc-500">
+              <p className="mt-1.5 text-center text-[10px] text-text-muted">
                 Cancele quando quiser • Pagamento seguro
               </p>
             )}
           </>
         )}
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }
 
 function FreePlanCard({ isCurrentPlan = true }: { isCurrentPlan?: boolean }) {
   return (
-    <Card className="relative flex flex-col overflow-hidden border-zinc-200 bg-white shadow-md transition-all duration-300 hover:shadow-lg">
+    <div className="relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-navy-200/50 bg-ds-surface-elevated p-5 shadow-sm transition-all duration-300 hover:shadow-lg">
       {isCurrentPlan && (
-        <div className="absolute left-0 right-0 top-0 bg-zinc-800 py-1.5 text-center text-xs font-semibold text-white">
+        <div className="absolute inset-x-0 top-0 bg-navy-800 py-1 text-center text-[11px] font-semibold text-white">
           Seu plano atual
         </div>
       )}
-      <CardHeader className={`space-y-2 ${isCurrentPlan ? "pt-10" : ""}`}>
-        <CardTitle className="text-xl font-bold text-zinc-900">
-          {FREE_PLAN.name}
-        </CardTitle>
-        <div className="flex items-baseline gap-1">
-          <span className="text-3xl font-bold tracking-tight text-zinc-900">
-            R$ 0
-          </span>
-          <span className="text-zinc-500">/sempre</span>
+
+      <div className={isCurrentPlan ? "pt-5" : ""}>
+        <div className="text-sm font-bold text-navy-900">{FREE_PLAN.name}</div>
+        <div className="mt-1 flex items-baseline gap-1">
+          <span className="text-2xl font-bold tracking-tight text-navy-900">R$ 0</span>
+          <span className="text-xs text-text-muted">/sempre</span>
         </div>
-        <CardDescription className="text-zinc-600">
-          Comece agora com 5 mapas mentais. Sem cartão de crédito.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1 space-y-4">
-        <ul className="space-y-2 text-xs text-zinc-700">
-          {FREE_PLAN.features.map((feature, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-2 pt-0">
-        <Button size="lg" variant="outline" className="w-full gap-2 font-semibold" asChild>
-          <Link to="/register" className="flex h-10 w-full items-center justify-center gap-2">
-            <UserCheck className="size-4 shrink-0" />
+      </div>
+
+      <ul className="mt-4 flex-1 space-y-1.5">
+        {FREE_PLAN.features.map((feature, i) => (
+          <li key={i} className="flex items-start gap-1.5 text-xs text-navy-800">
+            <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-ds-success" />
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-4">
+        <Button size="sm" variant="outline" className="w-full gap-1.5" asChild>
+          <Link to="/register">
+            <UserCheck className="size-3.5" />
             Começar grátis
           </Link>
         </Button>
-        <p className="text-center text-xs text-zinc-500">
+        <p className="mt-1.5 text-center text-[10px] text-text-muted">
           Sem cartão de crédito
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }
 
@@ -367,13 +341,13 @@ export function PricingPage() {
   if (isError) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-16 text-center">
-        <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-500">
+        <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-navy-100 text-text-muted">
           <HelpCircle className="size-8" />
         </div>
-        <h2 className="mt-4 text-xl font-semibold text-zinc-900">
+        <h2 className="mt-4 text-xl font-semibold text-navy-900">
           Planos temporariamente indisponíveis
         </h2>
-        <p className="mt-2 max-w-sm text-sm text-zinc-600">
+        <p className="mt-2 max-w-sm text-sm text-text-secondary">
           Estamos preparando novidades. Tente novamente em alguns minutos ou entre em contato com o suporte.
         </p>
       </div>
@@ -384,22 +358,22 @@ export function PricingPage() {
   const popularIndex = paidPlans.length >= 2 ? 1 : -1;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-50 via-white to-zinc-50/80">
+    <div className="min-h-screen bg-ds-surface">
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-4 pt-12 pb-8 sm:px-6 sm:pt-16 sm:pb-12">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-1.5 text-sm font-medium text-violet-700">
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-50 px-4 py-1.5 text-sm font-medium text-amber-700">
             <Sparkles className="size-4" />
             Planos que cabem no seu ritmo
           </div>
-          <h1 className="mt-6 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl">
+          <h1 className="mt-6 text-4xl font-bold tracking-tight text-navy-900 sm:text-5xl lg:text-6xl">
             Invista no que{" "}
-            <span className="text-violet-600">realmente importa</span>
+            <span className="text-amber-600">realmente importa</span>
           </h1>
-          <p className="mt-4 text-base font-medium text-zinc-500 sm:text-lg">
+          <p className="mt-4 text-base font-medium text-text-muted sm:text-lg">
             Para criadores, estudantes e equipes que querem organizar ideias e tomar decisões melhores.
           </p>
-          <p className="mt-3 text-lg text-zinc-600 sm:text-xl">
+          <p className="mt-3 text-lg text-text-secondary sm:text-xl">
             Mapas ilimitados, bibliotecas organizadas e suporte quando precisar.
             Comece em menos de 2 minutos — sem cartão no plano grátis.
           </p>
@@ -408,41 +382,41 @@ export function PricingPage() {
           {TRUST_BADGES.map(({ icon: Icon, text }) => (
             <div
               key={text}
-              className="flex items-center gap-2 text-sm font-medium text-zinc-600"
+              className="flex items-center gap-2 text-sm font-medium text-text-secondary"
             >
-              <Icon className="size-5 text-violet-500" />
+              <Icon className="size-5 text-amber-500" />
               {text}
             </div>
           ))}
         </div>
-        <div className="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-x-10 gap-y-6 border-t border-zinc-200/80 pt-10">
+        <div className="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-x-10 gap-y-6 border-t border-navy-200/60 pt-10">
           {SOCIAL_PROOF_STATS.map(({ value, label }) => (
             <div key={label} className="text-center">
-              <div className="text-2xl font-bold text-zinc-900 sm:text-3xl">
+              <div className="text-2xl font-bold text-navy-900 sm:text-3xl">
                 {value}
               </div>
-              <div className="mt-0.5 text-sm text-zinc-500">{label}</div>
+              <div className="mt-0.5 text-sm text-text-muted">{label}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Depoimentos */}
-      <section className="border-y border-zinc-200/80 bg-white py-12 sm:py-16">
+      <section className="border-y border-navy-200/60 bg-ds-surface-elevated py-12 sm:py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="text-center text-2xl font-bold text-zinc-900 sm:text-3xl">
+          <h2 className="text-center text-2xl font-bold text-navy-900 sm:text-3xl">
             Quem já usa recomenda
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-zinc-600">
+          <p className="mx-auto mt-3 max-w-xl text-center text-text-secondary">
             Criadores, estudantes e equipes que já organizam ideias com a Ankorar.
           </p>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {TESTIMONIALS.map((t) => (
               <div
                 key={t.name}
-                className="relative rounded-2xl border border-zinc-200/80 bg-zinc-50/50 p-6 shadow-sm"
+                className="relative rounded-2xl border border-navy-200/60 bg-ds-surface p-6 shadow-sm"
               >
-                <Quote className="absolute right-4 top-4 size-8 text-violet-200" />
+                <Quote className="absolute right-4 top-4 size-8 text-amber-200" />
                 <div className="mb-3 flex gap-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <Star
@@ -452,16 +426,16 @@ export function PricingPage() {
                     />
                   ))}
                 </div>
-                <p className="text-sm leading-relaxed text-zinc-700">
+                <p className="text-sm leading-relaxed text-navy-800">
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className="mt-4 flex items-center gap-3">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-violet-500/20 text-sm font-semibold text-violet-700">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-sm font-semibold text-amber-700">
                     {t.initials}
                   </div>
                   <div>
-                    <div className="font-semibold text-zinc-900">{t.name}</div>
-                    <div className="text-xs text-zinc-500">{t.role}</div>
+                    <div className="font-semibold text-navy-900">{t.name}</div>
+                    <div className="text-xs text-text-muted">{t.role}</div>
                   </div>
                 </div>
               </div>
@@ -471,25 +445,25 @@ export function PricingPage() {
       </section>
 
       {/* Benefícios */}
-      <section className="border-y border-zinc-200/80 bg-white/60 py-12 sm:py-16">
+      <section className="border-y border-navy-200/60 bg-ds-surface-elevated/80 py-12 sm:py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="text-center text-2xl font-bold text-zinc-900 sm:text-3xl">
+          <h2 className="text-center text-2xl font-bold text-navy-900 sm:text-3xl">
             O que você ganha em qualquer plano
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-zinc-600">
+          <p className="mx-auto mt-3 max-w-2xl text-center text-text-secondary">
             Recursos pensados para quem quer criar mais e perder menos tempo.
           </p>
           <div className="mt-10 grid gap-8 sm:grid-cols-3">
             {BENEFITS.map(({ icon: Icon, title, description }) => (
               <div
                 key={title}
-                className="rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+                className="rounded-2xl border border-navy-200/60 bg-ds-surface-elevated p-6 shadow-sm transition-shadow hover:shadow-md"
               >
-                <div className="flex size-12 items-center justify-center rounded-xl bg-violet-500/15 text-violet-600">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600">
                   <Icon className="size-6" />
                 </div>
-                <h3 className="mt-4 font-semibold text-zinc-900">{title}</h3>
-                <p className="mt-2 text-sm text-zinc-600">{description}</p>
+                <h3 className="mt-4 font-semibold text-navy-900">{title}</h3>
+                <p className="mt-2 text-sm text-text-secondary">{description}</p>
               </div>
             ))}
           </div>
@@ -499,27 +473,27 @@ export function PricingPage() {
       {/* Preços */}
       <section
         id="pricing-cards"
-        className="scroll-mt-24 mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20"
+        className="mx-auto max-w-7xl scroll-mt-24 px-4 py-14 sm:px-6 sm:py-20"
       >
-        <h2 className="text-center text-2xl font-bold text-zinc-900 sm:text-3xl">
+        <h2 className="text-center text-2xl font-bold text-navy-900 sm:text-3xl">
           Escolha seu plano
         </h2>
-        <p className="mx-auto mt-3 max-w-xl text-center text-zinc-600">
+        <p className="mx-auto mt-3 max-w-xl text-center text-text-secondary">
           Comece grátis com 5 mapas ou escolha um plano pago para desbloquear tudo.
         </p>
         <div className="mx-auto mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
-          <span className="flex items-center gap-2 font-medium text-violet-700">
+          <span className="flex items-center gap-2 font-medium text-amber-700">
             <Users className="size-4" />
             +200 assinaturas nos últimos 30 dias
           </span>
-          <span className="text-zinc-500">•</span>
-          <span className="text-zinc-600">Planos pagos: menos que um café por dia</span>
+          <span className="text-text-muted">•</span>
+          <span className="text-text-secondary">Planos pagos: menos que um café por dia</span>
         </div>
         <div className="mx-auto mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2">
           {USE_CASES.map((useCase) => (
             <span
               key={useCase}
-              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600"
+              className="rounded-full bg-navy-100 px-3 py-1 text-xs font-medium text-navy-700"
             >
               {useCase}
             </span>
@@ -539,28 +513,28 @@ export function PricingPage() {
             />
           ))}
         </div>
-        <div className="mx-auto mt-8 max-w-xl rounded-xl border border-zinc-200/80 bg-white/80 px-4 py-3 text-center shadow-sm">
-          <p className="text-sm text-zinc-600">
-            <span className="font-semibold text-zinc-800">98% dos usuários</span>
+        <div className="mx-auto mt-8 max-w-xl rounded-xl border border-navy-200/60 bg-ds-surface-elevated px-4 py-3 text-center shadow-sm">
+          <p className="text-sm text-text-secondary">
+            <span className="font-semibold text-navy-800">98% dos usuários</span>
             {" "}recomendariam a Ankorar para organizar mapas e ideias.
           </p>
         </div>
       </section>
 
       {/* Garantia / Objeções */}
-      <section className="border-t border-zinc-200/80 bg-zinc-50/80 py-12 sm:py-16">
+      <section className="border-t border-navy-200/60 bg-ds-surface-elevated/80 py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-          <div className="inline-flex size-14 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-600">
+          <div className="inline-flex size-14 items-center justify-center rounded-2xl bg-ds-success/15 text-ds-success">
             <ShieldCheck className="size-7" />
           </div>
-          <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-800">
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-ds-success/30 bg-ds-success/10 px-4 py-1.5 text-sm font-semibold text-ds-success">
             <ShieldCheck className="size-4" />
             Experimente sem risco — cancele em 1 clique
           </div>
-          <h2 className="mt-5 text-2xl font-bold text-zinc-900">
+          <h2 className="mt-5 text-2xl font-bold text-navy-900">
             Sem surpresas, sem fidelidade
           </h2>
-          <p className="mt-3 text-zinc-600">
+          <p className="mt-3 text-text-secondary">
             Cancele quando quiser pelo painel da assinatura. Seu acesso continua até o fim do período pago.
             Dúvidas? Nosso suporte responde em português.
           </p>
@@ -569,14 +543,14 @@ export function PricingPage() {
 
       {/* FAQ */}
       <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
-        <h2 className="text-center text-2xl font-bold text-zinc-900">
+        <h2 className="text-center text-2xl font-bold text-navy-900">
           Perguntas frequentes
         </h2>
         <ul className="mt-10 space-y-8">
           {FAQ_ITEMS.map(({ pergunta, resposta }) => (
             <li key={pergunta}>
-              <h3 className="font-semibold text-zinc-900">{pergunta}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-600">
+              <h3 className="font-semibold text-navy-900">{pergunta}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-text-secondary">
                 {resposta}
               </p>
             </li>
@@ -585,15 +559,15 @@ export function PricingPage() {
       </section>
 
       {/* CTA final */}
-      <section className="border-t border-zinc-200/80 bg-gradient-to-br from-violet-600 to-violet-700 px-4 py-14 sm:py-16">
+      <section className="border-t border-navy-200/60 bg-gradient-to-br from-navy-800 to-navy-900 px-4 py-14 sm:py-16">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-2xl font-bold text-white sm:text-3xl">
             Pronto para criar sem limites?
           </h2>
-          <p className="mt-3 text-violet-100">
+          <p className="mt-3 text-navy-200">
             Escolha um plano acima e comece em menos de 2 minutos. Sem fidelidade — junte-se a centenas de criadores este mês.
           </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-sm text-violet-200">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-sm text-navy-300">
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="size-4" />
               Cancele quando quiser
@@ -606,7 +580,7 @@ export function PricingPage() {
           <div className="mt-8">
             <a
               href="#pricing-cards"
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-violet-700 shadow-lg transition hover:bg-violet-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-amber-400 px-6 py-3 font-semibold text-navy-950 shadow-lg transition hover:bg-amber-300"
             >
               Ver planos
               <ArrowRight className="size-4" />

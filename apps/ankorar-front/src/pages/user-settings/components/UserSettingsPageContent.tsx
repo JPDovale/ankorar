@@ -16,10 +16,10 @@ export function UserSettingsPageContent() {
   return (
     <section className="space-y-8">
       <header className="space-y-1">
-        <h1 className="text-xl font-semibold tracking-tight text-zinc-900">
+        <h1 className="text-xl font-semibold tracking-tight text-navy-900">
           Minha conta
         </h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-text-muted">
           Atualize seu perfil e senha quando quiser.
         </p>
       </header>

@@ -3,7 +3,7 @@ import { Outlet } from "react-router";
 
 export function DefaultLayout() {
   return (
-    <div>
+    <div className="min-h-screen bg-ds-surface text-text-primary" style={{ fontFamily: "var(--font-syne-family)" }}>
       <Outlet />
       <Toaster />
     </div>
