@@ -19,6 +19,7 @@ import { HomePage } from "@/pages/home/page";
 import { EditorPage } from "@/pages/editor/page";
 import { EditorNotePage } from "@/pages/editor/[id]/page";
 import { NotesPage } from "@/pages/notes/page";
+import { NotesGraphPage } from "@/pages/notes/graph/page";
 
 const router = createBrowserRouter([
   {
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
               {
                 path: "/editor/:note_id",
                 Component: EditorNotePage,
+              },
+              {
+                path: "/notes/graph",
+                Component: NotesGraphPage,
               },
               {
                 path: "/notes",

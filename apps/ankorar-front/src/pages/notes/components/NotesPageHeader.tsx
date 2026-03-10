@@ -1,7 +1,8 @@
 import { Can } from "@/components/auth/Can";
 import { Button } from "@/components/ui/button";
 import { useNotesSection } from "@/pages/notes/hooks/useNotesSection";
-import { FilePlus } from "lucide-react";
+import { FilePlus, Network } from "lucide-react";
+import { Link } from "react-router";
 
 export function NotesPageHeader() {
   const { notes, handleCreateNote, isCreatingNote } = useNotesSection();
@@ -23,7 +24,13 @@ export function NotesPageHeader() {
         </p>
       </div>
 
-      <div className="flex sm:items-center sm:justify-end">
+      <div className="flex gap-2 sm:items-center sm:justify-end">
+        <Button variant="ghost" asChild className="gap-2">
+          <Link to="/notes/graph">
+            <Network className="size-4" />
+            Ver grafo
+          </Link>
+        </Button>
         <Can feature="create:note">
           <Button
             onClick={handleCreateNote}

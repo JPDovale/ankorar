@@ -5,7 +5,7 @@ import { useSuspenseMaps } from "@/hooks/useMaps";
 import { useSuspenseNotes } from "@/hooks/useNotes";
 import { cn } from "@/lib/utils";
 import type { LibraryPreview } from "@/services/libraries/listLibrariesRequest";
-import { ChevronDown, ChevronRight, FileText, Folder } from "lucide-react";
+import { ChevronDown, ChevronRight, FileText, Folder, Network } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router";
 
@@ -24,7 +24,9 @@ export function SideBarNav() {
   const isMapsSectionActive =
     location.pathname === "/home" || location.pathname.startsWith("/maps/");
   const isNotesSectionActive =
-    location.pathname === "/notes" || location.pathname.startsWith("/editor/");
+    location.pathname === "/notes" ||
+    location.pathname === "/notes/graph" ||
+    location.pathname.startsWith("/editor/");
   const isLibrariesSectionActive = location.pathname === "/libraries";
 
   const toggleLibrary = (id: string) => {
@@ -128,6 +130,11 @@ export function SideBarNav() {
             onToggle={() => setNotesOpen((o) => !o)}
             isSectionActive={isNotesSectionActive}
           >
+            <SideBarTreeItem
+              to="/notes/graph"
+              label="Grafo"
+              icon={Network}
+            />
             {notesList.length === 0 ? (
               <div className="py-1 pl-5 pr-2">
                 <span className="text-[11px] text-text-muted">

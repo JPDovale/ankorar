@@ -1,5 +1,6 @@
 import { createNoteRoute } from "../controllers/note/createNote";
 import { getNoteRoute } from "../controllers/note/getNote";
+import { getNotesGraphRoute } from "../controllers/note/getNotesGraph";
 import { listNotesRoute } from "../controllers/note/listNotes";
 import { updateNoteRoute } from "../controllers/note/updateNote";
 import { Controller } from "../infra/shared/entities/Controller";
@@ -11,6 +12,7 @@ const noteController = Controller.create({
 });
 
 noteController.appendRoute(createNoteRoute);
+noteController.appendRoute(getNotesGraphRoute);
 noteController.appendRoute(getNoteRoute);
 noteController.appendRoute(listNotesRoute);
 noteController.appendRoute(updateNoteRoute);
