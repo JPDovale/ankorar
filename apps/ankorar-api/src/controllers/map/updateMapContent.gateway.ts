@@ -1,6 +1,6 @@
 import z from "zod";
 
-type MapNodeType = "default" | "central" | "image";
+type MapNodeType = "default" | "central" | "image" | "custom";
 export type SanitizedMapNode = {
   id: string;
   pos: { x: number; y: number };
@@ -22,6 +22,8 @@ export type SanitizedMapNode = {
   sequence: number;
   childrens: SanitizedMapNode[];
   isVisible: boolean;
+  customType?: string;
+  customPayload?: unknown;
 };
 
 function toNumber(value: unknown, fallback = 0) {
@@ -48,8 +50,29 @@ function toString(value: unknown, fallback = "") {
   return fallback;
 }
 
+/** Payload permitido para nós custom do tipo "note": só noteId e contentCollapsed. */
+function sanitizeNotePayload(payload: unknown): {
+  noteId?: string;
+  contentCollapsed?: boolean;
+} {
+  if (typeof payload !== "object" || payload === null) {
+    return {};
+  }
+  const p = payload as Record<string, unknown>;
+  return {
+    noteId: typeof p.noteId === "string" ? p.noteId : undefined,
+    contentCollapsed:
+      typeof p.contentCollapsed === "boolean" ? p.contentCollapsed : undefined,
+  };
+}
+
 function sanitizeNodeType(type: unknown): MapNodeType {
-  if (type === "central" || type === "default" || type === "image") {
+  if (
+    type === "central" ||
+    type === "default" ||
+    type === "image" ||
+    type === "custom"
+  ) {
     return type;
   }
 
@@ -93,7 +116,7 @@ function sanitizeNode(node: unknown): SanitizedMapNode | null {
       ? textAlign
       : "left";
 
-  return {
+  const result: SanitizedMapNode = {
     id: toString(source.id, ""),
     pos: {
       x: toNumber(sourcePos.x, 0),
@@ -121,6 +144,20 @@ function sanitizeNode(node: unknown): SanitizedMapNode | null {
     childrens,
     isVisible: toBoolean(source.isVisible, true),
   };
+
+  if (source.type === "custom") {
+    if (typeof source.customType === "string") {
+      result.customType = source.customType;
+    }
+    if (source.customPayload !== undefined) {
+      result.customPayload =
+        result.customType === "note"
+          ? sanitizeNotePayload(source.customPayload)
+          : source.customPayload;
+    }
+  }
+
+  return result;
 }
 
 function sanitizeMapContent(content: unknown[]): SanitizedMapNode[] {

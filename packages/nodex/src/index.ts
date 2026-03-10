@@ -28,6 +28,8 @@ export {
   type ExportPdfOptions,
 } from "./utils/exportMindMapAsPdf";
 export { useMindMapHistoryDebounce } from "./hooks/mindMap/useMindMapHistoryDebounce";
+export { useMindMapNode } from "./hooks/mindMap/useMindMapNode";
+export { useMindMapNodeMouseHandlers } from "./hooks/mindMap/useMindMapNodeMouseHandlers";
 
 export { Background, type BackgroundProps } from "./components/mindMap/Background";
 export {
@@ -74,3 +76,11 @@ export type {
   MindMapNodeFontSize,
 } from "./state/mindMap";
 export type { NodeEditorCustomButton } from "./contexts/MindMapNodeEditorContext";
+export {
+  CustomNodeRenderersProvider,
+  useCustomNodeRenderers,
+} from "./contexts/CustomNodeRenderersContext";
+export type {
+  CustomNodeProps,
+  CustomNodeRenderers,
+} from "./contexts/CustomNodeRenderersContext";

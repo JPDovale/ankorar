@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export type MindMapNodeTextAlign = "left" | "center" | "right";
 export type MindMapNodeFontSize = 14 | 16 | 18 | 20 | 22 | 24;
-export type MindMapNodeType = "default" | "central" | "image";
+export type MindMapNodeType = "default" | "central" | "image" | "custom";
 
 export type MindMapNodeStyle = {
   w: number;
@@ -27,6 +27,10 @@ export type MindMapNode = {
   sequence: number;
   isVisible: boolean;
   childrens: MindMapNode[];
+  /** When type is "custom", identifies which custom renderer to use. */
+  customType?: string;
+  /** Optional payload for custom nodes (e.g. { noteId: string }). */
+  customPayload?: unknown;
 };
 
 interface UseMindMapState {
@@ -163,6 +167,8 @@ const cloneNodes = (nodes: MindMapNode[]): MindMapNode[] =>
     sequence: node.sequence,
     isVisible: node.isVisible,
     childrens: cloneNodes(node.childrens),
+    ...(node.customType != null && { customType: node.customType }),
+    ...(node.customPayload !== undefined && { customPayload: node.customPayload }),
   }));
 
 /**
@@ -209,7 +215,9 @@ function branchColorsEqual(a: MindMapNode[], b: MindMapNode[]): boolean {
 const PLACEHOLDER_W = 120;
 const PLACEHOLDER_H = 40;
 
-function getDefaultStyleForType(type: "central" | "default"): MindMapNodeStyle {
+function getDefaultStyleForType(
+  type: "central" | "default" | "custom",
+): MindMapNodeStyle {
   if (type === "central") {
     return {
       w: PLACEHOLDER_W,
@@ -245,7 +253,9 @@ function mergeMinimalStyle(nodes: MindMapNode[]): MindMapNode[] {
   const walk = (items: MindMapNode[]) => {
     for (const node of items) {
       if (node.type !== "image") {
-        const defaults = getDefaultStyleForType(node.type);
+        const styleType =
+          node.type === "custom" ? "default" : node.type;
+        const defaults = getDefaultStyleForType(styleType);
         node.style = {
           ...defaults,
           ...node.style,
@@ -425,7 +435,7 @@ const layoutNodes = (nodes: MindMapNode[]) => {
 const WRAP_WORDS_PER_LINE = 5;
 
 function applyMeasuredDimensionsToNode(node: MindMapNode): void {
-  if (node.type === "image") {
+  if (node.type === "image" || node.type === "custom") {
     return;
   }
   node.text = wrapTextAtWords(node.text ?? "", WRAP_WORDS_PER_LINE);
@@ -727,7 +737,7 @@ const useMindMapState = create<UseMindMapState>((set, get) => ({
 
     const { nodes } = get();
 
-    if (node.type !== "image") {
+    if (node.type !== "image" && node.type !== "custom") {
       const textSize = measureNodeText(node);
       const padding = node.style.padding;
       node.style.w = Math.max(8, textSize.w + padding.x * 2);

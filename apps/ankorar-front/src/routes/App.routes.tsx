@@ -16,7 +16,9 @@ import { UsersPage } from "@/pages/users/page";
 import { ProtectedRoute, PublicOnlyRoute } from "@/routes/guards";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { HomePage } from "@/pages/home/page";
-import { DesignSystemPage } from "@/pages/design-system/page";
+import { EditorPage } from "@/pages/editor/page";
+import { EditorNotePage } from "@/pages/editor/[id]/page";
+import { NotesPage } from "@/pages/notes/page";
 
 const router = createBrowserRouter([
   {
@@ -47,10 +49,6 @@ const router = createBrowserRouter([
       {
         path: "/pricing",
         Component: PricingPage,
-      },
-      {
-        path: "/design-system",
-        Component: DesignSystemPage,
       },
       {
         Component: ProtectedRoute,
@@ -93,6 +91,18 @@ const router = createBrowserRouter([
               {
                 path: "/settings",
                 Component: UserSettingsPage,
+              },
+              {
+                path: "/editor",
+                Component: EditorPage,
+              },
+              {
+                path: "/editor/:note_id",
+                Component: EditorNotePage,
+              },
+              {
+                path: "/notes",
+                Component: NotesPage,
               },
             ],
           },

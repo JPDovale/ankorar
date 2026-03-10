@@ -7,6 +7,10 @@ import {
   MindMapNodeEditorProvider,
   type NodeEditorCustomButton,
 } from "../../contexts/MindMapNodeEditorContext";
+import {
+  CustomNodeRenderersProvider,
+  type CustomNodeRenderers,
+} from "../../contexts/CustomNodeRenderersContext";
 
 interface NodexProps {
   children?: ReactNode;
@@ -16,6 +20,8 @@ interface NodexProps {
   nodeEditorCustomButtons?: NodeEditorCustomButton[];
   /** Default text color for newly created nodes (Tab/Enter). E.g. "white" or "#ffffff" for dark backgrounds. */
   newNodesTextColor?: string | null;
+  /** Custom node renderers: map of customType string to component. Enables type "custom" nodes with customType key. */
+  customNodeRenderers?: CustomNodeRenderers;
 }
 
 export function Nodex({
@@ -24,6 +30,7 @@ export function Nodex({
   readOnly = false,
   nodeEditorCustomButtons,
   newNodesTextColor,
+  customNodeRenderers,
 }: NodexProps) {
   const setReadOnly = useMindMapState((state) => state.setReadOnly);
   const setNewNodesTextColor = useMindMapState(
@@ -51,15 +58,19 @@ export function Nodex({
 
   return (
     <MindMapNodeEditorProvider customButtons={nodeEditorCustomButtons ?? []}>
-      <section
-        data-nodex
-        className={cn(
-          "flex h-full min-h-[480px] w-full flex-col rounded-2xl bg-slate-50 text-slate-900 shadow-sm font-sans",
-          className,
-        )}
+      <CustomNodeRenderersProvider
+        customNodeRenderers={customNodeRenderers ?? {}}
       >
-        {children}
-      </section>
+        <section
+          data-nodex
+          className={cn(
+            "flex h-full min-h-[480px] w-full flex-col rounded-2xl bg-slate-50 text-slate-900 shadow-sm font-sans",
+            className,
+          )}
+        >
+          {children}
+        </section>
+      </CustomNodeRenderersProvider>
     </MindMapNodeEditorProvider>
   );
 }

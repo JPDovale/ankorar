@@ -2,6 +2,7 @@ import { Can } from "@/components/auth/Can";
 import { sideBarSections } from "@/config/sideBar";
 import { useSuspenseLibraries } from "@/hooks/useLibraries";
 import { useSuspenseMaps } from "@/hooks/useMaps";
+import { useSuspenseNotes } from "@/hooks/useNotes";
 import { cn } from "@/lib/utils";
 import type { LibraryPreview } from "@/services/libraries/listLibrariesRequest";
 import { ChevronDown, ChevronRight, FileText, Folder } from "lucide-react";
@@ -12,6 +13,7 @@ export function SideBarNav() {
   const { data: maps } = useSuspenseMaps();
   const { data: libraries } = useSuspenseLibraries();
   const [mapsOpen, setMapsOpen] = useState(true);
+  const [notesOpen, setNotesOpen] = useState(true);
   const [librariesOpen, setLibrariesOpen] = useState(true);
   const [openLibraryIds, setOpenLibraryIds] = useState<Set<string>>(new Set());
   const location = useLocation();
@@ -21,6 +23,8 @@ export function SideBarNav() {
     location.pathname === "/users" || location.pathname.startsWith("/users/");
   const isMapsSectionActive =
     location.pathname === "/home" || location.pathname.startsWith("/maps/");
+  const isNotesSectionActive =
+    location.pathname === "/notes" || location.pathname.startsWith("/editor/");
   const isLibrariesSectionActive = location.pathname === "/libraries";
 
   const toggleLibrary = (id: string) => {
@@ -32,7 +36,9 @@ export function SideBarNav() {
     });
   };
 
+  const { data: notes } = useSuspenseNotes();
   const mapsList = maps ?? [];
+  const notesList = notes ?? [];
   const librariesList = libraries ?? [];
   const DashboardIcon = sideBarSections[0].icon;
   const UsersIcon = sideBarSections[1].icon;
@@ -112,12 +118,41 @@ export function SideBarNav() {
           </SideBarTreeSection>
         </Can>
 
-        {/* Bibliotecas */}
-        <Can feature="read:library">
+        {/* Notas */}
+        <Can feature="read:note">
           <SideBarTreeSection
             label={sideBarSections[3].label}
             to={sideBarSections[3].to}
             icon={sideBarSections[3].icon}
+            isOpen={notesOpen}
+            onToggle={() => setNotesOpen((o) => !o)}
+            isSectionActive={isNotesSectionActive}
+          >
+            {notesList.length === 0 ? (
+              <div className="py-1 pl-5 pr-2">
+                <span className="text-[11px] text-text-muted">
+                  Nenhuma nota
+                </span>
+              </div>
+            ) : (
+              notesList.map((note) => (
+                <SideBarTreeItem
+                  key={note.id}
+                  to={`/editor/${note.id}`}
+                  label={note.title}
+                  icon={FileText}
+                />
+              ))
+            )}
+          </SideBarTreeSection>
+        </Can>
+
+        {/* Bibliotecas */}
+        <Can feature="read:library">
+          <SideBarTreeSection
+            label={sideBarSections[4].label}
+            to={sideBarSections[4].to}
+            icon={sideBarSections[4].icon}
             isOpen={librariesOpen}
             onToggle={() => setLibrariesOpen((o) => !o)}
             isSectionActive={isLibrariesSectionActive}

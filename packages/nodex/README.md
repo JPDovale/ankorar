@@ -116,6 +116,20 @@ export function MindMapHydrator({ nodes }: { nodes: MindMapNode[] }) {
 }
 ```
 
+## Custom nodes (persisted)
+
+You can add **custom node types** that are stored and restored with the map.
+
+- Set `type: "custom"` and `customType: string` (e.g. `"note"`) on a node. Use `customPayload?: unknown` for app-specific data (e.g. `{ noteId: "..." }`).
+- These fields are part of `MindMapNode` and are **persisted** when your app saves the node tree (e.g. as `content` in your map API). When you load the map, pass the same tree into state so custom nodes keep their `customType` and `customPayload`.
+- Register a React component per `customType` via the `customNodeRenderers` prop on `Nodex`: `customNodeRenderers={{ note: NoteNodeComponent }}`. The component receives `CustomNodeProps` (`node`, style slots). Custom nodes are not auto-resized by layout (they keep the dimensions you set).
+
+```tsx
+<Nodex customNodeRenderers={{ note: NoteNode }}>
+  <Board>…</Board>
+</Nodex>
+```
+
 ## Styling
 
 `@ankorar/nodex` ships its own precompiled stylesheet, so consumer apps do not need to compile Tailwind classes from this package.
@@ -130,7 +144,7 @@ import "@ankorar/nodex/styles.css";
 
 ### Components
 
-- `Nodex`
+- `Nodex` (optional: `customNodeRenderers`, `nodeEditorCustomButtons`, `newNodesTextColor`)
 - `Board`
 - `Background`
 - `Nodes`
@@ -154,6 +168,9 @@ import "@ankorar/nodex/styles.css";
 
 - `useMindMapDebounce`
 - `useMindMapHistoryDebounce`
+- `useMindMapNode` (for custom node components: selection, addChild, destroy, getSide)
+- `useMindMapNodeMouseHandlers`
+- `useCustomNodeRenderers`
 
 ### State
 
@@ -163,11 +180,12 @@ import "@ankorar/nodex/styles.css";
 
 ### Types
 
-- `MindMapNode`
+- `MindMapNode` (includes optional `customType`, `customPayload` for custom nodes)
 - `MindMapNodeStyle`
-- `MindMapNodeType`
+- `MindMapNodeType` (`"default" | "central" | "image" | "custom"`)
 - `MindMapNodeTextAlign`
 - `MindMapNodeFontSize`
+- `CustomNodeProps`, `CustomNodeRenderers` (for custom node components)
 
 ## Package Structure
 

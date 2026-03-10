@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { useMindMapState } from "../../state/mindMap";
+import { useCustomNodeRenderers } from "../../contexts/CustomNodeRenderersContext";
 import { CentalNode } from "./CentalNode";
 import { DefaultNode } from "./DefaultNode";
 import { ImageNode } from "./ImageNode";
@@ -46,6 +47,7 @@ export function Nodes({
   imageNodeContentClassName,
   imageNodeContentStyle,
 }: NodesProps = {}) {
+  const { customNodeRenderers } = useCustomNodeRenderers();
   const { offset, scale, nodes, getFlatNodes } = useMindMapState(
     useShallow((state) => ({
       offset: state.offset,
@@ -94,6 +96,23 @@ export function Nodes({
               style={imageNodeStyle}
               contentClassName={imageNodeContentClassName}
               contentStyle={imageNodeContentStyle}
+            />
+          );
+        }
+        if (
+          node.type === "custom" &&
+          node.customType &&
+          customNodeRenderers[node.customType]
+        ) {
+          const CustomComponent = customNodeRenderers[node.customType];
+          return (
+            <CustomComponent
+              key={node.id}
+              node={node}
+              className={defaultNodeClassName}
+              style={defaultNodeStyle}
+              contentClassName={defaultNodeContentClassName}
+              contentStyle={defaultNodeContentStyle}
             />
           );
         }

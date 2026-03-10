@@ -16,7 +16,7 @@ interface UpdateMapContentMutationResult {
   success: boolean;
 }
 
-type MapNodeType = "default" | "central" | "image";
+type MapNodeType = "default" | "central" | "image" | "custom";
 type SanitizedNode = {
   id: string;
   pos: { x: number; y: number };
@@ -38,6 +38,8 @@ type SanitizedNode = {
   sequence: number;
   childrens: SanitizedNode[];
   isVisible: boolean;
+  customType?: string;
+  customPayload?: unknown;
 };
 
 export const mapQueryKey = (id: string) => ["map", id] as const;
@@ -115,7 +117,12 @@ function toString(value: unknown, fallback = "") {
 }
 
 function sanitizeNodeType(type: unknown): MapNodeType {
-  if (type === "central" || type === "default" || type === "image") {
+  if (
+    type === "central" ||
+    type === "default" ||
+    type === "image" ||
+    type === "custom"
+  ) {
     return type;
   }
 
@@ -167,7 +174,7 @@ function sanitizeNode(
     return acc;
   }, []);
 
-  return {
+  const result: SanitizedNode = {
     id: toString(source.id, ""),
     pos: {
       x: toNumber(sourcePos.x, 0),
@@ -195,6 +202,11 @@ function sanitizeNode(
     childrens,
     isVisible: toBoolean(source.isVisible, true),
   };
+  if (source.type === "custom") {
+    if (typeof source.customType === "string") result.customType = source.customType;
+    if (source.customPayload !== undefined) result.customPayload = source.customPayload;
+  }
+  return result;
 }
 
 function sanitizeMapContent(content: unknown[]): unknown[] {

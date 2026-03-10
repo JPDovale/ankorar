@@ -36,6 +36,11 @@ const availableFeatures = [
   "like:map:other",
   "unlike:map:other",
 
+  // NOTES
+  "read:note",
+  "create:note",
+  "update:note",
+
   // LIBRARIES
   "read:library",
   "create:library",

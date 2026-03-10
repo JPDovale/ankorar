@@ -91,12 +91,14 @@ model Member {
   updated_at DateTime?
   deleted_at DateTime?
 
-  user      User         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user_id   String
-  org       Organization @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  org_id    String
-  maps      Map[]
-  map_likes MapLike[]
+  user       User         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id    String
+  org        Organization @relation(fields: [org_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  org_id     String
+  maps       Map[]
+  map_likes  MapLike[]
+  notes      Note[]
+  note_likes NoteLike[]
 
   @@unique([org_id, user_id])
   @@map("members")
@@ -133,14 +135,15 @@ model MapLike {
 }
 
 model Library {
-  id              String       @id @unique
+  id              String        @id @unique
   name            String
   created_at      DateTime
   updated_at      DateTime?
   deleted_at      DateTime?
-  organization    Organization @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  organization    Organization  @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   organization_id String
   maps            MapLibrary[]
+  notes           NoteLibrary[]
 
   @@map("libraries")
 }
@@ -153,6 +156,56 @@ model MapLibrary {
 
   @@id([map_id, library_id])
   @@map("maps_libraries")
+}
+
+model Note {
+  id         String    @id @unique
+  title      String
+  text       String    @db.Text
+  created_at DateTime
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  member       Member         @relation(fields: [member_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  member_id    String
+  libraries    NoteLibrary[]
+  likes        NoteLike[]
+  related_from NoteRelation[] @relation("NoteFrom")
+  related_to   NoteRelation[] @relation("NoteTo")
+
+  @@map("notes")
+}
+
+model NoteLike {
+  id         String   @id @unique
+  note       Note     @relation(fields: [note_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  note_id    String
+  member     Member   @relation(fields: [member_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  member_id  String
+  created_at DateTime
+
+  @@unique([note_id, member_id])
+  @@map("note_likes")
+}
+
+model NoteRelation {
+  from_note_id String
+  to_note_id   String
+  from_note    Note   @relation("NoteFrom", fields: [from_note_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  to_note      Note   @relation("NoteTo", fields: [to_note_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([from_note_id, to_note_id])
+  @@map("notes_relations")
+}
+
+model NoteLibrary {
+  note       Note    @relation(fields: [note_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  note_id    String
+  library    Library @relation(fields: [library_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  library_id String
+
+  @@id([note_id, library_id])
+  @@map("notes_libraries")
 }
 
 model ApiKey {
