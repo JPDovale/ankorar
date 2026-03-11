@@ -1,16 +1,12 @@
 import { defaultMemberFeatures } from "../auth/Auth/fns/defaultMemberFeatures";
 
 /** Slug do plano; usado para mapear price_id (via env) → limites e features. */
-export type PlanSlug =
-  | "free"
-  | "basics"
-  | "premium"
-  | "master"
-  | "integration";
+export type PlanSlug = "free" | "basics" | "premium" | "master" | "integration";
 
 export type PlanLimits = {
   /** Máximo de mapas por organização (por membro/contexto). null = ilimitado. */
   max_maps: number | null;
+  max_notes: number | null;
   /** Máximo de organizações das quais o usuário pode participar (como membro). */
   max_organizations_join: number;
   /** Máximo de organizações que o usuário pode criar (ser creator). */
@@ -34,10 +30,7 @@ const BASICS_FEATURES: string[] = [
   "create:library",
 ];
 
-const PREMIUM_FEATURES: string[] = [
-  ...BASICS_FEATURES,
-  "create:library",
-];
+const PREMIUM_FEATURES: string[] = [...BASICS_FEATURES, "create:library"];
 
 const MASTER_FEATURES: string[] = [...PREMIUM_FEATURES];
 
@@ -54,6 +47,7 @@ const INTEGRATION_FEATURES: string[] = [
 const PLAN_LIMITS: Record<PlanSlug, PlanLimits> = {
   free: {
     max_maps: 5,
+    max_notes: 5,
     max_organizations_join: 2,
     max_organizations_create: 1,
     max_libraries: 0,
@@ -61,6 +55,7 @@ const PLAN_LIMITS: Record<PlanSlug, PlanLimits> = {
   },
   basics: {
     max_maps: 50,
+    max_notes: 50,
     max_organizations_join: 3,
     max_organizations_create: 1,
     max_libraries: 2,
@@ -68,6 +63,7 @@ const PLAN_LIMITS: Record<PlanSlug, PlanLimits> = {
   },
   premium: {
     max_maps: null,
+    max_notes: null,
     max_organizations_join: 4,
     max_organizations_create: 2,
     max_libraries: null,
@@ -75,6 +71,7 @@ const PLAN_LIMITS: Record<PlanSlug, PlanLimits> = {
   },
   master: {
     max_maps: null,
+    max_notes: null,
     max_organizations_join: 4,
     max_organizations_create: 3,
     max_libraries: null,
@@ -82,6 +79,7 @@ const PLAN_LIMITS: Record<PlanSlug, PlanLimits> = {
   },
   integration: {
     max_maps: null,
+    max_notes: null,
     max_organizations_join: 999,
     max_organizations_create: 10,
     max_libraries: null,
