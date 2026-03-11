@@ -36,16 +36,16 @@ export function HomeMapsSection() {
   return (
     <>
       {isEmptyState && (
-        <Card className="border-dashed border-zinc-300/80 bg-zinc-50/50">
+        <Card className="border-dashed border-zinc-300/80 bg-zinc-50/50 dark:border-navy-700/70 dark:bg-navy-900/40">
           <CardContent className="flex flex-col items-center gap-4 px-4 py-12 text-center">
-            <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-zinc-200/80 bg-white shadow-sm">
-              <MapPlus className="size-5 text-zinc-600" />
+            <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-zinc-200/80 bg-white shadow-sm dark:border-navy-700 dark:bg-navy-900">
+              <MapPlus className="size-5 text-zinc-600 dark:text-navy-200" />
             </span>
             <div className="space-y-1">
-              <p className="text-sm font-semibold text-zinc-900">
+              <p className="text-sm font-semibold text-zinc-900 dark:text-ds-white">
                 Nenhum mapa criado ainda
               </p>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-zinc-500 dark:text-navy-300">
                 {canCreateMap
                   ? "Crie seu primeiro mapa mental para começar a organizar ideias."
                   : "Você não tem permissão para criar mapas nesta organização."}

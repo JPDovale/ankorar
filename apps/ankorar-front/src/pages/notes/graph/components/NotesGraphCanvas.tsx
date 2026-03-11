@@ -31,7 +31,7 @@ interface Props {
 
 const COLORS = {
   dark: {
-    bg: "#070f18",
+    bg: "var(--ds-surface)",
     node: "#1a3350",
     nodeHover: "#254d78",
     nodeBorder: "#2e6090",
@@ -40,7 +40,7 @@ const COLORS = {
     label: "#e0ecf8",
   },
   light: {
-    bg: "#e8f0f8",
+    bg: "var(--ds-surface)",
     node: "#c0d8ee",
     nodeHover: "#9ec4e0",
     nodeBorder: "#6a9fc0",

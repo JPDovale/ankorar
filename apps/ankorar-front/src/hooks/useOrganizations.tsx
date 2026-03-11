@@ -21,6 +21,8 @@ import {
 import { rejectOrganizationInviteRequest } from "@/services/organizations/rejectOrganizationInviteRequest";
 import { librariesQueryKey } from "@/hooks/useLibraries";
 import { mapsQueryKey } from "@/hooks/useMaps";
+import { notesGraphQueryKey } from "@/hooks/useNotesGraph";
+import { notesQueryKey } from "@/hooks/useNotes";
 import {
   switchOrganizationContextRequest,
   type SwitchOrganizationContextRequestBody,
@@ -308,6 +310,12 @@ export function useOrganizations(params: UseOrganizationsParams = {}) {
       });
       queryClient.invalidateQueries({
         queryKey: librariesQueryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: notesQueryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: notesGraphQueryKey,
       });
       queryClient.invalidateQueries({
         queryKey: organizationInvitesQueryKey,
